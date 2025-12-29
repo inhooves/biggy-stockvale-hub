@@ -1,7 +1,7 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
-import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award } from 'lucide-react';
+import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase } from 'lucide-react';
 
 const Index = () => {
   return (
@@ -16,7 +16,14 @@ const Index = () => {
       <header className="relative z-10 border-b border-border/50 bg-background/50 backdrop-blur-lg">
         <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Logo size="sm" />
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 sm:gap-3">
+            <Link to="/agent">
+              <Button variant="outline" size="sm">
+                <Briefcase size={16} />
+                <span className="hidden sm:inline">Agent Portal</span>
+                <span className="sm:hidden">Agents</span>
+              </Button>
+            </Link>
             <Link to="/admin">
               <Button variant="ghost" size="sm">
                 <ShieldCheck size={16} />
