@@ -1,5 +1,5 @@
 import { useState, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -137,10 +137,18 @@ const AdminDashboard = () => {
       <header className="sticky top-0 z-50 bg-background/80 backdrop-blur-lg border-b border-border">
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Logo size="sm" />
-          <Button variant="outline" size="sm" onClick={handleLogout}>
-            <LogOut size={16} />
-            Logout
-          </Button>
+          <div className="flex items-center gap-3">
+            <Link to="/admin/agents">
+              <Button variant="ghost" size="sm">
+                <Users size={16} />
+                View Agents
+              </Button>
+            </Link>
+            <Button variant="outline" size="sm" onClick={handleLogout}>
+              <LogOut size={16} />
+              Logout
+            </Button>
+          </div>
         </div>
       </header>
 
