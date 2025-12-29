@@ -69,7 +69,7 @@ export default {
       },
       fontFamily: {
         sans: ['Inter', 'sans-serif'],
-        display: ['Playfair Display', 'serif'],
+        display: ['Poppins', 'sans-serif'],
       },
       keyframes: {
         "accordion-down": {
