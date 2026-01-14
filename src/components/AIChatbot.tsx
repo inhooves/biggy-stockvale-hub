@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from "react";
-import { MessageCircle, X, Send, Bot, User } from "lucide-react";
+import { MessageCircle, X, Send, User } from "lucide-react";
+import mamaBiggyAvatar from "@/assets/mama-biggy-avatar.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -124,8 +125,8 @@ export const AIChatbot = () => {
           {/* Header */}
           <div className="p-4 border-b bg-primary text-primary-foreground rounded-t-lg">
             <div className="flex items-center gap-2">
-              <Bot className="h-5 w-5" />
-              <span className="font-semibold">Stockvale Assistant</span>
+              <img src={mamaBiggyAvatar} alt="MaMa Biggy" className="h-8 w-8 rounded-full object-cover" />
+              <span className="font-semibold">MaMa Biggy</span>
             </div>
           </div>
 
@@ -133,8 +134,8 @@ export const AIChatbot = () => {
           <ScrollArea className="flex-1 p-4" ref={scrollRef}>
             {messages.length === 0 && (
               <div className="text-center text-muted-foreground py-8">
-                <Bot className="h-12 w-12 mx-auto mb-2 opacity-50" />
-                <p>Hi! How can I help you today?</p>
+                <img src={mamaBiggyAvatar} alt="MaMa Biggy" className="h-16 w-16 mx-auto mb-2 rounded-full object-cover opacity-80" />
+                <p>Hello my dear! MaMa Biggy is here to help you!</p>
               </div>
             )}
             <div className="space-y-4">
@@ -144,9 +145,7 @@ export const AIChatbot = () => {
                   className={`flex gap-2 ${msg.role === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {msg.role === "assistant" && (
-                    <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <Bot className="h-4 w-4 text-primary" />
-                    </div>
+                    <img src={mamaBiggyAvatar} alt="MaMa Biggy" className="h-8 w-8 rounded-full object-cover shrink-0" />
                   )}
                   <div
                     className={`max-w-[75%] rounded-lg px-3 py-2 text-sm ${
@@ -166,9 +165,7 @@ export const AIChatbot = () => {
               ))}
               {isLoading && messages[messages.length - 1]?.role === "user" && (
                 <div className="flex gap-2">
-                  <div className="h-8 w-8 rounded-full bg-primary/10 flex items-center justify-center">
-                    <Bot className="h-4 w-4 text-primary" />
-                  </div>
+                  <img src={mamaBiggyAvatar} alt="MaMa Biggy" className="h-8 w-8 rounded-full object-cover" />
                   <div className="bg-muted rounded-lg px-3 py-2">
                     <div className="flex gap-1">
                       <span className="w-2 h-2 bg-foreground/50 rounded-full animate-bounce" />
