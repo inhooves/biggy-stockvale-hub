@@ -46,6 +46,9 @@ import {
   TableRow,
 } from "@/components/ui/table";
 
+// Helper to get full name from customer
+const getFullName = (customer: Customer) => `${customer.firstName} ${customer.surname}`;
+
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -76,7 +79,7 @@ const AdminDashboard = () => {
     if (!searchQuery) return customers;
     const query = searchQuery.toLowerCase();
     return customers.filter(c => 
-      c.fullName.toLowerCase().includes(query) ||
+      getFullName(c).toLowerCase().includes(query) ||
       c.idNumber.toLowerCase().includes(query) ||
       c.phone.includes(query) ||
       c.email.toLowerCase().includes(query)
@@ -108,7 +111,7 @@ const AdminDashboard = () => {
       loadCustomers();
       toast({
         title: 'Customer Deleted',
-        description: `${customerToDelete.fullName}'s record has been removed.`,
+        description: `${getFullName(customerToDelete)}'s record has been removed.`,
       });
     }
     setDeleteDialogOpen(false);
@@ -206,7 +209,7 @@ const AdminDashboard = () => {
                   <TableHead className="text-muted-foreground">Name</TableHead>
                   <TableHead className="text-muted-foreground">Phone</TableHead>
                   <TableHead className="text-muted-foreground">ID Number</TableHead>
-                  <TableHead className="text-muted-foreground">Email</TableHead>
+                  <TableHead className="text-muted-foreground">City</TableHead>
                   <TableHead className="text-muted-foreground">Joined</TableHead>
                   <TableHead className="text-muted-foreground text-right">Actions</TableHead>
                 </TableRow>
@@ -225,17 +228,15 @@ const AdminDashboard = () => {
                         <div className="w-10 h-10 rounded-lg overflow-hidden border border-border">
                           <img 
                             src={customer.passportPhoto} 
-                            alt={customer.fullName}
+                            alt={getFullName(customer)}
                             className="w-full h-full object-cover"
                           />
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">{customer.fullName}</TableCell>
+                      <TableCell className="font-medium">{getFullName(customer)}</TableCell>
                       <TableCell className="text-muted-foreground">{customer.phone}</TableCell>
                       <TableCell className="font-mono text-sm">{customer.idNumber}</TableCell>
-                      <TableCell className="text-muted-foreground max-w-32 truncate">
-                        {customer.email}
-                      </TableCell>
+                      <TableCell className="text-muted-foreground">{customer.city}</TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         {new Date(customer.dateJoined).toLocaleDateString()}
                       </TableCell>
@@ -290,7 +291,7 @@ const AdminDashboard = () => {
               Delete Customer Record
             </AlertDialogTitle>
             <AlertDialogDescription className="text-muted-foreground">
-              Are you sure you want to delete <strong className="text-foreground">{customerToDelete?.fullName}</strong>'s 
+              Are you sure you want to delete <strong className="text-foreground">{customerToDelete && getFullName(customerToDelete)}</strong>'s 
               stockvale record? This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
