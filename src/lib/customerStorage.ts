@@ -1,14 +1,25 @@
 export interface Customer {
   id: string;
-  fullName: string;
+  firstName: string;
+  surname: string;
   phone: string;
   idNumber: string;
   idPhoto: string; // base64
   passportPhoto: string; // base64
   passportNumber: string;
   email: string;
+  gender: string;
   dateOfBirth: string;
   address: string;
+  city: string;
+  referralSource: string;
+  agentName: string;
+  agentPhone: string;
+  // Beneficiary/Next of Kin
+  beneficiaryName: string;
+  beneficiaryIdNumber: string;
+  beneficiaryAddress: string;
+  beneficiaryPhone: string;
   dateJoined: string;
 }
 
@@ -76,19 +87,34 @@ export const getCompleteProfiles = (): number => {
 
 export const exportToCSV = (): string => {
   const customers = getCustomers();
-  const headers = ['ID', 'Full Name', 'Phone', 'ID Number', 'ID Photo Filename', 'Passport Photo Filename', 'Passport Number', 'Email', 'Date of Birth', 'Address', 'Date Joined'];
+  const headers = [
+    'ID', 'First Name', 'Surname', 'Phone', 'ID Number', 'ID Photo Filename', 
+    'Passport Photo Filename', 'Passport Number', 'Email', 'Gender', 'Date of Birth', 
+    'Address', 'City', 'Referral Source', 'Agent Name', 'Agent Phone',
+    'Beneficiary Name', 'Beneficiary ID', 'Beneficiary Address', 'Beneficiary Phone', 'Date Joined'
+  ];
   
   const rows = customers.map(c => [
     c.id,
-    c.fullName,
+    c.firstName,
+    c.surname,
     c.phone,
     c.idNumber,
     c.idPhoto ? `id_${c.idNumber}.jpg` : '',
     c.passportPhoto ? `passport_${c.idNumber}.jpg` : '',
     c.passportNumber || '',
     c.email,
+    c.gender,
     c.dateOfBirth,
     c.address,
+    c.city,
+    c.referralSource,
+    c.agentName || '',
+    c.agentPhone || '',
+    c.beneficiaryName || '',
+    c.beneficiaryIdNumber || '',
+    c.beneficiaryAddress || '',
+    c.beneficiaryPhone || '',
     new Date(c.dateJoined).toLocaleDateString()
   ]);
 
