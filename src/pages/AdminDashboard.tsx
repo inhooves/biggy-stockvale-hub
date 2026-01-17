@@ -8,6 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import StatsCard from '@/components/StatsCard';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
+import { PieChart, Pie, Cell, ResponsiveContainer, Legend, Tooltip } from 'recharts';
 import { 
   LogOut, 
   Users, 
@@ -16,7 +17,8 @@ import {
   Eye, 
   Loader2,
   UserCheck,
-  Building2
+  Building2,
+  PieChart as PieChartIcon
 } from 'lucide-react';
 import {
   Table,
@@ -50,8 +52,25 @@ interface AgentCustomer {
   phone: string;
   email: string | null;
   address: string | null;
+  referral_source: string | null;
+  recruited_by_agent_id: string | null;
   created_at: string;
 }
+
+interface ReferralData {
+  name: string;
+  value: number;
+}
+
+const REFERRAL_COLORS = [
+  'hsl(var(--primary))',
+  'hsl(var(--accent))',
+  'hsl(142, 76%, 36%)',
+  'hsl(38, 92%, 50%)',
+  'hsl(262, 83%, 58%)',
+  'hsl(199, 89%, 48%)',
+  'hsl(350, 89%, 60%)',
+];
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
@@ -68,6 +87,9 @@ const AdminDashboard = () => {
   const [agentCustomers, setAgentCustomers] = useState<AgentCustomer[]>([]);
   const [customersModalOpen, setCustomersModalOpen] = useState(false);
   const [loadingCustomers, setLoadingCustomers] = useState(false);
+  
+  // All customers for referral chart
+  const [allCustomers, setAllCustomers] = useState<AgentCustomer[]>([]);
 
   // Check admin role
   useEffect(() => {
@@ -118,9 +140,25 @@ const AdminDashboard = () => {
     }
   };
 
+  // Fetch all customers for referral stats
+  const fetchAllCustomers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('agent_customers')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setAllCustomers(data || []);
+    } catch (error: any) {
+      console.error('Error fetching all customers:', error);
+    }
+  };
+
   useEffect(() => {
     if (isAdmin) {
       fetchAgents();
+      fetchAllCustomers();
     }
   }, [isAdmin]);
 
@@ -162,6 +200,25 @@ const AdminDashboard = () => {
   const totalCustomers = useMemo(() => {
     return agents.reduce((sum, agent) => sum + agent.customers_count, 0);
   }, [agents]);
+
+  // Compute referral source stats
+  const referralStats = useMemo((): ReferralData[] => {
+    const counts: Record<string, number> = {};
+    allCustomers.forEach(c => {
+      const source = c.referral_source || 'Unknown';
+      counts[source] = (counts[source] || 0) + 1;
+    });
+    return Object.entries(counts)
+      .map(([name, value]) => ({ name, value }))
+      .sort((a, b) => b.value - a.value);
+  }, [allCustomers]);
+
+  // Helper to get agent name by ID
+  const getAgentName = (agentId: string | null): string => {
+    if (!agentId) return '-';
+    const agent = agents.find(a => a.id === agentId);
+    return agent?.name || '-';
+  };
 
   const handleLogout = async () => {
     await signOut();
@@ -254,6 +311,50 @@ const AdminDashboard = () => {
             icon={UserPlus}
           />
         </div>
+
+        {/* Referral Source Pie Chart */}
+        {referralStats.length > 0 && (
+          <div className="bg-card rounded-xl border border-border card-elevated p-6 mb-8 animate-fade-in">
+            <div className="flex items-center gap-2 mb-4">
+              <PieChartIcon size={20} className="text-primary" />
+              <h2 className="font-display text-lg font-semibold text-foreground">
+                How Members Heard About Biggy
+              </h2>
+            </div>
+            <div className="h-72">
+              <ResponsiveContainer width="100%" height="100%">
+                <PieChart>
+                  <Pie
+                    data={referralStats}
+                    cx="50%"
+                    cy="50%"
+                    labelLine={false}
+                    outerRadius={100}
+                    fill="hsl(var(--primary))"
+                    dataKey="value"
+                    label={({ name, percent }) => `${name} (${(percent * 100).toFixed(0)}%)`}
+                  >
+                    {referralStats.map((_, index) => (
+                      <Cell 
+                        key={`cell-${index}`} 
+                        fill={REFERRAL_COLORS[index % REFERRAL_COLORS.length]} 
+                      />
+                    ))}
+                  </Pie>
+                  <Tooltip 
+                    contentStyle={{ 
+                      backgroundColor: 'hsl(var(--card))', 
+                      border: '1px solid hsl(var(--border))',
+                      borderRadius: '8px'
+                    }}
+                    labelStyle={{ color: 'hsl(var(--foreground))' }}
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            </div>
+          </div>
+        )}
 
         {/* Search Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-slide-up">
@@ -373,7 +474,8 @@ const AdminDashboard = () => {
                     <TableHead className="text-muted-foreground">Name</TableHead>
                     <TableHead className="text-muted-foreground">Phone</TableHead>
                     <TableHead className="text-muted-foreground">Email</TableHead>
-                    <TableHead className="text-muted-foreground">Address</TableHead>
+                    <TableHead className="text-muted-foreground">Referral Source</TableHead>
+                    <TableHead className="text-muted-foreground">Recruited By</TableHead>
                     <TableHead className="text-muted-foreground">Registered</TableHead>
                   </TableRow>
                 </TableHeader>
@@ -383,8 +485,11 @@ const AdminDashboard = () => {
                       <TableCell className="font-medium">{customer.name}</TableCell>
                       <TableCell className="text-muted-foreground">{customer.phone}</TableCell>
                       <TableCell className="text-muted-foreground">{customer.email || '-'}</TableCell>
-                      <TableCell className="text-muted-foreground max-w-40 truncate">
-                        {customer.address || '-'}
+                      <TableCell className="text-muted-foreground">
+                        {customer.referral_source || '-'}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground">
+                        {getAgentName(customer.recruited_by_agent_id)}
                       </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
                         {new Date(customer.created_at).toLocaleDateString()}

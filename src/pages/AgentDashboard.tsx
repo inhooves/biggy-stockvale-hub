@@ -82,6 +82,7 @@ const AgentDashboard = () => {
     phone: '',
     email: '',
     address: '',
+    referral_source: 'Agent',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -191,7 +192,7 @@ const AgentDashboard = () => {
 
   const openAddModal = () => {
     setEditingCustomer(null);
-    setCustomerForm({ name: '', phone: '', email: '', address: '' });
+    setCustomerForm({ name: '', phone: '', email: '', address: '', referral_source: 'Agent' });
     setCustomerModalOpen(true);
   };
 
@@ -202,6 +203,7 @@ const AgentDashboard = () => {
       phone: customer.phone,
       email: customer.email || '',
       address: customer.address || '',
+      referral_source: 'Agent',
     });
     setCustomerModalOpen(true);
   };
@@ -234,6 +236,8 @@ const AgentDashboard = () => {
             phone: customerForm.phone,
             email: customerForm.email || null,
             address: customerForm.address || null,
+            referral_source: 'Agent',
+            recruited_by_agent_id: agent.id,
           });
 
         if (error) throw error;
