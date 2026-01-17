@@ -1,42 +1,23 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
+import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import StatsCard from '@/components/StatsCard';
-import CustomerDetailsModal from '@/components/CustomerDetailsModal';
-import AddCustomerModal from '@/components/AddCustomerModal';
-import { 
-  getCustomers, 
-  deleteCustomer, 
-  getTodayRegistrations, 
-  getCompleteProfiles,
-  exportToCSV,
-  Customer 
-} from '@/lib/customerStorage';
+import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { 
   LogOut, 
   Users, 
   UserPlus, 
-  CheckCircle, 
   Search, 
   Eye, 
-  Trash2, 
-  Download,
-  Plus,
-  AlertTriangle
+  Loader2,
+  UserCheck,
+  Building2
 } from 'lucide-react';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog";
 import {
   Table,
   TableBody,
@@ -45,49 +26,145 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+} from '@/components/ui/dialog';
 
-// Helper to get full name from customer
-const getFullName = (customer: Customer) => `${customer.firstName} ${customer.surname}`;
+interface Agent {
+  id: string;
+  name: string;
+  email: string;
+  phone: string;
+  ref_number: string;
+  profile_pic_url: string | null;
+  customers_count: number;
+  created_at: string;
+}
+
+interface AgentCustomer {
+  id: string;
+  name: string;
+  phone: string;
+  email: string | null;
+  address: string | null;
+  created_at: string;
+}
 
 const AdminDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
-  const [customers, setCustomers] = useState<Customer[]>([]);
+  const { user, loading: authLoading, signOut } = useAuth();
+  
+  const [agents, setAgents] = useState<Agent[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
-  const [selectedCustomer, setSelectedCustomer] = useState<Customer | null>(null);
-  const [detailsModalOpen, setDetailsModalOpen] = useState(false);
-  const [addModalOpen, setAddModalOpen] = useState(false);
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [customerToDelete, setCustomerToDelete] = useState<Customer | null>(null);
+  const [isAdmin, setIsAdmin] = useState(false);
+  
+  // Customer view modal
+  const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
+  const [agentCustomers, setAgentCustomers] = useState<AgentCustomer[]>([]);
+  const [customersModalOpen, setCustomersModalOpen] = useState(false);
+  const [loadingCustomers, setLoadingCustomers] = useState(false);
 
+  // Check admin role
   useEffect(() => {
-    const isAdmin = sessionStorage.getItem('biggyround_admin');
-    if (!isAdmin) {
-      navigate('/admin');
-    }
-  }, [navigate]);
+    const checkAdminRole = async () => {
+      if (!authLoading && user) {
+        const { data } = await supabase.rpc('has_role', {
+          _user_id: user.id,
+          _role: 'admin'
+        });
+        
+        if (!data) {
+          toast({
+            title: 'Access Denied',
+            description: 'You do not have admin privileges.',
+            variant: 'destructive',
+          });
+          navigate('/admin');
+        } else {
+          setIsAdmin(true);
+        }
+      } else if (!authLoading && !user) {
+        navigate('/admin');
+      }
+    };
+    
+    checkAdminRole();
+  }, [user, authLoading, navigate, toast]);
 
-  const loadCustomers = () => {
-    setCustomers(getCustomers());
+  // Fetch agents data
+  const fetchAgents = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('agents')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setAgents(data || []);
+    } catch (error: any) {
+      console.error('Error fetching agents:', error);
+      toast({
+        title: 'Error',
+        description: 'Failed to load agents data.',
+        variant: 'destructive',
+      });
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    loadCustomers();
-  }, []);
+    if (isAdmin) {
+      fetchAgents();
+    }
+  }, [isAdmin]);
 
-  const filteredCustomers = useMemo(() => {
-    if (!searchQuery) return customers;
+  // Real-time subscription for agents
+  useEffect(() => {
+    if (!isAdmin) return;
+
+    const channel = supabase
+      .channel('admin-agents-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'agents',
+        },
+        () => {
+          fetchAgents();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
+  }, [isAdmin]);
+
+  const filteredAgents = useMemo(() => {
+    if (!searchQuery) return agents;
     const query = searchQuery.toLowerCase();
-    return customers.filter(c => 
-      getFullName(c).toLowerCase().includes(query) ||
-      c.idNumber.toLowerCase().includes(query) ||
-      c.phone.includes(query) ||
-      c.email.toLowerCase().includes(query)
+    return agents.filter(a => 
+      a.name.toLowerCase().includes(query) ||
+      a.email.toLowerCase().includes(query) ||
+      a.phone.includes(query) ||
+      a.ref_number.toLowerCase().includes(query)
     );
-  }, [customers, searchQuery]);
+  }, [agents, searchQuery]);
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('biggyround_admin');
+  const totalCustomers = useMemo(() => {
+    return agents.reduce((sum, agent) => sum + agent.customers_count, 0);
+  }, [agents]);
+
+  const handleLogout = async () => {
+    await signOut();
     toast({
       title: 'Logged Out',
       description: 'You have been successfully logged out.',
@@ -95,44 +172,41 @@ const AdminDashboard = () => {
     navigate('/admin');
   };
 
-  const handleViewDetails = (customer: Customer) => {
-    setSelectedCustomer(customer);
-    setDetailsModalOpen(true);
-  };
+  const handleViewCustomers = async (agent: Agent) => {
+    setSelectedAgent(agent);
+    setLoadingCustomers(true);
+    setCustomersModalOpen(true);
 
-  const handleDeleteClick = (customer: Customer) => {
-    setCustomerToDelete(customer);
-    setDeleteDialogOpen(true);
-  };
+    try {
+      const { data, error } = await supabase
+        .from('agent_customers')
+        .select('*')
+        .eq('agent_id', agent.id)
+        .order('created_at', { ascending: false });
 
-  const confirmDelete = () => {
-    if (customerToDelete) {
-      deleteCustomer(customerToDelete.id);
-      loadCustomers();
+      if (error) throw error;
+      setAgentCustomers(data || []);
+    } catch (error: any) {
+      console.error('Error fetching customers:', error);
       toast({
-        title: 'Customer Deleted',
-        description: `${getFullName(customerToDelete)}'s record has been removed.`,
+        title: 'Error',
+        description: 'Failed to load customer data.',
+        variant: 'destructive',
       });
+    } finally {
+      setLoadingCustomers(false);
     }
-    setDeleteDialogOpen(false);
-    setCustomerToDelete(null);
   };
 
-  const handleExportCSV = () => {
-    const csv = exportToCSV();
-    const blob = new Blob([csv], { type: 'text/csv' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = `biggyround_customers_${new Date().toISOString().split('T')[0]}.csv`;
-    a.click();
-    URL.revokeObjectURL(url);
-    
-    toast({
-      title: 'Export Complete',
-      description: 'Customer data has been exported to CSV.',
-    });
-  };
+  if (authLoading || loading) {
+    return (
+      <div className="min-h-screen bg-background flex items-center justify-center">
+        <Loader2 className="animate-spin text-primary" size={40} />
+      </div>
+    );
+  }
+
+  if (!isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-background">
@@ -141,10 +215,10 @@ const AdminDashboard = () => {
         <div className="container mx-auto px-4 py-4 flex items-center justify-between">
           <Logo size="sm" />
           <div className="flex items-center gap-3">
-            <Link to="/admin/agents">
+            <Link to="/">
               <Button variant="ghost" size="sm">
-                <Users size={16} />
-                View Agents
+                <Building2 size={16} />
+                Home
               </Button>
             </Link>
             <Button variant="outline" size="sm" onClick={handleLogout}>
@@ -156,109 +230,101 @@ const AdminDashboard = () => {
       </header>
 
       <main className="container mx-auto px-4 py-8">
+        {/* Page Title */}
+        <div className="mb-8 animate-fade-in">
+          <h1 className="font-display text-3xl font-bold text-foreground">Admin Dashboard</h1>
+          <p className="text-muted-foreground mt-1">Manage agents and view member registrations</p>
+        </div>
+
         {/* Stats */}
         <div className="grid sm:grid-cols-3 gap-4 mb-8 animate-fade-in">
           <StatsCard
-            title="Total Customers"
-            value={customers.length}
+            title="Total Agents"
+            value={agents.length}
+            icon={UserCheck}
+          />
+          <StatsCard
+            title="Total Members"
+            value={totalCustomers}
             icon={Users}
           />
           <StatsCard
-            title="Today's Registrations"
-            value={getTodayRegistrations()}
+            title="Avg Members/Agent"
+            value={agents.length > 0 ? Math.round(totalCustomers / agents.length) : 0}
             icon={UserPlus}
-            trend="up"
-          />
-          <StatsCard
-            title="Complete Profiles"
-            value={getCompleteProfiles()}
-            icon={CheckCircle}
           />
         </div>
 
-        {/* Actions Bar */}
+        {/* Search Bar */}
         <div className="flex flex-col sm:flex-row gap-4 mb-6 animate-slide-up">
           <div className="relative flex-1">
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search by name, ID, phone, or email..."
+              placeholder="Search agents by name, email, phone, or reference..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="pl-10"
             />
           </div>
-          <div className="flex gap-3">
-            <Button variant="gold" onClick={() => setAddModalOpen(true)}>
-              <Plus size={18} />
-              Add Customer
-            </Button>
-            <Button variant="outline" onClick={handleExportCSV}>
-              <Download size={18} />
-              Export CSV
-            </Button>
-          </div>
         </div>
 
-        {/* Customer Table */}
+        {/* Agents Table */}
         <div className="bg-card rounded-xl border border-border card-elevated overflow-hidden animate-slide-up">
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
                 <TableRow className="hover:bg-transparent border-border">
-                  <TableHead className="text-muted-foreground">Photo</TableHead>
-                  <TableHead className="text-muted-foreground">Name</TableHead>
+                  <TableHead className="text-muted-foreground">Agent</TableHead>
+                  <TableHead className="text-muted-foreground">Reference</TableHead>
                   <TableHead className="text-muted-foreground">Phone</TableHead>
-                  <TableHead className="text-muted-foreground">ID Number</TableHead>
-                  <TableHead className="text-muted-foreground">City</TableHead>
+                  <TableHead className="text-muted-foreground">Email</TableHead>
+                  <TableHead className="text-muted-foreground">Members</TableHead>
                   <TableHead className="text-muted-foreground">Joined</TableHead>
                   <TableHead className="text-muted-foreground text-right">Actions</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {filteredCustomers.length === 0 ? (
+                {filteredAgents.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">
-                      {searchQuery ? 'No customers match your search.' : 'No customers registered yet.'}
+                      {searchQuery ? 'No agents match your search.' : 'No agents registered yet.'}
                     </TableCell>
                   </TableRow>
                 ) : (
-                  filteredCustomers.map(customer => (
-                    <TableRow key={customer.id} className="border-border hover:bg-secondary/50">
+                  filteredAgents.map(agent => (
+                    <TableRow key={agent.id} className="border-border hover:bg-secondary/50">
                       <TableCell>
-                        <div className="w-10 h-10 rounded-lg overflow-hidden border border-border">
-                          <img 
-                            src={customer.passportPhoto} 
-                            alt={getFullName(customer)}
-                            className="w-full h-full object-cover"
-                          />
+                        <div className="flex items-center gap-3">
+                          <Avatar className="h-10 w-10 border-2 border-primary/30">
+                            <AvatarImage src={agent.profile_pic_url || undefined} />
+                            <AvatarFallback className="bg-primary text-primary-foreground">
+                              {agent.name.charAt(0)}
+                            </AvatarFallback>
+                          </Avatar>
+                          <span className="font-medium">{agent.name}</span>
                         </div>
                       </TableCell>
-                      <TableCell className="font-medium">{getFullName(customer)}</TableCell>
-                      <TableCell className="text-muted-foreground">{customer.phone}</TableCell>
-                      <TableCell className="font-mono text-sm">{customer.idNumber}</TableCell>
-                      <TableCell className="text-muted-foreground">{customer.city}</TableCell>
+                      <TableCell className="font-mono text-sm text-primary">{agent.ref_number}</TableCell>
+                      <TableCell className="text-muted-foreground">{agent.phone}</TableCell>
+                      <TableCell className="text-muted-foreground">{agent.email}</TableCell>
+                      <TableCell>
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary/10 text-primary">
+                          {agent.customers_count} members
+                        </span>
+                      </TableCell>
                       <TableCell className="text-muted-foreground text-sm">
-                        {new Date(customer.dateJoined).toLocaleDateString()}
+                        {new Date(agent.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            onClick={() => handleViewDetails(customer)}
-                            title="View Details"
-                          >
-                            <Eye size={16} className="text-primary" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            onClick={() => handleDeleteClick(customer)}
-                            title="Delete Customer"
-                          >
-                            <Trash2 size={16} className="text-destructive" />
-                          </Button>
-                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="sm"
+                          onClick={() => handleViewCustomers(agent)}
+                          title="View Customers"
+                        >
+                          <Eye size={16} className="text-primary" />
+                          View Members
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))
@@ -269,43 +335,68 @@ const AdminDashboard = () => {
         </div>
       </main>
 
-      {/* Modals */}
-      <CustomerDetailsModal
-        customer={selectedCustomer}
-        open={detailsModalOpen}
-        onClose={() => setDetailsModalOpen(false)}
-      />
-
-      <AddCustomerModal
-        open={addModalOpen}
-        onClose={() => setAddModalOpen(false)}
-        onSuccess={loadCustomers}
-      />
-
-      {/* Delete Confirmation */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="bg-card border-border">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-foreground">
-              <AlertTriangle className="text-destructive" size={20} />
-              Delete Customer Record
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-muted-foreground">
-              Are you sure you want to delete <strong className="text-foreground">{customerToDelete && getFullName(customerToDelete)}</strong>'s 
-              stockvale record? This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-border">Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {/* Customer View Modal */}
+      <Dialog open={customersModalOpen} onOpenChange={setCustomersModalOpen}>
+        <DialogContent className="bg-card border-border max-w-4xl max-h-[80vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="text-foreground flex items-center gap-3">
+              {selectedAgent && (
+                <>
+                  <Avatar className="h-8 w-8 border-2 border-primary/30">
+                    <AvatarImage src={selectedAgent.profile_pic_url || undefined} />
+                    <AvatarFallback className="bg-primary text-primary-foreground text-sm">
+                      {selectedAgent.name.charAt(0)}
+                    </AvatarFallback>
+                  </Avatar>
+                  <span>{selectedAgent.name}'s Members</span>
+                  <span className="text-sm text-muted-foreground font-normal">
+                    ({selectedAgent.ref_number})
+                  </span>
+                </>
+              )}
+            </DialogTitle>
+          </DialogHeader>
+          
+          <div className="flex-1 overflow-auto">
+            {loadingCustomers ? (
+              <div className="flex items-center justify-center py-12">
+                <Loader2 className="animate-spin text-primary" size={32} />
+              </div>
+            ) : agentCustomers.length === 0 ? (
+              <div className="text-center py-12 text-muted-foreground">
+                No members registered by this agent yet.
+              </div>
+            ) : (
+              <Table>
+                <TableHeader>
+                  <TableRow className="hover:bg-transparent border-border">
+                    <TableHead className="text-muted-foreground">Name</TableHead>
+                    <TableHead className="text-muted-foreground">Phone</TableHead>
+                    <TableHead className="text-muted-foreground">Email</TableHead>
+                    <TableHead className="text-muted-foreground">Address</TableHead>
+                    <TableHead className="text-muted-foreground">Registered</TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {agentCustomers.map(customer => (
+                    <TableRow key={customer.id} className="border-border hover:bg-secondary/50">
+                      <TableCell className="font-medium">{customer.name}</TableCell>
+                      <TableCell className="text-muted-foreground">{customer.phone}</TableCell>
+                      <TableCell className="text-muted-foreground">{customer.email || '-'}</TableCell>
+                      <TableCell className="text-muted-foreground max-w-40 truncate">
+                        {customer.address || '-'}
+                      </TableCell>
+                      <TableCell className="text-muted-foreground text-sm">
+                        {new Date(customer.created_at).toLocaleDateString()}
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
