@@ -23,6 +23,8 @@ export type Database = {
           id: string
           name: string
           phone: string
+          recruited_by_agent_id: string | null
+          referral_source: string | null
           updated_at: string
         }
         Insert: {
@@ -33,6 +35,8 @@ export type Database = {
           id?: string
           name: string
           phone: string
+          recruited_by_agent_id?: string | null
+          referral_source?: string | null
           updated_at?: string
         }
         Update: {
@@ -43,12 +47,21 @@ export type Database = {
           id?: string
           name?: string
           phone?: string
+          recruited_by_agent_id?: string | null
+          referral_source?: string | null
           updated_at?: string
         }
         Relationships: [
           {
             foreignKeyName: "agent_customers_agent_id_fkey"
             columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "agent_customers_recruited_by_agent_id_fkey"
+            columns: ["recruited_by_agent_id"]
             isOneToOne: false
             referencedRelation: "agents"
             referencedColumns: ["id"]
