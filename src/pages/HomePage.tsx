@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageLayout } from "@/components/PageLayout";
 import Logo from "@/components/Logo";
-import { Users, ShoppingCart, Wallet, Heart, Trophy, Handshake, Shield } from "lucide-react";
+import { Users, ShoppingCart, Wallet, Heart, Trophy, Handshake, Shield, UserCheck } from "lucide-react";
 
 export default function HomePage() {
   const features = [
@@ -53,7 +53,13 @@ export default function HomePage() {
               <Link to="/about">Learn More</Link>
             </Button>
           </div>
-          <div className="mt-8">
+          <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
+            <Button size="sm" variant="ghost" asChild className="text-muted-foreground hover:text-primary">
+              <Link to="/agent/dashboard" className="flex items-center gap-2">
+                <UserCheck className="h-4 w-4" />
+                Agent Portal
+              </Link>
+            </Button>
             <Button size="sm" variant="ghost" asChild className="text-muted-foreground hover:text-primary">
               <Link to="/admin" className="flex items-center gap-2">
                 <Shield className="h-4 w-4" />
