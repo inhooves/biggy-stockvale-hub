@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { PageLayout } from "@/components/PageLayout";
 import Logo from "@/components/Logo";
-import { Users, ShoppingCart, Wallet, Heart, Trophy, Handshake } from "lucide-react";
+import { Users, ShoppingCart, Wallet, Heart, Trophy, Handshake, Shield } from "lucide-react";
 
 export default function HomePage() {
   const features = [
@@ -51,6 +51,14 @@ export default function HomePage() {
             </Button>
             <Button size="lg" variant="outline" asChild>
               <Link to="/about">Learn More</Link>
+            </Button>
+          </div>
+          <div className="mt-8">
+            <Button size="sm" variant="ghost" asChild className="text-muted-foreground hover:text-primary">
+              <Link to="/admin" className="flex items-center gap-2">
+                <Shield className="h-4 w-4" />
+                Admin Portal
+              </Link>
             </Button>
           </div>
         </div>
