@@ -1,0 +1,124 @@
+import { PageLayout } from "@/components/PageLayout";
+import { Card, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
+import { Link } from "react-router-dom";
+import { Heart, DollarSign, ShoppingCart, Users, Calendar } from "lucide-react";
+
+export default function BurialPage() {
+  const benefits = [
+    {
+      icon: DollarSign,
+      title: "USD $500 Cash Aid",
+      description: "The next of kin will receive USD $500 equivalence for burial-related expenses."
+    },
+    {
+      icon: ShoppingCart,
+      title: "4 Months Groceries",
+      description: "The family will receive standard grocery allotment for 4 months post the death of the member."
+    },
+    {
+      icon: Users,
+      title: "Counselling Sessions",
+      description: "We organize counselling sessions and provide ideas on how to move on and ensure family financial needs are met."
+    },
+    {
+      icon: Calendar,
+      title: "Events Management",
+      description: "An events management specialist will help with on-ground planning and coordination from news until counselling completion."
+    },
+  ];
+
+  return (
+    <PageLayout>
+      {/* Hero */}
+      <section className="py-16 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+        <div className="container mx-auto text-center">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <Heart className="h-10 w-10 text-primary" />
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6">Biggy Burial Society</h1>
+          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+            Supporting families during their most difficult times with financial assistance and emotional care.
+          </p>
+        </div>
+      </section>
+
+      {/* Description */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
+            This is a service to assist the provided next of kin with burial-related expenses. The contribution 
+            is automatically covered on the monthly contribution. This benefit is meant to give the family time 
+            to heal, adjust and prepare for the future without their loved one's contribution.
+          </p>
+          <p className="text-lg text-muted-foreground leading-relaxed">
+            As the Biggy Round community stewards, we believe help comes in many forms apart from financial needs. 
+            Emotional support, presence and ideas on teaching the family how to fish can have medium to long-term impact.
+          </p>
+        </div>
+      </section>
+
+      {/* Benefits */}
+      <section className="py-16 px-4 bg-muted/30">
+        <div className="container mx-auto">
+          <h2 className="text-3xl font-bold text-center mb-12">What We Provide</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+            {benefits.map((benefit) => (
+              <Card key={benefit.title}>
+                <CardContent className="p-6">
+                  <div className="flex items-start gap-4">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <benefit.icon className="h-6 w-6 text-primary" />
+                    </div>
+                    <div>
+                      <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
+                      <p className="text-muted-foreground">{benefit.description}</p>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Eligibility */}
+      <section className="py-16 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <Card className="border-primary/20">
+            <CardContent className="p-8">
+              <h2 className="text-2xl font-bold mb-4">Eligibility Requirements</h2>
+              <ul className="space-y-4 text-muted-foreground">
+                <li className="flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">1</span>
+                  <span>Only members who contribute the full monthly fee for a period of <strong>6 months</strong> without skipping a month will be eligible to benefit from this scheme.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">2</span>
+                  <span>The details of the next of kin beneficiary are required upon initial registration to avoid conflicts during grieving.</span>
+                </li>
+                <li className="flex items-start gap-3">
+                  <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold shrink-0">3</span>
+                  <span>Beneficiary details include: Name, ID number, physical address, email address, and contact numbers.</span>
+                </li>
+              </ul>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section className="py-16 px-4 bg-primary text-primary-foreground">
+        <div className="container mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">Protect Your Family Today</h2>
+          <p className="text-lg mb-8 opacity-90">
+            Register and ensure your loved ones are protected.
+          </p>
+          <Button size="lg" variant="secondary" asChild>
+            <Link to="/register">Register Now</Link>
+          </Button>
+        </div>
+      </section>
+    </PageLayout>
+  );
+}
