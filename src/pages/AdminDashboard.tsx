@@ -294,7 +294,7 @@ const AdminDashboard = () => {
         </div>
 
         {/* Stats */}
-        <div className="grid sm:grid-cols-3 gap-4 mb-8 animate-fade-in">
+        <div className="flex flex-col gap-4 mb-8 animate-fade-in">
           <StatsCard
             title="Total Agents"
             value={agents.length}
