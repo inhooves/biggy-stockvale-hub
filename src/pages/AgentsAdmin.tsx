@@ -1,6 +1,7 @@
 import { useState, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
+import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import StatsCard from '@/components/StatsCard';
@@ -55,10 +56,12 @@ interface AgentCustomer {
 const AgentsAdmin = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
+  const { user, loading: authLoading, signOut } = useAuth();
   
   const [agents, setAgents] = useState<Agent[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
+  const [isAdmin, setIsAdmin] = useState(false);
   
   // View customers modal
   const [selectedAgent, setSelectedAgent] = useState<Agent | null>(null);
@@ -66,13 +69,32 @@ const AgentsAdmin = () => {
   const [customersModalOpen, setCustomersModalOpen] = useState(false);
   const [loadingCustomers, setLoadingCustomers] = useState(false);
 
-  // Check admin auth
+  // Check admin role using proper Supabase auth
   useEffect(() => {
-    const isAdmin = sessionStorage.getItem('biggyround_admin');
-    if (!isAdmin) {
-      navigate('/admin');
-    }
-  }, [navigate]);
+    const checkAdminRole = async () => {
+      if (!authLoading && user) {
+        const { data } = await supabase.rpc('has_role', {
+          _user_id: user.id,
+          _role: 'admin'
+        });
+        
+        if (!data) {
+          toast({
+            title: 'Access Denied',
+            description: 'You do not have admin privileges.',
+            variant: 'destructive',
+          });
+          navigate('/admin');
+        } else {
+          setIsAdmin(true);
+        }
+      } else if (!authLoading && !user) {
+        navigate('/admin');
+      }
+    };
+    
+    checkAdminRole();
+  }, [user, authLoading, navigate, toast]);
 
   const fetchAgents = async () => {
     try {
@@ -96,11 +118,15 @@ const AgentsAdmin = () => {
   };
 
   useEffect(() => {
-    fetchAgents();
-  }, []);
+    if (isAdmin) {
+      fetchAgents();
+    }
+  }, [isAdmin]);
 
   // Real-time subscription
   useEffect(() => {
+    if (!isAdmin) return;
+
     const channel = supabase
       .channel('agents-admin-changes')
       .on(
@@ -113,7 +139,7 @@ const AgentsAdmin = () => {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, []);
+  }, [isAdmin]);
 
   const filteredAgents = useMemo(() => {
     if (!searchQuery) return agents;
@@ -155,8 +181,8 @@ const AgentsAdmin = () => {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('biggyround_admin');
+  const handleLogout = async () => {
+    await signOut();
     toast({
       title: 'Logged Out',
       description: 'You have been successfully logged out.',
@@ -164,13 +190,15 @@ const AgentsAdmin = () => {
     navigate('/admin');
   };
 
-  if (loading) {
+  if (authLoading || loading) {
     return (
       <div className="min-h-screen bg-background flex items-center justify-center">
         <Loader2 className="animate-spin text-primary" size={40} />
       </div>
     );
   }
+
+  if (!isAdmin) return null;
 
   return (
     <div className="min-h-screen bg-background">

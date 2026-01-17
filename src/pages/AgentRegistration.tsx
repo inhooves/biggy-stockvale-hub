@@ -111,7 +111,7 @@ const AgentRegistration = () => {
       // Upload profile picture
       const profilePicUrl = await uploadProfilePic(data.profilePic, newUser.id);
 
-      // Create agent record
+      // Create agent record - role assignment is handled by database trigger
       const refNumber = generateRefNumber();
       const { error: agentError } = await supabase.from('agents').insert({
         user_id: newUser.id,
@@ -123,12 +123,6 @@ const AgentRegistration = () => {
       });
 
       if (agentError) throw agentError;
-
-      // Add agent role
-      await supabase.from('user_roles').insert({
-        user_id: newUser.id,
-        role: 'agent',
-      });
 
       toast({
         title: 'Registration Successful!',
