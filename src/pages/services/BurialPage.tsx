@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Heart, DollarSign, ShoppingCart, Users, Calendar } from "lucide-react";
 import burialHeroImage from "@/assets/burial-hero.jpeg";
+import burialSupportImage from "@/assets/burial-support.jpeg";
 
 export default function BurialPage() {
   const benefits = [
@@ -67,6 +68,19 @@ export default function BurialPage() {
             As the Biggy Round community stewards, we believe help comes in many forms apart from financial needs. 
             Emotional support, presence and ideas on teaching the family how to fish can have medium to long-term impact.
           </p>
+        </div>
+      </section>
+
+      {/* Community Support Image */}
+      <section className="py-12 px-4">
+        <div className="container mx-auto max-w-4xl">
+          <div className="overflow-hidden rounded-2xl shadow-xl">
+            <img 
+              src={burialSupportImage} 
+              alt="Community members supporting each other during difficult times" 
+              className="w-full h-64 md:h-80 object-cover"
+            />
+          </div>
         </div>
       </section>
 
