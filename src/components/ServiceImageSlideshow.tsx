@@ -34,7 +34,7 @@ export function ServiceImageSlideshow() {
             <Link
               key={index}
               to={image.link}
-              className="flex-shrink-0 w-40 md:w-56 lg:w-64 px-2"
+              className="flex-shrink-0 w-[264px] md:w-[370px] lg:w-[422px] px-3"
             >
               <div className="aspect-square overflow-hidden rounded-lg shadow-md cursor-pointer">
                 <img
