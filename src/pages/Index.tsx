@@ -4,6 +4,7 @@ import Logo from '@/components/Logo';
 import { MainNavigation } from '@/components/MainNavigation';
 import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Heart, Wallet, Sprout } from 'lucide-react';
 import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
+import groceriesBagImage from '@/assets/groceries-bag.jpeg';
 
 const Index = () => {
   const serviceTabs: TabItem[] = [
@@ -15,7 +16,8 @@ const Index = () => {
         <div className="p-4 text-center">
           <ShoppingBasket size={32} className="text-primary mx-auto mb-3" />
           <h3 className="font-display text-lg font-semibold mb-2">Bulk Groceries</h3>
-          <p className="text-sm text-muted-foreground">Pool funds for wholesale grocery purchases at discounted rates.</p>
+          <p className="text-sm text-muted-foreground mb-3">Pool funds for wholesale grocery purchases at discounted rates.</p>
+          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-full max-w-xs mx-auto rounded-lg" />
         </div>
       ),
     },
