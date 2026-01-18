@@ -58,7 +58,7 @@ const Index = () => {
         <div className="p-4 text-center">
           <Sprout size={32} className="text-primary mx-auto mb-3" />
           <h3 className="font-display text-lg font-semibold mb-2">Crowd Farming</h3>
-          <p className="text-sm text-muted-foreground mb-3">Invest more to multiply your investments with us.</p>
+          <p className="text-sm text-muted-foreground mb-3">Expand your investment to realize higher potential returns.</p>
           <img src={investmentGrowthImage} alt="Investment growth chart" className="w-full max-w-xs mx-auto rounded-lg" />
         </div>
       ),
