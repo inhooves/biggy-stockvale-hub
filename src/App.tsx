@@ -25,6 +25,7 @@ import AgentDashboard from "./pages/AgentDashboard";
 import AgentsAdmin from "./pages/AgentsAdmin";
 import NotFound from "./pages/NotFound";
 import TabbedDemo from "./pages/TabbedDemo";
+import MemberDashboard from "./pages/MemberDashboard";
 import { AIChatbot } from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
@@ -58,6 +59,9 @@ const App = () => (
           <Route path="/benefits" element={<BenefitsPage />} />
           <Route path="/contact" element={<ContactPage />} />
           <Route path="/marketplace" element={<MarketplacePage />} />
+          
+          {/* Member Dashboard */}
+          <Route path="/member/dashboard" element={<MemberDashboard />} />
           
           {/* Admin & Agent */}
           <Route path="/admin" element={<AdminLogin />} />
