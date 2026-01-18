@@ -26,6 +26,7 @@ import AgentsAdmin from "./pages/AgentsAdmin";
 import NotFound from "./pages/NotFound";
 import TabbedDemo from "./pages/TabbedDemo";
 import MemberDashboard from "./pages/MemberDashboard";
+import MemberLogin from "./pages/MemberLogin";
 import { AIChatbot } from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
@@ -61,6 +62,7 @@ const App = () => (
           <Route path="/marketplace" element={<MarketplacePage />} />
           
           {/* Member Dashboard */}
+          <Route path="/member/login" element={<MemberLogin />} />
           <Route path="/member/dashboard" element={<MemberDashboard />} />
           
           {/* Admin & Agent */}

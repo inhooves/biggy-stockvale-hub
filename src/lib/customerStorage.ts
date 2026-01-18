@@ -21,9 +21,56 @@ export interface Customer {
   beneficiaryAddress: string;
   beneficiaryPhone: string;
   dateJoined: string;
+  // Login credentials
+  username: string;
+  passwordHash: string;
 }
 
 const STORAGE_KEY = 'biggyround_customers';
+
+// Simple hash function for password storage (for demo purposes - in production use proper hashing)
+const hashPassword = (password: string): string => {
+  let hash = 0;
+  for (let i = 0; i < password.length; i++) {
+    const char = password.charCodeAt(i);
+    hash = ((hash << 5) - hash) + char;
+    hash = hash & hash;
+  }
+  return hash.toString(16) + '_' + btoa(password.slice(0, 3));
+};
+
+export const verifyPassword = (password: string, hash: string): boolean => {
+  return hashPassword(password) === hash;
+};
+
+export const authenticateMember = (username: string, password: string): { success: boolean; customer?: Customer; message: string } => {
+  const customers = getCustomers();
+  const customer = customers.find(c => c.username.toLowerCase() === username.toLowerCase());
+  
+  if (!customer) {
+    return { success: false, message: 'Username not found. Please check your username or register.' };
+  }
+  
+  if (!verifyPassword(password, customer.passwordHash)) {
+    return { success: false, message: 'Incorrect password. Please try again.' };
+  }
+  
+  return { success: true, customer, message: 'Login successful!' };
+};
+
+export const isUsernameTaken = (username: string): boolean => {
+  const customers = getCustomers();
+  return customers.some(c => c.username.toLowerCase() === username.toLowerCase());
+};
+
+export const getHashedPassword = (password: string): string => {
+  return hashPassword(password);
+};
+
+export const getCustomerByEmail = (email: string): Customer | undefined => {
+  const customers = getCustomers();
+  return customers.find(c => c.email.toLowerCase() === email.toLowerCase());
+};
 
 export const getCustomers = (): Customer[] => {
   try {

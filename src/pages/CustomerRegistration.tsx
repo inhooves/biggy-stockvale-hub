@@ -1,14 +1,15 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { z } from 'zod';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import PhotoUpload from '@/components/PhotoUpload';
-import { addCustomer } from '@/lib/customerStorage';
-import { setMemberSession } from '@/pages/MemberDashboard';
-import { ArrowLeft, CheckCircle, Shield, User, MapPin, Users, UserPlus } from 'lucide-react';
+import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
+import { addCustomer, isUsernameTaken, getHashedPassword } from '@/lib/customerStorage';
+import { ArrowLeft, CheckCircle, Shield, User, MapPin, Users, UserPlus, Lock, KeyRound } from 'lucide-react';
+import { strongPasswordSchema } from '@/lib/passwordValidation';
 import {
   Select,
   SelectContent,
@@ -18,6 +19,9 @@ import {
 } from "@/components/ui/select";
 
 const registrationSchema = z.object({
+  username: z.string().min(3, 'Username must be at least 3 characters').max(30).regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
+  password: strongPasswordSchema,
+  confirmPassword: z.string(),
   firstName: z.string().min(2, 'First name is required').max(50),
   surname: z.string().min(2, 'Surname is required').max(50),
   phone: z.string().regex(/^[\d\s\-+()]{10,20}$/, 'Invalid phone number'),
@@ -37,6 +41,9 @@ const registrationSchema = z.object({
   beneficiaryIdNumber: z.string().min(5, 'Beneficiary ID number is required').max(20),
   beneficiaryAddress: z.string().min(5, 'Beneficiary address is required').max(200),
   beneficiaryPhone: z.string().regex(/^[\d\s\-+()]{10,20}$/, 'Invalid beneficiary phone number'),
+}).refine((data) => data.password === data.confirmPassword, {
+  message: "Passwords don't match",
+  path: ["confirmPassword"],
 });
 
 const CustomerRegistration = () => {
@@ -47,6 +54,9 @@ const CustomerRegistration = () => {
   const [registeredId, setRegisteredId] = useState('');
   
   const [formData, setFormData] = useState({
+    username: '',
+    password: '',
+    confirmPassword: '',
     firstName: '',
     surname: '',
     phone: '',
@@ -92,6 +102,13 @@ const CustomerRegistration = () => {
         return;
       }
 
+      // Check if username is taken
+      if (isUsernameTaken(validatedData.username)) {
+        setErrors({ username: 'Username is already taken. Please choose another.' });
+        setIsSubmitting(false);
+        return;
+      }
+
       const result = addCustomer({
         firstName: validatedData.firstName,
         surname: validatedData.surname,
@@ -112,11 +129,12 @@ const CustomerRegistration = () => {
         beneficiaryIdNumber: validatedData.beneficiaryIdNumber,
         beneficiaryAddress: validatedData.beneficiaryAddress,
         beneficiaryPhone: validatedData.beneficiaryPhone,
+        username: validatedData.username,
+        passwordHash: getHashedPassword(validatedData.password),
       });
       
       if (result.success && result.customer) {
         setRegisteredId(result.customer.idNumber);
-        setMemberSession(result.customer.id);
         setShowSuccess(true);
       } else {
         toast({
@@ -168,8 +186,8 @@ const CustomerRegistration = () => {
                 Note: A once-off initiation fee of USD $3 will be required when you start contributing.
               </p>
             </div>
-            <Button variant="gold" size="lg" onClick={() => navigate('/member/dashboard')} className="w-full">
-              Go to My Dashboard
+            <Button variant="gold" size="lg" onClick={() => navigate('/member/login')} className="w-full">
+              Go to Login
             </Button>
           </div>
         </div>
@@ -203,6 +221,74 @@ const CustomerRegistration = () => {
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up">
+          {/* Account Credentials Section */}
+          <div className="bg-card rounded-2xl p-6 card-elevated border border-border space-y-5">
+            <div className="flex items-center gap-2 mb-4">
+              <KeyRound className="text-primary" size={20} />
+              <h2 className="font-semibold text-lg">Create Your Account</h2>
+            </div>
+            
+            <div className="space-y-2">
+              <label className="text-sm font-medium flex items-center gap-2">
+                <User size={16} className="text-muted-foreground" />
+                Username <span className="text-destructive">*</span>
+              </label>
+              <Input
+                value={formData.username}
+                onChange={e => updateField('username', e.target.value)}
+                placeholder="Choose a unique username"
+                className={errors.username ? 'border-destructive' : ''}
+                autoComplete="username"
+              />
+              {errors.username && <p className="text-xs text-destructive">{errors.username}</p>}
+              <p className="text-xs text-muted-foreground">Letters, numbers, and underscores only</p>
+            </div>
+
+            <div className="grid md:grid-cols-2 gap-5">
+              <div className="space-y-2">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <Lock size={16} className="text-muted-foreground" />
+                  Password <span className="text-destructive">*</span>
+                </label>
+                <Input
+                  type="password"
+                  value={formData.password}
+                  onChange={e => updateField('password', e.target.value)}
+                  placeholder="Create a strong password"
+                  className={errors.password ? 'border-destructive' : ''}
+                  autoComplete="new-password"
+                />
+                {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
+                <PasswordStrengthIndicator password={formData.password} />
+              </div>
+
+              <div className="space-y-2">
+                <label className="text-sm font-medium flex items-center gap-2">
+                  <Lock size={16} className="text-muted-foreground" />
+                  Confirm Password <span className="text-destructive">*</span>
+                </label>
+                <Input
+                  type="password"
+                  value={formData.confirmPassword}
+                  onChange={e => updateField('confirmPassword', e.target.value)}
+                  placeholder="Confirm your password"
+                  className={errors.confirmPassword ? 'border-destructive' : ''}
+                  autoComplete="new-password"
+                />
+                {errors.confirmPassword && <p className="text-xs text-destructive">{errors.confirmPassword}</p>}
+              </div>
+            </div>
+
+            <div className="text-center pt-2">
+              <p className="text-sm text-muted-foreground">
+                Already have an account?{' '}
+                <Link to="/member/login" className="text-primary hover:underline font-medium">
+                  Login here
+                </Link>
+              </p>
+            </div>
+          </div>
+
           {/* Personal Information Section */}
           <div className="bg-card rounded-2xl p-6 card-elevated border border-border space-y-5">
             <div className="flex items-center gap-2 mb-4">
