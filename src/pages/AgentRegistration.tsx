@@ -14,6 +14,7 @@ import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Loader2, UserPlus, LogIn, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -22,6 +23,7 @@ const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   phone: z.string().regex(/^\+263[0-9]{9}$/, 'Phone must be in +263 format (e.g., +263771234567)'),
+  gender: z.string().min(1, 'Please select your gender'),
   password: strongPasswordSchema,
   confirmPassword: z.string(),
   profilePic: z.string().min(1, 'Profile picture is required'),
@@ -51,6 +53,7 @@ const AgentRegistration = () => {
       name: '',
       email: '',
       phone: '+263',
+      gender: '',
       password: '',
       confirmPassword: '',
       profilePic: '',
@@ -120,6 +123,7 @@ const AgentRegistration = () => {
         name: data.name,
         email: data.email,
         phone: data.phone,
+        gender: data.gender,
         ref_number: refNumber,
         profile_pic_url: profilePicUrl,
       });
@@ -251,6 +255,29 @@ const AgentRegistration = () => {
                           <FormControl>
                             <Input placeholder="+263771234567" {...field} />
                           </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={registerForm.control}
+                      name="gender"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel>Gender *</FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger>
+                                <SelectValue placeholder="Select your gender" />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="Male">Male</SelectItem>
+                              <SelectItem value="Female">Female</SelectItem>
+                              <SelectItem value="Other">Other</SelectItem>
+                            </SelectContent>
+                          </Select>
                           <FormMessage />
                         </FormItem>
                       )}
