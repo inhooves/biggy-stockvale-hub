@@ -27,6 +27,7 @@ import NotFound from "./pages/NotFound";
 import TabbedDemo from "./pages/TabbedDemo";
 import MemberDashboard from "./pages/MemberDashboard";
 import MemberLogin from "./pages/MemberLogin";
+import MemberSignUp from "./pages/MemberSignUp";
 import { AIChatbot } from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
@@ -63,6 +64,7 @@ const App = () => (
           
           {/* Member Dashboard */}
           <Route path="/member/login" element={<MemberLogin />} />
+          <Route path="/member/signup" element={<MemberSignUp />} />
           <Route path="/member/dashboard" element={<MemberDashboard />} />
           
           {/* Admin & Agent */}
