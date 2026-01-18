@@ -7,6 +7,7 @@ import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import PhotoUpload from '@/components/PhotoUpload';
 import { addCustomer } from '@/lib/customerStorage';
+import { setMemberSession } from '@/pages/MemberDashboard';
 import { ArrowLeft, CheckCircle, Shield, User, MapPin, Users, UserPlus } from 'lucide-react';
 import {
   Select,
@@ -115,6 +116,7 @@ const CustomerRegistration = () => {
       
       if (result.success && result.customer) {
         setRegisteredId(result.customer.idNumber);
+        setMemberSession(result.customer.id);
         setShowSuccess(true);
       } else {
         toast({
@@ -166,8 +168,8 @@ const CustomerRegistration = () => {
                 Note: A once-off initiation fee of USD $3 will be required when you start contributing.
               </p>
             </div>
-            <Button variant="gold" size="lg" onClick={() => navigate('/')} className="w-full">
-              Back to Home
+            <Button variant="gold" size="lg" onClick={() => navigate('/member/dashboard')} className="w-full">
+              Go to My Dashboard
             </Button>
           </div>
         </div>
