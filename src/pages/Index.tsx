@@ -1,9 +1,61 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
-import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase } from 'lucide-react';
+import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase, Heart, Wallet, Sprout } from 'lucide-react';
+import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
 
 const Index = () => {
+  const serviceTabs: TabItem[] = [
+    {
+      id: 'groceries',
+      title: 'Groceries',
+      closable: false,
+      content: (
+        <div className="p-4 text-center">
+          <ShoppingBasket size={32} className="text-primary mx-auto mb-3" />
+          <h3 className="font-display text-lg font-semibold mb-2">Bulk Groceries</h3>
+          <p className="text-sm text-muted-foreground">Pool funds for wholesale grocery purchases at discounted rates.</p>
+        </div>
+      ),
+    },
+    {
+      id: 'burial',
+      title: 'Burial',
+      closable: false,
+      content: (
+        <div className="p-4 text-center">
+          <Heart size={32} className="text-primary mx-auto mb-3" />
+          <h3 className="font-display text-lg font-semibold mb-2">Burial Cover</h3>
+          <p className="text-sm text-muted-foreground">Community support during difficult times with burial insurance.</p>
+        </div>
+      ),
+    },
+    {
+      id: 'savings',
+      title: 'Savings',
+      closable: false,
+      content: (
+        <div className="p-4 text-center">
+          <Wallet size={32} className="text-primary mx-auto mb-3" />
+          <h3 className="font-display text-lg font-semibold mb-2">Group Savings</h3>
+          <p className="text-sm text-muted-foreground">Save together and grow your funds with community savings.</p>
+        </div>
+      ),
+    },
+    {
+      id: 'investments',
+      title: 'Investments',
+      closable: false,
+      content: (
+        <div className="p-4 text-center">
+          <Sprout size={32} className="text-primary mx-auto mb-3" />
+          <h3 className="font-display text-lg font-semibold mb-2">Crowd Farming</h3>
+          <p className="text-sm text-muted-foreground">Invest in agricultural projects and share in the harvest.</p>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Background Effects */}
@@ -42,19 +94,29 @@ const Index = () => {
 
       {/* Hero Section */}
       <main className="relative z-10">
-        <section className="container mx-auto px-4 py-20 text-center">
-          <div className="max-w-3xl mx-auto animate-fade-in">
-            <div className="flex justify-center mb-8">
+        <section className="container mx-auto px-4 py-12 text-center">
+          <div className="max-w-4xl mx-auto animate-fade-in">
+            <div className="flex justify-center mb-6">
               <Logo size="lg" />
             </div>
             
-            <h1 className="font-display text-4xl md:text-6xl font-bold mb-6">
+            {/* Side-by-Side Tabs */}
+            <div className="h-[200px] mb-8 rounded-xl border border-border overflow-hidden">
+              <TabbedContainer
+                tabs={serviceTabs}
+                defaultLayoutMode="side-by-side"
+                maxVisiblePanels={4}
+                persistKey="home-services"
+              />
+            </div>
+            
+            <h1 className="font-display text-3xl md:text-5xl font-bold mb-4">
               <span className="text-foreground">Your Trusted</span>
               <br />
               <span className="gold-text text-3d">Groceries Partner</span>
             </h1>
             
-            <p className="text-lg text-muted-foreground mb-10 max-w-xl mx-auto">
+            <p className="text-base text-muted-foreground mb-8 max-w-xl mx-auto">
               Join Biggy Round Groceries Stockvale and experience premium grocery management 
               with exclusive member benefits and seamless service.
             </p>
