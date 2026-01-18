@@ -20,11 +20,15 @@ export type Database = {
           agent_id: string
           created_at: string
           email: string | null
+          gender: string | null
           id: string
+          id_number: string | null
+          id_photo_url: string | null
           name: string
           phone: string
           recruited_by_agent_id: string | null
           referral_source: string | null
+          surname: string | null
           updated_at: string
         }
         Insert: {
@@ -32,11 +36,15 @@ export type Database = {
           agent_id: string
           created_at?: string
           email?: string | null
+          gender?: string | null
           id?: string
+          id_number?: string | null
+          id_photo_url?: string | null
           name: string
           phone: string
           recruited_by_agent_id?: string | null
           referral_source?: string | null
+          surname?: string | null
           updated_at?: string
         }
         Update: {
@@ -44,11 +52,15 @@ export type Database = {
           agent_id?: string
           created_at?: string
           email?: string | null
+          gender?: string | null
           id?: string
+          id_number?: string | null
+          id_photo_url?: string | null
           name?: string
           phone?: string
           recruited_by_agent_id?: string | null
           referral_source?: string | null
+          surname?: string | null
           updated_at?: string
         }
         Relationships: [
@@ -73,6 +85,7 @@ export type Database = {
           created_at: string
           customers_count: number
           email: string
+          gender: string | null
           id: string
           name: string
           phone: string
@@ -85,6 +98,7 @@ export type Database = {
           created_at?: string
           customers_count?: number
           email: string
+          gender?: string | null
           id?: string
           name: string
           phone: string
@@ -97,6 +111,7 @@ export type Database = {
           created_at?: string
           customers_count?: number
           email?: string
+          gender?: string | null
           id?: string
           name?: string
           phone?: string
