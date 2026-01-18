@@ -7,6 +7,7 @@ import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
 import groceriesBagImage from '@/assets/groceries-bag.jpeg';
 import burialSupportImage from '@/assets/burial-support.jpeg';
 import savingsJarImage from '@/assets/savings-jar.jpeg';
+import investmentGrowthImage from '@/assets/investment-growth.jpeg';
 
 const Index = () => {
   const serviceTabs: TabItem[] = [
@@ -57,7 +58,8 @@ const Index = () => {
         <div className="p-4 text-center">
           <Sprout size={32} className="text-primary mx-auto mb-3" />
           <h3 className="font-display text-lg font-semibold mb-2">Crowd Farming</h3>
-          <p className="text-sm text-muted-foreground">Invest more to multiply your investments with us.</p>
+          <p className="text-sm text-muted-foreground mb-3">Invest more to multiply your investments with us.</p>
+          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-full max-w-xs mx-auto rounded-lg" />
         </div>
       ),
     },
