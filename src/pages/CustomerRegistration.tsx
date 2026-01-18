@@ -134,8 +134,11 @@ const CustomerRegistration = () => {
       });
       
       if (result.success && result.customer) {
-        setRegisteredId(result.customer.idNumber);
-        setShowSuccess(true);
+        toast({
+          title: 'Registration Successful!',
+          description: 'Your account has been created. Please login to continue.',
+        });
+        navigate('/member/login');
       } else {
         toast({
           title: 'Registration Failed',
