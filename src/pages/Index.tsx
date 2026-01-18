@@ -51,7 +51,7 @@ const Index = () => {
         <div className="p-4 text-center">
           <Sprout size={32} className="text-primary mx-auto mb-3" />
           <h3 className="font-display text-lg font-semibold mb-2">Crowd Farming</h3>
-          <p className="text-sm text-muted-foreground">Invest in agricultural projects and share in the harvest.</p>
+          <p className="text-sm text-muted-foreground">Invest more to multiply your investments with us.</p>
         </div>
       ),
     },
