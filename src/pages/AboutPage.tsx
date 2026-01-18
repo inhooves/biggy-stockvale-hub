@@ -1,6 +1,7 @@
 import { PageLayout } from "@/components/PageLayout";
 import { Card, CardContent } from "@/components/ui/card";
 import { Award, Users, Lightbulb, Scale, Heart } from "lucide-react";
+import takeHomeMoreImage from "@/assets/take-home-more.jpeg";
 
 export default function AboutPage() {
   const values = [
@@ -54,6 +55,15 @@ export default function AboutPage() {
                 real life value addition and innovative solutions to our members. We aim to create a 
                 community where every member experiences the true meaning of Ubuntu and collective prosperity.
               </p>
+              
+              {/* Take Home More Image */}
+              <div className="mt-8">
+                <img 
+                  src={takeHomeMoreImage} 
+                  alt="Take home more than what you paid for" 
+                  className="w-full max-w-2xl mx-auto rounded-lg shadow-lg"
+                />
+              </div>
             </CardContent>
           </Card>
         </div>
