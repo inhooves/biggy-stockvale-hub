@@ -3,6 +3,7 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { ShoppingCart, Truck, Shield, Calendar } from "lucide-react";
+import groceriesHeroImage from "@/assets/groceries-hero.jpeg";
 
 export default function GroceriesPage() {
   const foodItems = [
@@ -25,14 +26,25 @@ export default function GroceriesPage() {
     <PageLayout>
       {/* Hero */}
       <section className="py-16 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
-        <div className="container mx-auto text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-            <ShoppingCart className="h-10 w-10 text-primary" />
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="flex-1 text-center md:text-left">
+              <div className="w-20 h-20 mx-auto md:mx-0 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+                <ShoppingCart className="h-10 w-10 text-primary" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Biggy Groceries</h1>
+              <p className="text-xl text-muted-foreground max-w-xl">
+                Pool your resources for collective grocery purchases and enjoy major discounts with door-to-door delivery.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <img 
+                src={groceriesHeroImage} 
+                alt="Take home more than what you paid for" 
+                className="w-72 h-48 md:w-80 md:h-56 object-cover rounded-2xl shadow-xl"
+              />
+            </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Biggy Groceries</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Pool your resources for collective grocery purchases and enjoy major discounts with door-to-door delivery.
-          </p>
         </div>
       </section>
 

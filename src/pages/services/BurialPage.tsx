@@ -3,6 +3,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Heart, DollarSign, ShoppingCart, Users, Calendar } from "lucide-react";
+import burialHeroImage from "@/assets/burial-hero.jpeg";
 
 export default function BurialPage() {
   const benefits = [
@@ -32,14 +33,25 @@ export default function BurialPage() {
     <PageLayout>
       {/* Hero */}
       <section className="py-16 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
-        <div className="container mx-auto text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-            <Heart className="h-10 w-10 text-primary" />
+        <div className="container mx-auto">
+          <div className="flex flex-col md:flex-row items-center gap-8 md:gap-12">
+            <div className="flex-1 text-center md:text-left">
+              <div className="w-20 h-20 mx-auto md:mx-0 mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+                <Heart className="h-10 w-10 text-primary" />
+              </div>
+              <h1 className="text-4xl md:text-5xl font-bold mb-6">Biggy Burial Society</h1>
+              <p className="text-xl text-muted-foreground max-w-xl">
+                Supporting families during their most difficult times with financial assistance and emotional care.
+              </p>
+            </div>
+            <div className="flex-shrink-0">
+              <img 
+                src={burialHeroImage} 
+                alt="Community support at funeral service" 
+                className="w-72 h-48 md:w-80 md:h-56 object-cover rounded-2xl shadow-xl"
+              />
+            </div>
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Biggy Burial Society</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
-            Supporting families during their most difficult times with financial assistance and emotional care.
-          </p>
         </div>
       </section>
 
