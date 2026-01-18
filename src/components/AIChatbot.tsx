@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, User } from "lucide-react";
-import mamaBiggyAvatar from "@/assets/mama-biggy-avatar.jpeg";
+import mamaBiggyAvatar from "@/assets/mama-biggy-animated.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";
