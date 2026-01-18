@@ -48,13 +48,13 @@ const MemberDashboard = () => {
   useEffect(() => {
     const memberId = getMemberSession();
     if (!memberId) {
-      navigate('/register');
+      navigate('/member/login');
       return;
     }
     const customerData = getCustomerById(memberId);
     if (!customerData) {
       clearMemberSession();
-      navigate('/register');
+      navigate('/member/login');
       return;
     }
     setMember(customerData);

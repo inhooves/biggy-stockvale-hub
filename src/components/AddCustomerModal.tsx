@@ -117,6 +117,9 @@ const AddCustomerModal = ({ open, onClose, onSuccess }: AddCustomerModalProps) =
         return;
       }
 
+      // Generate a default username from email and random suffix for agent-added customers
+      const defaultUsername = validatedData.email.split('@')[0] + Math.floor(Math.random() * 1000);
+      
       const result = addCustomer({
         firstName: validatedData.firstName,
         surname: validatedData.surname,
@@ -137,6 +140,8 @@ const AddCustomerModal = ({ open, onClose, onSuccess }: AddCustomerModalProps) =
         beneficiaryIdNumber: validatedData.beneficiaryIdNumber,
         beneficiaryAddress: validatedData.beneficiaryAddress,
         beneficiaryPhone: validatedData.beneficiaryPhone,
+        username: defaultUsername,
+        passwordHash: '', // Agent-added customers will need to set password later
       });
       
       if (result.success) {
