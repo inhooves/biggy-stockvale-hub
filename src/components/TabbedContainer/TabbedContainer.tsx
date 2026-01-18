@@ -4,6 +4,7 @@ import { VerticalTabs } from './VerticalTabs';
 import { SideBySideTabs } from './SideBySideTabs';
 import { LayoutToggle } from './LayoutToggle';
 import { useLayoutPersistence } from './useLayoutPersistence';
+import { useIsMobile } from '@/hooks/use-mobile';
 
 export function TabbedContainer({
   tabs,
@@ -13,10 +14,14 @@ export function TabbedContainer({
   onTabsChange,
   persistKey = 'default',
 }: TabbedContainerProps) {
-  const { layoutMode, setLayoutMode, openTabIds, setOpenTabIds } = useLayoutPersistence(
+  const isMobile = useIsMobile();
+  const { layoutMode: persistedLayoutMode, setLayoutMode, openTabIds, setOpenTabIds } = useLayoutPersistence(
     persistKey,
     defaultLayoutMode
   );
+  
+  // On mobile, always use vertical layout; on desktop, use persisted preference
+  const layoutMode: LayoutMode = isMobile ? 'vertical' : persistedLayoutMode;
 
   // Active tab for vertical mode
   const [activeTabId, setActiveTabId] = useState<string>(() => {
@@ -81,13 +86,15 @@ export function TabbedContainer({
 
   return (
     <div className="h-full flex flex-col bg-background">
-      {/* Header with layout toggle */}
-      <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
-        <span className="text-sm font-medium text-muted-foreground">
-          {layoutMode === 'vertical' ? 'Tab View' : 'Panel View'}
-        </span>
-        <LayoutToggle mode={layoutMode} onChange={handleLayoutChange} />
-      </div>
+      {/* Header with layout toggle - hidden on mobile since we force vertical */}
+      {!isMobile && (
+        <div className="flex items-center justify-between px-4 py-2 border-b border-border bg-muted/30">
+          <span className="text-sm font-medium text-muted-foreground">
+            {layoutMode === 'vertical' ? 'Tab View' : 'Panel View'}
+          </span>
+          <LayoutToggle mode={layoutMode} onChange={handleLayoutChange} />
+        </div>
+      )}
 
       {/* Content area */}
       <div className="flex-1 overflow-hidden">
