@@ -125,13 +125,14 @@ export const AIChatbot = () => {
           {/* Header */}
           <div className="p-4 border-b bg-primary text-primary-foreground rounded-t-lg">
             <div className="flex items-center gap-3">
-              <div className="relative">
+              <div className="relative group">
+                <div className="absolute -inset-1 bg-gradient-to-r from-primary-foreground/40 to-primary-foreground/20 rounded-full animate-[spin_4s_linear_infinite] opacity-75"></div>
                 <img 
                   src={mamaBiggyAvatar} 
                   alt="Mama Biggy" 
-                  className="h-10 w-10 rounded-full object-cover border-2 border-primary-foreground/30 animate-pulse shadow-lg" 
+                  className="relative h-10 w-10 rounded-full object-cover border-2 border-primary-foreground/50 shadow-lg transition-transform duration-300 hover:scale-110" 
                 />
-                <span className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-primary"></span>
+                <span className="absolute bottom-0 right-0 h-3 w-3 bg-green-500 rounded-full border-2 border-primary animate-pulse"></span>
               </div>
               <div>
                 <span className="font-semibold block">Mama Biggy</span>
@@ -145,12 +146,14 @@ export const AIChatbot = () => {
             {messages.length === 0 && (
               <div className="text-center text-muted-foreground py-8 animate-fade-in">
                 <div className="relative inline-block mb-4">
+                  <div className="absolute -inset-2 bg-gradient-to-r from-primary via-purple-500 to-primary rounded-full animate-[spin_3s_linear_infinite] opacity-60 blur-sm"></div>
+                  <div className="absolute -inset-1 bg-gradient-to-r from-primary/50 to-purple-500/50 rounded-full animate-[pulse_2s_ease-in-out_infinite]"></div>
                   <img 
                     src={mamaBiggyAvatar} 
                     alt="Mama Biggy" 
-                    className="h-20 w-20 mx-auto rounded-full object-cover border-4 border-primary/30 shadow-xl animate-[pulse_3s_ease-in-out_infinite]" 
+                    className="relative h-20 w-20 mx-auto rounded-full object-cover border-4 border-primary/50 shadow-xl animate-[bounce_2s_ease-in-out_infinite]" 
                   />
-                  <div className="absolute inset-0 rounded-full border-4 border-primary/20 animate-ping"></div>
+                  <div className="absolute -inset-3 rounded-full border-2 border-primary/30 animate-ping"></div>
                 </div>
                 <p className="font-medium text-foreground">Hello my dear!</p>
                 <p className="text-sm">Mama Biggy is here to help you!</p>
