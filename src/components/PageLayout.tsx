@@ -1,6 +1,7 @@
 import { ReactNode } from "react";
 import { MainNavigation } from "./MainNavigation";
 import { Link } from "react-router-dom";
+import { ServiceImageSlideshow } from "./ServiceImageSlideshow";
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -11,6 +12,7 @@ export function PageLayout({ children }: PageLayoutProps) {
     <div className="min-h-screen bg-background flex flex-col">
       <MainNavigation />
       <main className="flex-1">{children}</main>
+      <ServiceImageSlideshow />
       <footer className="bg-muted/50 border-t border-border py-6 md:py-8">
         <div className="container mx-auto px-3 md:px-4">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-8">
