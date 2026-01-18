@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useNavigate, Link } from 'react-router-dom';
 import { z } from 'zod';
+import { AlertCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
@@ -79,13 +80,37 @@ const CustomerRegistration = () => {
   });
   
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const [showValidationSummary, setShowValidationSummary] = useState(false);
+  const formRef = useRef<HTMLFormElement>(null);
 
   const updateField = (field: string, value: string) => {
     setFormData(prev => ({ ...prev, [field]: value }));
     if (errors[field]) {
-      setErrors(prev => ({ ...prev, [field]: '' }));
+      setErrors(prev => {
+        const newErrors = { ...prev };
+        delete newErrors[field];
+        return newErrors;
+      });
     }
   };
+
+  // Scroll to first error field when errors change
+  useEffect(() => {
+    if (Object.keys(errors).length > 0 && formRef.current) {
+      setShowValidationSummary(true);
+      const firstErrorField = formRef.current.querySelector('[class*="border-destructive"]');
+      if (firstErrorField) {
+        firstErrorField.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        // Add shake animation
+        firstErrorField.classList.add('animate-shake');
+        setTimeout(() => {
+          firstErrorField.classList.remove('animate-shake');
+        }, 500);
+      }
+    } else {
+      setShowValidationSummary(false);
+    }
+  }, [errors]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -223,7 +248,26 @@ const CustomerRegistration = () => {
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6 animate-slide-up">
+        <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 animate-slide-up">
+          {/* Validation Summary */}
+          {showValidationSummary && Object.keys(errors).length > 0 && (
+            <div className="bg-destructive/10 border border-destructive/30 rounded-lg p-4 animate-fade-in">
+              <div className="flex items-start gap-3">
+                <AlertCircle className="text-destructive shrink-0 mt-0.5" size={20} />
+                <div className="flex-1">
+                  <h3 className="font-medium text-destructive mb-2">Please fix the following errors:</h3>
+                  <ul className="text-sm text-destructive/80 space-y-1 list-disc list-inside">
+                    {Object.entries(errors).map(([field, message]) => (
+                      <li key={field}>
+                        <span className="font-medium">{field.replace(/([A-Z])/g, ' $1').replace(/^./, str => str.toUpperCase())}:</span> {message}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              </div>
+            </div>
+          )}
+
           {/* Account Credentials Section */}
           <div className="bg-card rounded-2xl p-6 card-elevated border border-border space-y-5">
             <div className="flex items-center gap-2 mb-4">
