@@ -3,6 +3,8 @@ import { useNavigate } from 'react-router-dom';
 import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
+import { useOfflineSync } from '@/hooks/useOfflineSync';
+import { savePendingRegistration, PendingRegistration } from '@/lib/offlineStorage';
 import Logo from '@/components/Logo';
 import StatsCard from '@/components/StatsCard';
 import PhotoUpload from '@/components/PhotoUpload';
@@ -44,7 +46,10 @@ import {
   Mail,
   Eye,
   Trophy,
-  BarChart3
+  BarChart3,
+  WifiOff,
+  RefreshCw,
+  Cloud
 } from 'lucide-react';
 
 interface Agent {
@@ -92,6 +97,7 @@ const AgentDashboard = () => {
   const navigate = useNavigate();
   const { toast } = useToast();
   const { user, loading: authLoading, signOut } = useAuth();
+  const { isOnline, pendingCount, isSyncing, syncPendingRegistrations, checkPendingCount } = useOfflineSync();
   
   const [agent, setAgent] = useState<Agent | null>(null);
   const [customers, setCustomers] = useState<AgentCustomer[]>([]);
@@ -291,24 +297,58 @@ const AgentDashboard = () => {
     }
 
     setIsSubmitting(true);
+    
+    const registrationData = {
+      agent_id: agent.id,
+      name: customerForm.name,
+      surname: customerForm.surname,
+      phone: customerForm.phone,
+      email: customerForm.email || null,
+      address: customerForm.address,
+      city: customerForm.city,
+      date_of_birth: customerForm.date_of_birth,
+      id_number: customerForm.id_number,
+      gender: customerForm.gender,
+      id_photo_url: customerForm.id_photo,
+      referral_source: 'Agent',
+      recruited_by_agent_id: agent.id,
+    };
+
+    // If offline, save to local storage
+    if (!isOnline) {
+      try {
+        const pendingReg: PendingRegistration = {
+          id: crypto.randomUUID(),
+          ...registrationData,
+          created_at: new Date().toISOString(),
+        };
+        await savePendingRegistration(pendingReg);
+        await checkPendingCount();
+        
+        toast({
+          title: 'Saved Offline',
+          description: 'Member registration saved locally. Will sync when back online.',
+        });
+        setCustomerModalOpen(false);
+        setCustomerForm({ name: '', surname: '', id_number: '', gender: '', id_photo: '', phone: '', email: '', address: '', city: '', date_of_birth: '' });
+      } catch (error: any) {
+        console.error('Error saving offline:', error);
+        toast({
+          title: 'Error',
+          description: 'Failed to save registration offline.',
+          variant: 'destructive',
+        });
+      } finally {
+        setIsSubmitting(false);
+      }
+      return;
+    }
+
+    // Online: save to database
     try {
       const { error } = await supabase
         .from('agent_customers')
-        .insert({
-          agent_id: agent.id,
-          name: customerForm.name,
-          surname: customerForm.surname,
-          phone: customerForm.phone,
-          email: customerForm.email || null,
-          address: customerForm.address,
-          city: customerForm.city,
-          date_of_birth: customerForm.date_of_birth,
-          id_number: customerForm.id_number,
-          gender: customerForm.gender,
-          id_photo_url: customerForm.id_photo,
-          referral_source: 'Agent',
-          recruited_by_agent_id: agent.id,
-        });
+        .insert(registrationData);
 
       if (error) throw error;
       toast({ title: 'Member Added', description: 'New member has been registered successfully.' });
@@ -345,6 +385,34 @@ const AgentDashboard = () => {
           <Logo size="sm" />
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-3">
+              {/* Offline Status Indicator */}
+              {!isOnline && (
+                <div className="flex items-center gap-1 px-3 py-1.5 bg-destructive/10 rounded-full">
+                  <WifiOff size={14} className="text-destructive" />
+                  <span className="text-sm font-medium text-destructive hidden sm:inline">Offline</span>
+                </div>
+              )}
+              
+              {/* Pending Sync Indicator */}
+              {pendingCount > 0 && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={syncPendingRegistrations}
+                  disabled={!isOnline || isSyncing}
+                  className="flex items-center gap-1.5"
+                >
+                  {isSyncing ? (
+                    <Loader2 size={14} className="animate-spin" />
+                  ) : isOnline ? (
+                    <Cloud size={14} />
+                  ) : (
+                    <RefreshCw size={14} />
+                  )}
+                  <span className="text-xs">{pendingCount} pending</span>
+                </Button>
+              )}
+              
               {agentRank && (
                 <div className="hidden sm:flex items-center gap-1 px-3 py-1.5 bg-primary/10 rounded-full">
                   <Trophy size={14} className="text-primary" />
