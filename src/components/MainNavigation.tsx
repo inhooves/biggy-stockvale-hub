@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "react-router-dom";
-import { Menu, X, ChevronDown } from "lucide-react";
+import { Menu, X, ChevronDown, Settings } from "lucide-react";
+import { SettingsDropdown } from "./SettingsDropdown";
 import { Button } from "@/components/ui/button";
 import {
   DropdownMenu,
@@ -92,7 +93,7 @@ export function MainNavigation() {
             ))}
           </div>
 
-          {/* Auth Buttons */}
+          {/* Auth Buttons & Settings */}
           <div className="hidden lg:flex items-center gap-2">
             <Button variant="outline" size="sm" asChild>
               <Link to="/agent">Agent Portal</Link>
@@ -100,6 +101,7 @@ export function MainNavigation() {
             <Button size="sm" asChild>
               <Link to="/admin">Admin</Link>
             </Button>
+            <SettingsDropdown />
           </div>
 
           {/* Mobile Menu Button */}
@@ -150,6 +152,7 @@ export function MainNavigation() {
                 <Button size="sm" asChild className="flex-1">
                   <Link to="/admin">Admin</Link>
                 </Button>
+                <SettingsDropdown />
               </div>
             </div>
           </div>
