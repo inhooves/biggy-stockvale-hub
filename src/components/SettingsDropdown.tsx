@@ -35,7 +35,7 @@ import { toast } from 'sonner';
 
 export function SettingsDropdown() {
   const navigate = useNavigate();
-  const { user, signOut } = useAuth();
+  const { user, isAgent, isAdmin, signOut } = useAuth();
   const { layoutMode, setLayoutMode } = useLayoutPersistence('home-services', 'side-by-side');
   const [notifications, setNotifications] = useState(true);
   const [darkMode, setDarkMode] = useState(false);
@@ -52,6 +52,23 @@ export function SettingsDropdown() {
 
   const handleAddAccount = () => {
     navigate('/agent/register');
+  };
+
+  const handleProfileClick = () => {
+    if (!user) {
+      // Not logged in, redirect to login
+      navigate('/agent/login');
+      return;
+    }
+    
+    if (isAgent) {
+      navigate('/agent');
+    } else if (isAdmin) {
+      navigate('/admin');
+    } else {
+      // Regular user or member - for now redirect to register
+      navigate('/register');
+    }
   };
 
   const handleLayoutChange = (value: string) => {
@@ -149,7 +166,7 @@ export function SettingsDropdown() {
         <DropdownMenuSeparator />
 
         {/* Account Management */}
-        <DropdownMenuItem onClick={() => navigate('/agent')}>
+        <DropdownMenuItem onClick={handleProfileClick}>
           <User className="mr-2 h-4 w-4" />
           My Profile
         </DropdownMenuItem>
