@@ -95,32 +95,32 @@ export default function BenefitsPage() {
   return (
     <PageLayout>
       {/* Hero */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-            <Gift className="h-10 w-10 text-primary" />
+          <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <Gift className="h-8 w-8 md:h-10 md:w-10 text-primary" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Member Benefits</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">Member Benefits</h1>
+          <p className="text-base md:text-xl text-muted-foreground max-w-3xl mx-auto">
             Discover all the advantages of being a Biggy Round stokvel member.
           </p>
         </div>
       </section>
 
       {/* Benefits Grid */}
-      <section className="py-16 px-4">
+      <section className="py-10 md:py-16 px-3 md:px-4">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
             {benefits.map((benefit, index) => (
               <Card key={index} className="h-full hover:shadow-lg transition-shadow">
-                <CardContent className="p-6">
-                  <div className="flex items-start gap-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
-                      <benefit.icon className="h-6 w-6 text-primary" />
+                <CardContent className="p-4 md:p-6">
+                  <div className="flex items-start gap-3 md:gap-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <benefit.icon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                     </div>
                     <div>
-                      <h3 className="font-semibold text-lg mb-2">{benefit.title}</h3>
-                      <p className="text-muted-foreground text-sm">{benefit.description}</p>
+                      <h3 className="font-semibold text-base md:text-lg mb-1 md:mb-2">{benefit.title}</h3>
+                      <p className="text-xs md:text-sm text-muted-foreground">{benefit.description}</p>
                     </div>
                   </div>
                 </CardContent>
@@ -131,21 +131,21 @@ export default function BenefitsPage() {
       </section>
 
       {/* Risk Management */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
           <Card className="border-primary/20">
-            <CardContent className="p-8">
-              <div className="flex items-center gap-4 mb-6">
-                <Shield className="h-10 w-10 text-primary" />
-                <h2 className="text-2xl font-bold">Strong Risk Management</h2>
+            <CardContent className="p-6 md:p-8">
+              <div className="flex items-center gap-3 md:gap-4 mb-4 md:mb-6">
+                <Shield className="h-8 w-8 md:h-10 md:w-10 text-primary" />
+                <h2 className="text-xl md:text-2xl font-bold">Strong Risk Management</h2>
               </div>
-              <p className="text-muted-foreground leading-relaxed mb-4">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-3 md:mb-4">
                 Strong risk management policies safeguard stokvel member contributions. Joining members 
                 are free to visit the bank and verify if the pool account is only deposit taking without 
                 anyone capable of withdrawing any funds or diverting them for any other reason varying 
                 from the stokvel purpose.
               </p>
-              <p className="text-muted-foreground leading-relaxed">
+              <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                 Our operations are transparent and things are done according to established policy. 
                 Our community is very organized and highly professional. Integrity is at the heart 
                 of our esteemed values.
@@ -156,14 +156,14 @@ export default function BenefitsPage() {
       </section>
 
       {/* Free Registration */}
-      <section className="py-16 px-4">
+      <section className="py-10 md:py-16 px-3 md:px-4">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-6">Registration is FREE!</h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Registration is FREE!</h2>
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8">
             During the registration process of all members, no one will pay any money. 
             Contributions are only required post registration.
           </p>
-          <p className="text-muted-foreground mb-8">
+          <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8">
             Members can join from any city in Zimbabwe. We will introduce several stokvels 
             for different purposes and market segments.
           </p>
@@ -171,10 +171,10 @@ export default function BenefitsPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-primary text-primary-foreground">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-primary text-primary-foreground">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Start Enjoying These Benefits Today</h2>
-          <p className="text-lg mb-8 opacity-90">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Start Enjoying These Benefits Today</h2>
+          <p className="text-base md:text-lg mb-6 md:mb-8 opacity-90">
             Join Biggy Round and become part of Zimbabwe's biggest stokvel community.
           </p>
           <Button size="lg" variant="secondary" asChild>
