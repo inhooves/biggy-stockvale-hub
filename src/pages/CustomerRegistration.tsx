@@ -9,6 +9,7 @@ import Logo from '@/components/Logo';
 import PhotoUpload from '@/components/PhotoUpload';
 import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
 import { addCustomer, isUsernameTaken, getHashedPassword } from '@/lib/customerStorage';
+import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft, CheckCircle, Shield, User, MapPin, Users, UserPlus, Lock, KeyRound } from 'lucide-react';
 import { strongPasswordSchema } from '@/lib/passwordValidation';
 import {
@@ -134,6 +135,34 @@ const CustomerRegistration = () => {
         return;
       }
 
+      // Save to Supabase registered_members table
+      const { error: dbError } = await supabase
+        .from('registered_members')
+        .insert({
+          name: validatedData.firstName,
+          surname: validatedData.surname,
+          email: validatedData.email,
+          phone: validatedData.phone,
+          id_number: validatedData.idNumber,
+          date_of_birth: validatedData.dateOfBirth,
+          gender: validatedData.gender,
+          address: validatedData.address || null,
+          city: validatedData.city || null,
+          referral_source: validatedData.referralSource,
+        });
+
+      if (dbError) {
+        console.error('Database error:', dbError);
+        toast({
+          title: 'Registration Failed',
+          description: 'Failed to save your registration. Please try again.',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Also save to local storage for member login
       const result = addCustomer({
         firstName: validatedData.firstName,
         surname: validatedData.surname,
