@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { TabbedContainerProps, LayoutMode } from './types';
 import { VerticalTabs } from './VerticalTabs';
 import { SideBySideTabs } from './SideBySideTabs';
@@ -96,25 +97,45 @@ export function TabbedContainer({
         </div>
       )}
 
-      {/* Content area */}
+      {/* Content area with animated transitions */}
       <div className="flex-1 overflow-hidden">
-        {layoutMode === 'vertical' ? (
-          <VerticalTabs
-            tabs={tabs}
-            activeTabId={activeTabId}
-            onTabChange={setActiveTabId}
-            onTabClose={handleTabClose}
-          />
-        ) : (
-          <SideBySideTabs
-            tabs={tabs}
-            visibleTabIds={openTabIds}
-            maxVisible={maxVisiblePanels}
-            onTabClose={handleTabClose}
-            onTabOpen={handleTabOpen}
-            onVisibleTabsChange={handleVisibleTabsChange}
-          />
-        )}
+        <AnimatePresence mode="wait">
+          {layoutMode === 'vertical' ? (
+            <motion.div
+              key="vertical"
+              className="h-full"
+              initial={{ opacity: 0, x: -20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: 20 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <VerticalTabs
+                tabs={tabs}
+                activeTabId={activeTabId}
+                onTabChange={setActiveTabId}
+                onTabClose={handleTabClose}
+              />
+            </motion.div>
+          ) : (
+            <motion.div
+              key="side-by-side"
+              className="h-full"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              exit={{ opacity: 0, x: -20 }}
+              transition={{ duration: 0.3, ease: 'easeInOut' }}
+            >
+              <SideBySideTabs
+                tabs={tabs}
+                visibleTabIds={openTabIds}
+                maxVisible={maxVisiblePanels}
+                onTabClose={handleTabClose}
+                onTabOpen={handleTabOpen}
+                onVisibleTabsChange={handleVisibleTabsChange}
+              />
+            </motion.div>
+          )}
+        </AnimatePresence>
       </div>
     </div>
   );
