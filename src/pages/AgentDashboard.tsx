@@ -74,6 +74,8 @@ interface AgentCustomer {
   phone: string;
   email: string | null;
   address: string | null;
+  city: string | null;
+  date_of_birth: string | null;
   id_number: string | null;
   gender: string | null;
   id_photo_url: string | null;
@@ -106,6 +108,11 @@ const AgentDashboard = () => {
     id_number: '',
     gender: '',
     id_photo: '',
+    phone: '',
+    email: '',
+    address: '',
+    city: '',
+    date_of_birth: '',
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -261,7 +268,7 @@ const AgentDashboard = () => {
   };
 
   const openAddModal = () => {
-    setCustomerForm({ name: '', surname: '', id_number: '', gender: '', id_photo: '' });
+    setCustomerForm({ name: '', surname: '', id_number: '', gender: '', id_photo: '', phone: '', email: '', address: '', city: '', date_of_birth: '' });
     setCustomerModalOpen(true);
   };
 
@@ -274,7 +281,7 @@ const AgentDashboard = () => {
     e.preventDefault();
     if (!agent) return;
 
-    if (!customerForm.name || !customerForm.surname || !customerForm.id_number || !customerForm.gender || !customerForm.id_photo) {
+    if (!customerForm.name || !customerForm.surname || !customerForm.id_number || !customerForm.gender || !customerForm.id_photo || !customerForm.phone || !customerForm.address || !customerForm.city || !customerForm.date_of_birth) {
       toast({
         title: 'Missing Fields',
         description: 'Please fill in all required fields including ID photo.',
@@ -291,7 +298,11 @@ const AgentDashboard = () => {
           agent_id: agent.id,
           name: customerForm.name,
           surname: customerForm.surname,
-          phone: '', // Not required in this form
+          phone: customerForm.phone,
+          email: customerForm.email || null,
+          address: customerForm.address,
+          city: customerForm.city,
+          date_of_birth: customerForm.date_of_birth,
           id_number: customerForm.id_number,
           gender: customerForm.gender,
           id_photo_url: customerForm.id_photo,
@@ -658,6 +669,51 @@ const AgentDashboard = () => {
                   <SelectItem value="Other">Other</SelectItem>
                 </SelectContent>
               </Select>
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Contact Number *</label>
+              <Input
+                value={customerForm.phone}
+                onChange={e => setCustomerForm(f => ({ ...f, phone: e.target.value }))}
+                placeholder="+263..."
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Email (Optional)</label>
+              <Input
+                type="email"
+                value={customerForm.email}
+                onChange={e => setCustomerForm(f => ({ ...f, email: e.target.value }))}
+                placeholder="email@example.com"
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Address *</label>
+              <Input
+                value={customerForm.address}
+                onChange={e => setCustomerForm(f => ({ ...f, address: e.target.value }))}
+                placeholder="Street address"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">City *</label>
+              <Input
+                value={customerForm.city}
+                onChange={e => setCustomerForm(f => ({ ...f, city: e.target.value }))}
+                placeholder="City"
+                required
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium text-foreground">Date of Birth *</label>
+              <Input
+                type="date"
+                value={customerForm.date_of_birth}
+                onChange={e => setCustomerForm(f => ({ ...f, date_of_birth: e.target.value }))}
+                required
+              />
             </div>
             <PhotoUpload
               label="ID Photo"

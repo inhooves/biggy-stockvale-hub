@@ -18,7 +18,9 @@ export type Database = {
         Row: {
           address: string | null
           agent_id: string
+          city: string | null
           created_at: string
+          date_of_birth: string | null
           email: string | null
           gender: string | null
           id: string
@@ -34,7 +36,9 @@ export type Database = {
         Insert: {
           address?: string | null
           agent_id: string
+          city?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           gender?: string | null
           id?: string
@@ -50,7 +54,9 @@ export type Database = {
         Update: {
           address?: string | null
           agent_id?: string
+          city?: string | null
           created_at?: string
+          date_of_birth?: string | null
           email?: string | null
           gender?: string | null
           id?: string
