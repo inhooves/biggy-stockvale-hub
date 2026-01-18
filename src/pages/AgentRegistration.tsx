@@ -7,8 +7,10 @@ import { supabase } from '@/integrations/supabase/client';
 import { useAuth } from '@/hooks/useAuth';
 import { useToast } from '@/hooks/use-toast';
 import { generateRefNumber } from '@/lib/generateRefNumber';
+import { strongPasswordSchema } from '@/lib/passwordValidation';
 import Logo from '@/components/Logo';
 import PhotoUpload from '@/components/PhotoUpload';
+import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
@@ -20,7 +22,7 @@ const registerSchema = z.object({
   name: z.string().min(2, 'Name must be at least 2 characters'),
   email: z.string().email('Invalid email address'),
   phone: z.string().regex(/^\+263[0-9]{9}$/, 'Phone must be in +263 format (e.g., +263771234567)'),
-  password: z.string().min(8, 'Password must be at least 8 characters'),
+  password: strongPasswordSchema,
   confirmPassword: z.string(),
   profilePic: z.string().min(1, 'Profile picture is required'),
 }).refine(data => data.password === data.confirmPassword, {
@@ -261,8 +263,9 @@ const AgentRegistration = () => {
                         <FormItem>
                           <FormLabel>Password *</FormLabel>
                           <FormControl>
-                            <Input type="password" placeholder="Min 8 characters" {...field} />
+                            <Input type="password" placeholder="Strong password required" {...field} />
                           </FormControl>
+                          <PasswordStrengthIndicator password={field.value} />
                           <FormMessage />
                         </FormItem>
                       )}
