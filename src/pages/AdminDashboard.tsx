@@ -77,6 +77,17 @@ interface ReferralData {
   value: number;
 }
 
+interface RegisteredMember {
+  id: string;
+  name: string;
+  surname: string;
+  email: string;
+  phone: string;
+  gender: string;
+  referral_source: string;
+  created_at: string;
+}
+
 const REFERRAL_COLORS = [
   'hsl(var(--primary))',
   'hsl(var(--accent))',
@@ -112,6 +123,9 @@ const AdminDashboard = () => {
   
   // All customers for referral chart
   const [allCustomers, setAllCustomers] = useState<AgentCustomer[]>([]);
+  
+  // Self-registered members
+  const [registeredMembers, setRegisteredMembers] = useState<RegisteredMember[]>([]);
 
   // Check admin role
   useEffect(() => {
@@ -177,10 +191,26 @@ const AdminDashboard = () => {
     }
   };
 
+  // Fetch self-registered members
+  const fetchRegisteredMembers = async () => {
+    try {
+      const { data, error } = await supabase
+        .from('registered_members')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      setRegisteredMembers(data || []);
+    } catch (error: any) {
+      console.error('Error fetching registered members:', error);
+    }
+  };
+
   useEffect(() => {
     if (isAdmin) {
       fetchAgents();
       fetchAllCustomers();
+      fetchRegisteredMembers();
     }
   }, [isAdmin]);
 
@@ -223,17 +253,30 @@ const AdminDashboard = () => {
     return agents.reduce((sum, agent) => sum + agent.customers_count, 0);
   }, [agents]);
 
-  // Compute referral source stats
+  // Compute referral source stats - combines agent-registered (as Word of Mouth) and self-registered members
   const referralStats = useMemo((): ReferralData[] => {
     const counts: Record<string, number> = {};
-    allCustomers.forEach(c => {
-      const source = c.referral_source || 'Unknown';
+    
+    // Agent-registered members count as "Word of Mouth"
+    if (allCustomers.length > 0) {
+      counts['Word of Mouth'] = (counts['Word of Mouth'] || 0) + allCustomers.length;
+    }
+    
+    // Self-registered members use their actual referral source
+    registeredMembers.forEach(m => {
+      const source = m.referral_source || 'Unknown';
       counts[source] = (counts[source] || 0) + 1;
     });
+    
     return Object.entries(counts)
       .map(([name, value]) => ({ name, value }))
       .sort((a, b) => b.value - a.value);
-  }, [allCustomers]);
+  }, [allCustomers, registeredMembers]);
+
+  // Total members (agent-registered + self-registered)
+  const totalAllMembers = useMemo(() => {
+    return totalCustomers + registeredMembers.length;
+  }, [totalCustomers, registeredMembers.length]);
 
   // Compute ranked agents
   const rankedAgents = useMemo((): RankedAgent[] => {
@@ -350,14 +393,19 @@ const AdminDashboard = () => {
             icon={UserCheck}
           />
           <StatsCard
-            title="Total Members"
+            title="Agent-Registered Members"
             value={totalCustomers}
             icon={Users}
           />
           <StatsCard
-            title="Avg Members/Agent"
-            value={agents.length > 0 ? Math.round(totalCustomers / agents.length) : 0}
+            title="Self-Registered Members"
+            value={registeredMembers.length}
             icon={UserPlus}
+          />
+          <StatsCard
+            title="Total All Members"
+            value={totalAllMembers}
+            icon={UserCheck}
           />
         </div>
 

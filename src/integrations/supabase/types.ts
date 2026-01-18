@@ -128,6 +128,54 @@ export type Database = {
         }
         Relationships: []
       }
+      registered_members: {
+        Row: {
+          address: string | null
+          city: string | null
+          created_at: string
+          date_of_birth: string
+          email: string
+          gender: string
+          id: string
+          id_number: string
+          name: string
+          phone: string
+          referral_source: string
+          surname: string
+          updated_at: string
+        }
+        Insert: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth: string
+          email: string
+          gender: string
+          id?: string
+          id_number: string
+          name: string
+          phone: string
+          referral_source: string
+          surname: string
+          updated_at?: string
+        }
+        Update: {
+          address?: string | null
+          city?: string | null
+          created_at?: string
+          date_of_birth?: string
+          email?: string
+          gender?: string
+          id?: string
+          id_number?: string
+          name?: string
+          phone?: string
+          referral_source?: string
+          surname?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       user_roles: {
         Row: {
           id: string
