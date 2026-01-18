@@ -15,16 +15,6 @@ import {
   DialogTitle,
 } from '@/components/ui/dialog';
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from '@/components/ui/alert-dialog';
-import {
   Table,
   TableBody,
   TableCell,
@@ -37,12 +27,12 @@ import {
   Users, 
   Plus, 
   Search, 
-  Edit, 
-  Trash2, 
   Loader2,
   UserCircle,
   Hash,
-  AlertTriangle
+  Phone,
+  Mail,
+  Eye
 } from 'lucide-react';
 
 interface Agent {
@@ -74,9 +64,8 @@ const AgentDashboard = () => {
   const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState('');
   
-  // Add/Edit Customer Modal
+  // Add Member Modal
   const [customerModalOpen, setCustomerModalOpen] = useState(false);
-  const [editingCustomer, setEditingCustomer] = useState<AgentCustomer | null>(null);
   const [customerForm, setCustomerForm] = useState({
     name: '',
     phone: '',
@@ -86,9 +75,9 @@ const AgentDashboard = () => {
   });
   const [isSubmitting, setIsSubmitting] = useState(false);
 
-  // Delete confirmation
-  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
-  const [customerToDelete, setCustomerToDelete] = useState<AgentCustomer | null>(null);
+  // View member details
+  const [viewingCustomer, setViewingCustomer] = useState<AgentCustomer | null>(null);
+  const [viewModalOpen, setViewModalOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !user) {
@@ -191,21 +180,13 @@ const AgentDashboard = () => {
   };
 
   const openAddModal = () => {
-    setEditingCustomer(null);
     setCustomerForm({ name: '', phone: '', email: '', address: '', referral_source: 'Agent' });
     setCustomerModalOpen(true);
   };
 
-  const openEditModal = (customer: AgentCustomer) => {
-    setEditingCustomer(customer);
-    setCustomerForm({
-      name: customer.name,
-      phone: customer.phone,
-      email: customer.email || '',
-      address: customer.address || '',
-      referral_source: 'Agent',
-    });
-    setCustomerModalOpen(true);
+  const openViewModal = (customer: AgentCustomer) => {
+    setViewingCustomer(customer);
+    setViewModalOpen(true);
   };
 
   const handleSubmitCustomer = async (e: React.FormEvent) => {
@@ -214,82 +195,32 @@ const AgentDashboard = () => {
 
     setIsSubmitting(true);
     try {
-      if (editingCustomer) {
-        const { error } = await supabase
-          .from('agent_customers')
-          .update({
-            name: customerForm.name,
-            phone: customerForm.phone,
-            email: customerForm.email || null,
-            address: customerForm.address || null,
-          })
-          .eq('id', editingCustomer.id);
+      const { error } = await supabase
+        .from('agent_customers')
+        .insert({
+          agent_id: agent.id,
+          name: customerForm.name,
+          phone: customerForm.phone,
+          email: customerForm.email || null,
+          address: customerForm.address || null,
+          referral_source: 'Agent',
+          recruited_by_agent_id: agent.id,
+        });
 
-        if (error) throw error;
-        toast({ title: 'Customer Updated', description: 'Customer details have been updated.' });
-      } else {
-        const { error } = await supabase
-          .from('agent_customers')
-          .insert({
-            agent_id: agent.id,
-            name: customerForm.name,
-            phone: customerForm.phone,
-            email: customerForm.email || null,
-            address: customerForm.address || null,
-            referral_source: 'Agent',
-            recruited_by_agent_id: agent.id,
-          });
-
-        if (error) throw error;
-        toast({ title: 'Customer Added', description: 'New customer has been added successfully.' });
-      }
+      if (error) throw error;
+      toast({ title: 'Member Added', description: 'New member has been registered successfully.' });
 
       setCustomerModalOpen(false);
       fetchAgentData();
     } catch (error: any) {
-      console.error('Error saving customer:', error);
+      console.error('Error saving member:', error);
       toast({
         title: 'Error',
-        description: error.message || 'Failed to save customer.',
+        description: error.message || 'Failed to add member.',
         variant: 'destructive',
       });
     } finally {
       setIsSubmitting(false);
-    }
-  };
-
-  const handleDeleteClick = (customer: AgentCustomer) => {
-    setCustomerToDelete(customer);
-    setDeleteDialogOpen(true);
-  };
-
-  const confirmDelete = async () => {
-    if (!customerToDelete) return;
-
-    try {
-      const { error } = await supabase
-        .from('agent_customers')
-        .delete()
-        .eq('id', customerToDelete.id);
-
-      if (error) throw error;
-
-      toast({
-        title: 'Customer Deleted',
-        description: `${customerToDelete.name} has been removed.`,
-      });
-
-      fetchAgentData();
-    } catch (error: any) {
-      console.error('Error deleting customer:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to delete customer.',
-        variant: 'destructive',
-      });
-    } finally {
-      setDeleteDialogOpen(false);
-      setCustomerToDelete(null);
     }
   };
 
@@ -333,31 +264,48 @@ const AgentDashboard = () => {
       <main className="container mx-auto px-4 py-8">
         {/* Agent Profile Card */}
         <div className="bg-card/50 backdrop-blur-sm rounded-2xl border border-border p-6 mb-8 animate-fade-in">
-          <div className="flex flex-col sm:flex-row items-center gap-6">
-            <Avatar className="h-24 w-24 border-4 border-primary/30">
+          <h2 className="text-lg font-semibold text-foreground mb-4 flex items-center gap-2">
+            <UserCircle size={20} className="text-primary" />
+            Agent Profile
+          </h2>
+          <div className="flex flex-col lg:flex-row items-center gap-6">
+            <Avatar className="h-28 w-28 border-4 border-primary/30 shadow-lg">
               <AvatarImage src={agent.profile_pic_url || undefined} />
-              <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+              <AvatarFallback className="bg-primary text-primary-foreground text-3xl">
                 {agent.name.charAt(0)}
               </AvatarFallback>
             </Avatar>
-            <div className="text-center sm:text-left flex-1">
-              <h1 className="font-display text-2xl font-bold text-foreground">{agent.name}</h1>
-              <div className="flex flex-wrap justify-center sm:justify-start gap-4 mt-2 text-sm text-muted-foreground">
-                <span className="flex items-center gap-1">
-                  <Hash size={14} />
-                  {agent.ref_number}
-                </span>
-                <span className="flex items-center gap-1">
-                  <UserCircle size={14} />
-                  {agent.email}
-                </span>
+            <div className="flex-1 text-center lg:text-left">
+              <h1 className="font-display text-2xl font-bold text-foreground mb-3">{agent.name}</h1>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <Hash size={16} className="text-primary" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Reference Number</p>
+                    <p className="font-medium text-foreground">{agent.ref_number}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <Mail size={16} className="text-primary" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Email</p>
+                    <p className="font-medium text-foreground">{agent.email}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-2 justify-center lg:justify-start">
+                  <Phone size={16} className="text-primary" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Phone</p>
+                    <p className="font-medium text-foreground">{agent.phone}</p>
+                  </div>
+                </div>
               </div>
             </div>
             <StatsCard
-              title="My Customers"
+              title="Members Registered"
               value={agent.customers_count}
               icon={Users}
-              className="w-full sm:w-auto"
+              className="w-full lg:w-auto"
             />
           </div>
         </div>
@@ -367,7 +315,7 @@ const AgentDashboard = () => {
           <div className="relative flex-1">
             <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
             <Input
-              placeholder="Search customers..."
+              placeholder="Search members..."
               value={searchQuery}
               onChange={e => setSearchQuery(e.target.value)}
               className="pl-10"
@@ -375,12 +323,16 @@ const AgentDashboard = () => {
           </div>
           <Button variant="gold" onClick={openAddModal}>
             <Plus size={18} />
-            Add Customer
+            Add Member
           </Button>
         </div>
 
-        {/* Customers Table */}
+        {/* Members Table */}
         <div className="bg-card rounded-xl border border-border card-elevated overflow-hidden animate-slide-up">
+          <div className="p-4 border-b border-border">
+            <h3 className="font-semibold text-foreground">My Registered Members</h3>
+            <p className="text-sm text-muted-foreground">View-only access to members you have registered</p>
+          </div>
           <div className="overflow-x-auto">
             <Table>
               <TableHeader>
@@ -389,15 +341,15 @@ const AgentDashboard = () => {
                   <TableHead className="text-muted-foreground">Phone</TableHead>
                   <TableHead className="text-muted-foreground">Email</TableHead>
                   <TableHead className="text-muted-foreground">Address</TableHead>
-                  <TableHead className="text-muted-foreground">Added</TableHead>
-                  <TableHead className="text-muted-foreground text-right">Actions</TableHead>
+                  <TableHead className="text-muted-foreground">Registered</TableHead>
+                  <TableHead className="text-muted-foreground text-right">View</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {filteredCustomers.length === 0 ? (
                   <TableRow>
                     <TableCell colSpan={6} className="text-center py-12 text-muted-foreground">
-                      {searchQuery ? 'No customers match your search.' : 'No customers yet. Add your first customer!'}
+                      {searchQuery ? 'No members match your search.' : 'No members registered yet. Add your first member!'}
                     </TableCell>
                   </TableRow>
                 ) : (
@@ -411,24 +363,14 @@ const AgentDashboard = () => {
                         {new Date(customer.created_at).toLocaleDateString()}
                       </TableCell>
                       <TableCell className="text-right">
-                        <div className="flex justify-end gap-2">
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            onClick={() => openEditModal(customer)}
-                            title="Edit Customer"
-                          >
-                            <Edit size={16} className="text-primary" />
-                          </Button>
-                          <Button 
-                            variant="ghost" 
-                            size="icon"
-                            onClick={() => handleDeleteClick(customer)}
-                            title="Delete Customer"
-                          >
-                            <Trash2 size={16} className="text-destructive" />
-                          </Button>
-                        </div>
+                        <Button 
+                          variant="ghost" 
+                          size="icon"
+                          onClick={() => openViewModal(customer)}
+                          title="View Member Details"
+                        >
+                          <Eye size={16} className="text-primary" />
+                        </Button>
                       </TableCell>
                     </TableRow>
                   ))
@@ -439,12 +381,12 @@ const AgentDashboard = () => {
         </div>
       </main>
 
-      {/* Add/Edit Customer Modal */}
+      {/* Add Member Modal */}
       <Dialog open={customerModalOpen} onOpenChange={setCustomerModalOpen}>
         <DialogContent className="bg-card border-border">
           <DialogHeader>
             <DialogTitle className="text-foreground">
-              {editingCustomer ? 'Edit Customer' : 'Add New Customer'}
+              Add New Member
             </DialogTitle>
           </DialogHeader>
           <form onSubmit={handleSubmitCustomer} className="space-y-4">
@@ -453,7 +395,7 @@ const AgentDashboard = () => {
               <Input
                 value={customerForm.name}
                 onChange={e => setCustomerForm(f => ({ ...f, name: e.target.value }))}
-                placeholder="Customer name"
+                placeholder="Member name"
                 required
               />
             </div>
@@ -472,7 +414,7 @@ const AgentDashboard = () => {
                 type="email"
                 value={customerForm.email}
                 onChange={e => setCustomerForm(f => ({ ...f, email: e.target.value }))}
-                placeholder="customer@example.com"
+                placeholder="member@example.com"
               />
             </div>
             <div className="space-y-2">
@@ -480,7 +422,7 @@ const AgentDashboard = () => {
               <Input
                 value={customerForm.address}
                 onChange={e => setCustomerForm(f => ({ ...f, address: e.target.value }))}
-                placeholder="Customer address"
+                placeholder="Member address"
               />
             </div>
             <div className="flex justify-end gap-3 pt-4">
@@ -489,37 +431,70 @@ const AgentDashboard = () => {
               </Button>
               <Button type="submit" variant="gold" disabled={isSubmitting}>
                 {isSubmitting ? <Loader2 className="animate-spin" size={18} /> : null}
-                {editingCustomer ? 'Update' : 'Add'} Customer
+                Add Member
               </Button>
             </div>
           </form>
         </DialogContent>
       </Dialog>
 
-      {/* Delete Confirmation */}
-      <AlertDialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
-        <AlertDialogContent className="bg-card border-border">
-          <AlertDialogHeader>
-            <AlertDialogTitle className="flex items-center gap-2 text-foreground">
-              <AlertTriangle className="text-destructive" size={20} />
-              Delete Customer
-            </AlertDialogTitle>
-            <AlertDialogDescription className="text-muted-foreground">
-              Are you sure you want to delete <strong className="text-foreground">{customerToDelete?.name}</strong>? 
-              This action cannot be undone.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel className="border-border">Cancel</AlertDialogCancel>
-            <AlertDialogAction 
-              onClick={confirmDelete}
-              className="bg-destructive text-destructive-foreground hover:bg-destructive/90"
-            >
-              Delete
-            </AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {/* View Member Details Modal */}
+      <Dialog open={viewModalOpen} onOpenChange={setViewModalOpen}>
+        <DialogContent className="bg-card border-border">
+          <DialogHeader>
+            <DialogTitle className="text-foreground">Member Details</DialogTitle>
+          </DialogHeader>
+          {viewingCustomer && (
+            <div className="space-y-4">
+              <div className="flex items-center gap-4 p-4 bg-secondary/50 rounded-lg">
+                <Avatar className="h-16 w-16 border-2 border-primary/30">
+                  <AvatarFallback className="bg-primary text-primary-foreground text-xl">
+                    {viewingCustomer.name.charAt(0)}
+                  </AvatarFallback>
+                </Avatar>
+                <div>
+                  <h3 className="font-semibold text-lg text-foreground">{viewingCustomer.name}</h3>
+                  <p className="text-sm text-muted-foreground">
+                    Registered on {new Date(viewingCustomer.created_at).toLocaleDateString()}
+                  </p>
+                </div>
+              </div>
+              
+              <div className="space-y-3">
+                <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                  <Phone size={18} className="text-primary" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Phone</p>
+                    <p className="font-medium text-foreground">{viewingCustomer.phone}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-center gap-3 p-3 bg-muted/50 rounded-lg">
+                  <Mail size={18} className="text-primary" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Email</p>
+                    <p className="font-medium text-foreground">{viewingCustomer.email || 'Not provided'}</p>
+                  </div>
+                </div>
+                
+                <div className="flex items-start gap-3 p-3 bg-muted/50 rounded-lg">
+                  <UserCircle size={18} className="text-primary mt-0.5" />
+                  <div>
+                    <p className="text-xs text-muted-foreground">Address</p>
+                    <p className="font-medium text-foreground">{viewingCustomer.address || 'Not provided'}</p>
+                  </div>
+                </div>
+              </div>
+              
+              <div className="flex justify-end pt-2">
+                <Button variant="outline" onClick={() => setViewModalOpen(false)}>
+                  Close
+                </Button>
+              </div>
+            </div>
+          )}
+        </DialogContent>
+      </Dialog>
     </div>
   );
 };
