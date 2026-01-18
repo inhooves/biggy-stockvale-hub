@@ -104,15 +104,17 @@ export function MainNavigation() {
             <SettingsDropdown />
           </div>
 
-          {/* Mobile Menu Button */}
-          <Button
-            variant="ghost"
-            size="icon"
-            className="lg:hidden"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
-          </Button>
+          {/* Mobile Menu Button & Settings */}
+          <div className="flex items-center gap-1 lg:hidden">
+            <SettingsDropdown />
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </Button>
+          </div>
         </div>
 
         {/* Mobile Navigation */}
@@ -152,7 +154,6 @@ export function MainNavigation() {
                 <Button size="sm" asChild className="flex-1">
                   <Link to="/admin">Admin</Link>
                 </Button>
-                <SettingsDropdown />
               </div>
             </div>
           </div>
