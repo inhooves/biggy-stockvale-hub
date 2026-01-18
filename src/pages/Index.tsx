@@ -6,6 +6,7 @@ import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Heart,
 import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
 import groceriesBagImage from '@/assets/groceries-bag.jpeg';
 import burialSupportImage from '@/assets/burial-support.jpeg';
+import savingsJarImage from '@/assets/savings-jar.jpeg';
 
 const Index = () => {
   const serviceTabs: TabItem[] = [
@@ -43,7 +44,8 @@ const Index = () => {
         <div className="p-4 text-center">
           <Wallet size={32} className="text-primary mx-auto mb-3" />
           <h3 className="font-display text-lg font-semibold mb-2">Group Savings</h3>
-          <p className="text-sm text-muted-foreground">Save together and grow your funds with community savings.</p>
+          <p className="text-sm text-muted-foreground mb-3">Save together and grow your funds with community savings.</p>
+          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-full max-w-xs mx-auto rounded-lg" />
         </div>
       ),
     },
