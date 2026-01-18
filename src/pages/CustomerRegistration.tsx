@@ -22,7 +22,7 @@ const registrationSchema = z.object({
   phone: z.string().regex(/^[\d\s\-+()]{10,20}$/, 'Invalid phone number'),
   idNumber: z.string().min(5, 'ID number is required').max(20),
   idPhoto: z.string().min(1, 'ID photo is required'),
-  passportPhoto: z.string().min(1, 'Passport sized photo is required'),
+  passportPhoto: z.string().optional(),
   passportNumber: z.string().optional(),
   email: z.string().email('Invalid email address'),
   gender: z.string().min(1, 'Gender is required'),
@@ -97,7 +97,7 @@ const CustomerRegistration = () => {
         phone: validatedData.phone,
         idNumber: validatedData.idNumber,
         idPhoto: validatedData.idPhoto,
-        passportPhoto: validatedData.passportPhoto,
+        passportPhoto: validatedData.passportPhoto || '',
         passportNumber: validatedData.passportNumber || '',
         email: validatedData.email,
         gender: validatedData.gender,
@@ -491,7 +491,7 @@ const CustomerRegistration = () => {
                 label="ID Photo"
                 value={formData.idPhoto}
                 onChange={value => updateField('idPhoto', value)}
-                maxSizeMB={5}
+                maxSizeMB={15}
                 required
                 error={errors.idPhoto}
               />
@@ -499,8 +499,8 @@ const CustomerRegistration = () => {
                 label="Passport Sized Photo"
                 value={formData.passportPhoto}
                 onChange={value => updateField('passportPhoto', value)}
-                maxSizeMB={2}
-                required
+                maxSizeMB={15}
+                required={false}
                 error={errors.passportPhoto}
               />
             </div>

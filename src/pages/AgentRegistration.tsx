@@ -291,7 +291,7 @@ const AgentRegistration = () => {
                             label="Profile Picture"
                             value={field.value}
                             onChange={field.onChange}
-                            maxSizeMB={2}
+                            maxSizeMB={15}
                             required
                             error={registerForm.formState.errors.profilePic?.message}
                           />
