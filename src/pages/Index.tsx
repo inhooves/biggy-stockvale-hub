@@ -16,11 +16,12 @@ const Index = () => {
       title: 'Groceries',
       closable: false,
       content: (
-        <div className="p-2 text-center flex flex-col items-center">
-          <ShoppingBasket size={24} className="text-primary mb-1" />
-          <h3 className="font-display text-sm font-semibold mb-1">Bulk Groceries</h3>
-          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Pool funds for wholesale grocery purchases at discounted rates.</p>
-          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-28 h-28 object-cover rounded-lg" />
+        <div className="p-2 md:p-3 text-center flex flex-col items-center">
+          <ShoppingBasket size={20} className="text-primary mb-1 md:hidden" />
+          <ShoppingBasket size={24} className="text-primary mb-1 hidden md:block" />
+          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Bulk Groceries</h3>
+          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Pool funds for wholesale grocery purchases.</p>
+          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -29,11 +30,12 @@ const Index = () => {
       title: 'Burial',
       closable: false,
       content: (
-        <div className="p-2 text-center flex flex-col items-center">
-          <Heart size={24} className="text-primary mb-1" />
-          <h3 className="font-display text-sm font-semibold mb-1">Burial Cover</h3>
-          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Community support during difficult times with burial insurance.</p>
-          <img src={burialSupportImage} alt="Community support during difficult times" className="w-28 h-28 object-cover rounded-lg" />
+        <div className="p-2 md:p-3 text-center flex flex-col items-center">
+          <Heart size={20} className="text-primary mb-1 md:hidden" />
+          <Heart size={24} className="text-primary mb-1 hidden md:block" />
+          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Burial Cover</h3>
+          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Community support during difficult times.</p>
+          <img src={burialSupportImage} alt="Community support during difficult times" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -42,11 +44,12 @@ const Index = () => {
       title: 'Savings',
       closable: false,
       content: (
-        <div className="p-2 text-center flex flex-col items-center">
-          <Wallet size={24} className="text-primary mb-1" />
-          <h3 className="font-display text-sm font-semibold mb-1">Group Savings</h3>
-          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Save together and grow your funds with community savings.</p>
-          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-28 h-28 object-cover rounded-lg" />
+        <div className="p-2 md:p-3 text-center flex flex-col items-center">
+          <Wallet size={20} className="text-primary mb-1 md:hidden" />
+          <Wallet size={24} className="text-primary mb-1 hidden md:block" />
+          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Group Savings</h3>
+          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Save together and grow your funds.</p>
+          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -55,11 +58,12 @@ const Index = () => {
       title: 'Investments',
       closable: false,
       content: (
-        <div className="p-2 text-center flex flex-col items-center">
-          <Sprout size={24} className="text-primary mb-1" />
-          <h3 className="font-display text-sm font-semibold mb-1">Crowd Farming</h3>
-          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Expand your investment to realize higher potential returns.</p>
-          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-28 h-28 object-cover rounded-lg" />
+        <div className="p-2 md:p-3 text-center flex flex-col items-center">
+          <Sprout size={20} className="text-primary mb-1 md:hidden" />
+          <Sprout size={24} className="text-primary mb-1 hidden md:block" />
+          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Crowd Farming</h3>
+          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Expand your investment potential.</p>
+          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -78,14 +82,16 @@ const Index = () => {
 
       {/* Hero Section */}
       <main className="relative z-10">
-        <section className="container mx-auto px-4 py-12 text-center">
+        <section className="container mx-auto px-3 md:px-4 py-6 md:py-12 text-center">
           <div className="max-w-4xl mx-auto animate-fade-in">
-            <div className="flex justify-center mb-6">
-              <Logo size="lg" />
+            <div className="flex justify-center mb-4 md:mb-6">
+              <div className="scale-75 md:scale-100">
+                <Logo size="lg" />
+              </div>
             </div>
             
             {/* Side-by-Side Tabs */}
-            <div className="h-auto mb-8 rounded-xl border border-border overflow-visible">
+            <div className="h-auto mb-4 md:mb-8 rounded-xl border border-border overflow-visible">
               <TabbedContainer
                 tabs={serviceTabs}
                 defaultLayoutMode="side-by-side"
@@ -94,27 +100,29 @@ const Index = () => {
               />
             </div>
             
-            <h1 className="font-display text-3xl md:text-5xl font-bold mb-4">
+            <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold mb-3 md:mb-4">
               <span className="text-foreground">Your Trusted</span>
               <br />
               <span className="gold-text text-3d">Groceries Partner</span>
             </h1>
             
-            <p className="text-base text-muted-foreground mb-8 max-w-xl mx-auto">
+            <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8 max-w-xl mx-auto px-2">
               Join Biggy Round Groceries Stockvale and experience premium grocery management 
-              with exclusive member benefits and seamless service.
+              with exclusive member benefits.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
               <Link to="/register">
-                <Button variant="gold" size="lg" className="w-full sm:w-auto text-lg px-8">
-                  <UserPlus size={20} />
+                <Button variant="gold" size="lg" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8">
+                  <UserPlus size={18} className="md:hidden" />
+                  <UserPlus size={20} className="hidden md:block" />
                   Register Now
                 </Button>
               </Link>
               <Link to="/admin">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-lg px-8">
-                  <ShieldCheck size={20} />
+                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8">
+                  <ShieldCheck size={18} className="md:hidden" />
+                  <ShieldCheck size={20} className="hidden md:block" />
                   Admin Portal
                 </Button>
               </Link>
@@ -123,8 +131,8 @@ const Index = () => {
         </section>
 
         {/* Features */}
-        <section className="container mx-auto px-4 pb-20">
-          <div className="grid md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <section className="container mx-auto px-3 md:px-4 pb-12 md:pb-20">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6 max-w-4xl mx-auto">
             {[
               {
                 icon: ShoppingBasket,
@@ -144,16 +152,17 @@ const Index = () => {
             ].map((feature, index) => (
               <div 
                 key={index}
-                className="bg-card/50 backdrop-blur-sm rounded-2xl p-6 border border-border hover-glow transition-all duration-300 animate-slide-up"
+                className="bg-card/50 backdrop-blur-sm rounded-xl md:rounded-2xl p-4 md:p-6 border border-border hover-glow transition-all duration-300 animate-slide-up"
                 style={{ animationDelay: `${index * 0.1}s` }}
               >
-                <div className="w-12 h-12 rounded-xl bg-primary/20 flex items-center justify-center mb-4">
-                  <feature.icon size={24} className="text-primary" />
+                <div className="w-10 h-10 md:w-12 md:h-12 rounded-lg md:rounded-xl bg-primary/20 flex items-center justify-center mb-3 md:mb-4">
+                  <feature.icon size={20} className="text-primary md:hidden" />
+                  <feature.icon size={24} className="text-primary hidden md:block" />
                 </div>
-                <h3 className="font-display text-lg font-semibold text-foreground mb-2">
+                <h3 className="font-display text-base md:text-lg font-semibold text-foreground mb-1 md:mb-2">
                   {feature.title}
                 </h3>
-                <p className="text-sm text-muted-foreground">
+                <p className="text-xs md:text-sm text-muted-foreground">
                   {feature.description}
                 </p>
               </div>
@@ -162,13 +171,14 @@ const Index = () => {
         </section>
 
         {/* Trust Badge */}
-        <section className="container mx-auto px-4 pb-20">
-          <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-2xl p-8 max-w-2xl mx-auto text-center border border-primary/20">
-            <Award size={40} className="text-primary mx-auto mb-4" />
-            <h3 className="font-display text-xl font-semibold text-foreground mb-2">
+        <section className="container mx-auto px-3 md:px-4 pb-12 md:pb-20">
+          <div className="bg-gradient-to-r from-primary/10 via-accent/10 to-primary/10 rounded-xl md:rounded-2xl p-6 md:p-8 max-w-2xl mx-auto text-center border border-primary/20">
+            <Award size={32} className="text-primary mx-auto mb-3 md:hidden" />
+            <Award size={40} className="text-primary mx-auto mb-4 hidden md:block" />
+            <h3 className="font-display text-lg md:text-xl font-semibold text-foreground mb-2">
               Trusted by Thousands
             </h3>
-            <p className="text-muted-foreground">
+            <p className="text-sm md:text-base text-muted-foreground">
               Join our growing community of satisfied customers who trust Biggy Round 
               for their grocery stockvale needs.
             </p>
@@ -177,8 +187,8 @@ const Index = () => {
       </main>
 
       {/* Footer */}
-      <footer className="relative z-10 border-t border-border/50 py-8">
-        <div className="container mx-auto px-4 text-center text-sm text-muted-foreground">
+      <footer className="relative z-10 border-t border-border/50 py-6 md:py-8">
+        <div className="container mx-auto px-3 md:px-4 text-center text-xs md:text-sm text-muted-foreground">
           <p>© {new Date().getFullYear()} Biggy Round Groceries Stockvale. All rights reserved.</p>
         </div>
       </footer>
