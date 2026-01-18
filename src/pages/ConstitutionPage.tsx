@@ -53,38 +53,38 @@ export default function ConstitutionPage() {
   return (
     <PageLayout>
       {/* Hero */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto text-center">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-full bg-primary/10 flex items-center justify-center">
-            <ScrollText className="h-10 w-10 text-primary" />
+          <div className="w-16 h-16 md:w-20 md:h-20 mx-auto mb-4 md:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+            <ScrollText className="h-8 w-8 md:h-10 md:w-10 text-primary" />
           </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Constitution</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">Constitution</h1>
+          <p className="text-base md:text-xl text-muted-foreground max-w-3xl mx-auto">
             The rules and guidelines that govern our stokvel community.
           </p>
         </div>
       </section>
 
       {/* Rules */}
-      <section className="py-16 px-4">
+      <section className="py-10 md:py-16 px-3 md:px-4">
         <div className="container mx-auto max-w-4xl">
-          <div className="space-y-8">
+          <div className="space-y-4 md:space-y-8">
             {rules.map((section) => (
               <Card key={section.title}>
-                <CardContent className="p-6">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                      <section.icon className="h-6 w-6 text-primary" />
+                <CardContent className="p-4 md:p-6">
+                  <div className="flex items-center gap-3 md:gap-4 mb-3 md:mb-4">
+                    <div className="w-10 h-10 md:w-12 md:h-12 rounded-full bg-primary/10 flex items-center justify-center">
+                      <section.icon className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                     </div>
-                    <h2 className="text-xl font-bold">{section.title}</h2>
+                    <h2 className="text-lg md:text-xl font-bold">{section.title}</h2>
                   </div>
-                  <ul className="space-y-3">
+                  <ul className="space-y-2 md:space-y-3">
                     {section.rules.map((rule, index) => (
-                      <li key={index} className="flex items-start gap-3">
-                        <span className="w-6 h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-sm shrink-0 mt-0.5">
+                      <li key={index} className="flex items-start gap-2 md:gap-3">
+                        <span className="w-5 h-5 md:w-6 md:h-6 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold text-xs md:text-sm shrink-0 mt-0.5">
                           {index + 1}
                         </span>
-                        <span className="text-muted-foreground">{rule}</span>
+                        <span className="text-sm md:text-base text-muted-foreground">{rule}</span>
                       </li>
                     ))}
                   </ul>
@@ -96,19 +96,19 @@ export default function ConstitutionPage() {
       </section>
 
       {/* Important Notice */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-muted/30">
         <div className="container mx-auto max-w-4xl">
           <Card className="border-yellow-500/50 bg-yellow-500/5">
-            <CardContent className="p-8">
-              <div className="flex items-start gap-4">
-                <AlertCircle className="h-8 w-8 text-yellow-500 shrink-0" />
+            <CardContent className="p-6 md:p-8">
+              <div className="flex items-start gap-3 md:gap-4">
+                <AlertCircle className="h-6 w-6 md:h-8 md:w-8 text-yellow-500 shrink-0" />
                 <div>
-                  <h2 className="text-xl font-bold mb-4">Important Notice</h2>
-                  <p className="text-muted-foreground leading-relaxed mb-4">
+                  <h2 className="text-lg md:text-xl font-bold mb-3 md:mb-4">Important Notice</h2>
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed mb-3 md:mb-4">
                     During the registration process of all members, no one will pay any money. 
                     <strong> Registration is FREE</strong> and the contributions will only be required post registration.
                   </p>
-                  <p className="text-muted-foreground leading-relaxed">
+                  <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
                     Members are advised to read and understand all terms and policies before registering 
                     to avoid any future misunderstanding of the model being used by all registered members.
                   </p>
@@ -120,13 +120,13 @@ export default function ConstitutionPage() {
       </section>
 
       {/* Initiation Fee */}
-      <section className="py-16 px-4">
+      <section className="py-10 md:py-16 px-3 md:px-4">
         <div className="container mx-auto max-w-4xl text-center">
-          <h2 className="text-3xl font-bold mb-6">Initiation Fee</h2>
+          <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Initiation Fee</h2>
           <Card>
-            <CardContent className="p-8">
-              <p className="text-4xl font-bold text-primary mb-4">USD $3</p>
-              <p className="text-muted-foreground">
+            <CardContent className="p-6 md:p-8">
+              <p className="text-3xl md:text-4xl font-bold text-primary mb-3 md:mb-4">USD $3</p>
+              <p className="text-sm md:text-base text-muted-foreground">
                 One-time subscription fee for all new members
               </p>
             </CardContent>

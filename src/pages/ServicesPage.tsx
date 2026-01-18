@@ -46,39 +46,39 @@ export default function ServicesPage() {
   return (
     <PageLayout>
       {/* Hero Section */}
-      <section className="py-16 px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto text-center">
-          <h1 className="text-4xl md:text-5xl font-bold mb-6">Stokvel Services</h1>
-          <p className="text-xl text-muted-foreground max-w-3xl mx-auto">
+          <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">Stokvel Services</h1>
+          <p className="text-base md:text-xl text-muted-foreground max-w-3xl mx-auto">
             Comprehensive financial solutions designed to help our community save, invest, and prosper together.
           </p>
         </div>
       </section>
 
       {/* Services Grid */}
-      <section className="py-16 px-4">
+      <section className="py-10 md:py-16 px-3 md:px-4">
         <div className="container mx-auto">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-8">
             {services.map((service) => (
               <Card key={service.title} className="hover:shadow-lg transition-all">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="w-14 h-14 rounded-full bg-primary/10 flex items-center justify-center">
-                      <service.icon className="h-7 w-7 text-primary" />
+                <CardHeader className="pb-2 md:pb-4">
+                  <div className="flex items-center gap-3 md:gap-4">
+                    <div className="w-12 h-12 md:w-14 md:h-14 rounded-full bg-primary/10 flex items-center justify-center shrink-0">
+                      <service.icon className="h-6 w-6 md:h-7 md:w-7 text-primary" />
                     </div>
-                    <CardTitle className="text-2xl">{service.title}</CardTitle>
+                    <CardTitle className="text-lg md:text-2xl">{service.title}</CardTitle>
                   </div>
                 </CardHeader>
                 <CardContent>
-                  <p className="text-muted-foreground mb-4 leading-relaxed">{service.description}</p>
-                  <div className="flex flex-wrap gap-2 mb-6">
+                  <p className="text-sm md:text-base text-muted-foreground mb-3 md:mb-4 leading-relaxed">{service.description}</p>
+                  <div className="flex flex-wrap gap-1.5 md:gap-2 mb-4 md:mb-6">
                     {service.features.map((feature) => (
-                      <span key={feature} className="px-3 py-1 bg-primary/10 text-primary text-sm rounded-full">
+                      <span key={feature} className="px-2 md:px-3 py-0.5 md:py-1 bg-primary/10 text-primary text-xs md:text-sm rounded-full">
                         {feature}
                       </span>
                     ))}
                   </div>
-                  <Button asChild>
+                  <Button asChild size="sm" className="md:text-base">
                     <Link to={service.link}>
                       Learn More <ArrowRight className="ml-2 h-4 w-4" />
                     </Link>
@@ -91,10 +91,10 @@ export default function ServicesPage() {
       </section>
 
       {/* CTA */}
-      <section className="py-16 px-4 bg-muted/30">
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-muted/30">
         <div className="container mx-auto text-center">
-          <h2 className="text-3xl font-bold mb-4">Ready to Start Saving?</h2>
-          <p className="text-lg text-muted-foreground mb-8">
+          <h2 className="text-2xl md:text-3xl font-bold mb-3 md:mb-4">Ready to Start Saving?</h2>
+          <p className="text-base md:text-lg text-muted-foreground mb-6 md:mb-8">
             Join Biggy Round today and access all our stokvel services.
           </p>
           <Button size="lg" asChild>
