@@ -24,6 +24,7 @@ import AgentRegistration from "./pages/AgentRegistration";
 import AgentDashboard from "./pages/AgentDashboard";
 import AgentsAdmin from "./pages/AgentsAdmin";
 import NotFound from "./pages/NotFound";
+import TabbedDemo from "./pages/TabbedDemo";
 import { AIChatbot } from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
@@ -64,6 +65,7 @@ const App = () => (
           <Route path="/admin/agents" element={<AgentsAdmin />} />
           <Route path="/agent" element={<AgentRegistration />} />
           <Route path="/agent/dashboard" element={<AgentDashboard />} />
+          <Route path="/tabs-demo" element={<TabbedDemo />} />
           
           <Route path="*" element={<NotFound />} />
         </Routes>
