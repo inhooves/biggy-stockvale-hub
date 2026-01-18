@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import {
   Carousel,
   CarouselContent,
@@ -19,14 +20,14 @@ import investmentsHero from '@/assets/investments-hero.jpeg';
 import savingsClubJar from '@/assets/savings-club-jar.jpeg';
 
 const serviceImages = [
-  { src: groceriesBag, alt: 'Biggy Groceries - Bulk buying savings' },
-  { src: burialHero, alt: 'Biggy Burial Society - Community support' },
-  { src: savingsJar, alt: 'Biggy Savings Club - Save together' },
-  { src: investmentsHero, alt: 'Biggy Investments - Grow your wealth' },
-  { src: burialSupport, alt: 'Biggy Burial Society - We care' },
-  { src: groceriesHero, alt: 'Biggy Groceries - Fresh produce' },
-  { src: savingsClubJar, alt: 'Biggy Savings - Travel dreams' },
-  { src: investmentGrowth, alt: 'Biggy Investments - Financial growth' },
+  { src: groceriesBag, alt: 'Biggy Groceries - Bulk buying savings', link: '/services/groceries' },
+  { src: burialHero, alt: 'Biggy Burial Society - Community support', link: '/services/burial' },
+  { src: savingsJar, alt: 'Biggy Savings Club - Save together', link: '/services/savings' },
+  { src: investmentsHero, alt: 'Biggy Investments - Grow your wealth', link: '/services/investments' },
+  { src: burialSupport, alt: 'Biggy Burial Society - We care', link: '/services/burial' },
+  { src: groceriesHero, alt: 'Biggy Groceries - Fresh produce', link: '/services/groceries' },
+  { src: savingsClubJar, alt: 'Biggy Savings - Travel dreams', link: '/services/savings' },
+  { src: investmentGrowth, alt: 'Biggy Investments - Financial growth', link: '/services/investments' },
 ];
 
 export function ServiceImageSlideshow() {
@@ -51,13 +52,15 @@ export function ServiceImageSlideshow() {
           <CarouselContent className="-ml-2 md:-ml-4">
             {serviceImages.map((image, index) => (
               <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
-                <div className="aspect-square overflow-hidden rounded-lg shadow-md">
-                  <img
-                    src={image.src}
-                    alt={image.alt}
-                    className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                  />
-                </div>
+                <Link to={image.link} className="block">
+                  <div className="aspect-square overflow-hidden rounded-lg shadow-md cursor-pointer">
+                    <img
+                      src={image.src}
+                      alt={image.alt}
+                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                    />
+                  </div>
+                </Link>
               </CarouselItem>
             ))}
           </CarouselContent>
