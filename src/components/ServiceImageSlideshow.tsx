@@ -1,13 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import {
-  Carousel,
-  CarouselContent,
-  CarouselItem,
-  CarouselNext,
-  CarouselPrevious,
-} from '@/components/ui/carousel';
-import Autoplay from 'embla-carousel-autoplay';
 
 // Import all service images
 import groceriesBag from '@/assets/groceries-bag.jpeg';
@@ -30,40 +22,30 @@ const serviceImages = [
   { src: investmentGrowth, alt: 'Biggy Investments - Financial growth', link: '/services/investments' },
 ];
 
-export function ServiceImageSlideshow() {
-  const plugin = React.useRef(
-    Autoplay({ delay: 3000, stopOnInteraction: false })
-  );
+// Duplicate images for seamless loop
+const duplicatedImages = [...serviceImages, ...serviceImages];
 
+export function ServiceImageSlideshow() {
   return (
-    <section className="py-8 md:py-12 bg-muted/30">
-      <div className="container mx-auto px-4">
-        <Carousel
-          plugins={[plugin.current]}
-          opts={{
-            align: 'start',
-            loop: true,
-          }}
-          className="w-full max-w-5xl mx-auto"
-        >
-          <CarouselContent className="-ml-2 md:-ml-4">
-            {serviceImages.map((image, index) => (
-              <CarouselItem key={index} className="pl-2 md:pl-4 basis-1/2 md:basis-1/3 lg:basis-1/4">
-                <Link to={image.link} className="block">
-                  <div className="aspect-square overflow-hidden rounded-lg shadow-md cursor-pointer">
-                    <img
-                      src={image.src}
-                      alt={image.alt}
-                      className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                    />
-                  </div>
-                </Link>
-              </CarouselItem>
-            ))}
-          </CarouselContent>
-          <CarouselPrevious className="hidden md:flex -left-12" />
-          <CarouselNext className="hidden md:flex -right-12" />
-        </Carousel>
+    <section className="py-8 md:py-12 bg-muted/30 overflow-hidden">
+      <div className="relative w-full">
+        <div className="flex animate-scroll-slow hover:pause-animation">
+          {duplicatedImages.map((image, index) => (
+            <Link
+              key={index}
+              to={image.link}
+              className="flex-shrink-0 w-40 md:w-56 lg:w-64 px-2"
+            >
+              <div className="aspect-square overflow-hidden rounded-lg shadow-md cursor-pointer">
+                <img
+                  src={image.src}
+                  alt={image.alt}
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
+                />
+              </div>
+            </Link>
+          ))}
+        </div>
       </div>
     </section>
   );
