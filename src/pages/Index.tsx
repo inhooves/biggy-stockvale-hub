@@ -4,6 +4,7 @@ import Logo from '@/components/Logo';
 import { MainNavigation } from '@/components/MainNavigation';
 import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Heart, Wallet, Sprout } from 'lucide-react';
 import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
+import { ServiceImageSlideshow } from '@/components/ServiceImageSlideshow';
 import groceriesBagImage from '@/assets/groceries-bag.jpeg';
 import burialSupportImage from '@/assets/burial-support.jpeg';
 import savingsJarImage from '@/assets/savings-jar.jpeg';
@@ -185,6 +186,9 @@ const Index = () => {
           </div>
         </section>
       </main>
+
+      {/* Service Image Slideshow */}
+      <ServiceImageSlideshow />
 
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 py-6 md:py-8">
