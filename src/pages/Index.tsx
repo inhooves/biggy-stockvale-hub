@@ -16,11 +16,11 @@ const Index = () => {
       title: 'Groceries',
       closable: false,
       content: (
-        <div className="p-4 text-center">
-          <ShoppingBasket size={32} className="text-primary mx-auto mb-3" />
-          <h3 className="font-display text-lg font-semibold mb-2">Bulk Groceries</h3>
-          <p className="text-sm text-muted-foreground mb-3">Pool funds for wholesale grocery purchases at discounted rates.</p>
-          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-full max-w-xs mx-auto rounded-lg" />
+        <div className="p-2 text-center flex flex-col items-center">
+          <ShoppingBasket size={24} className="text-primary mb-1" />
+          <h3 className="font-display text-sm font-semibold mb-1">Bulk Groceries</h3>
+          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Pool funds for wholesale grocery purchases at discounted rates.</p>
+          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-20 h-20 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -29,11 +29,11 @@ const Index = () => {
       title: 'Burial',
       closable: false,
       content: (
-        <div className="p-4 text-center">
-          <Heart size={32} className="text-primary mx-auto mb-3" />
-          <h3 className="font-display text-lg font-semibold mb-2">Burial Cover</h3>
-          <p className="text-sm text-muted-foreground mb-3">Community support during difficult times with burial insurance.</p>
-          <img src={burialSupportImage} alt="Community support during difficult times" className="w-full max-w-xs mx-auto rounded-lg" />
+        <div className="p-2 text-center flex flex-col items-center">
+          <Heart size={24} className="text-primary mb-1" />
+          <h3 className="font-display text-sm font-semibold mb-1">Burial Cover</h3>
+          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Community support during difficult times with burial insurance.</p>
+          <img src={burialSupportImage} alt="Community support during difficult times" className="w-20 h-20 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -42,11 +42,11 @@ const Index = () => {
       title: 'Savings',
       closable: false,
       content: (
-        <div className="p-4 text-center">
-          <Wallet size={32} className="text-primary mx-auto mb-3" />
-          <h3 className="font-display text-lg font-semibold mb-2">Group Savings</h3>
-          <p className="text-sm text-muted-foreground mb-3">Save together and grow your funds with community savings.</p>
-          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-full max-w-xs mx-auto rounded-lg" />
+        <div className="p-2 text-center flex flex-col items-center">
+          <Wallet size={24} className="text-primary mb-1" />
+          <h3 className="font-display text-sm font-semibold mb-1">Group Savings</h3>
+          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Save together and grow your funds with community savings.</p>
+          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-20 h-20 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -55,11 +55,11 @@ const Index = () => {
       title: 'Investments',
       closable: false,
       content: (
-        <div className="p-4 text-center">
-          <Sprout size={32} className="text-primary mx-auto mb-3" />
-          <h3 className="font-display text-lg font-semibold mb-2">Crowd Farming</h3>
-          <p className="text-sm text-muted-foreground mb-3">Expand your investment to realize higher potential returns.</p>
-          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-full max-w-xs mx-auto rounded-lg" />
+        <div className="p-2 text-center flex flex-col items-center">
+          <Sprout size={24} className="text-primary mb-1" />
+          <h3 className="font-display text-sm font-semibold mb-1">Crowd Farming</h3>
+          <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Expand your investment to realize higher potential returns.</p>
+          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-20 h-20 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -85,7 +85,7 @@ const Index = () => {
             </div>
             
             {/* Side-by-Side Tabs */}
-            <div className="h-[200px] mb-8 rounded-xl border border-border overflow-hidden">
+            <div className="h-auto mb-8 rounded-xl border border-border overflow-visible">
               <TabbedContainer
                 tabs={serviceTabs}
                 defaultLayoutMode="side-by-side"
