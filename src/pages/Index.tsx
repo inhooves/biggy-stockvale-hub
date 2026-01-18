@@ -1,7 +1,8 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
-import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase, Heart, Wallet, Sprout } from 'lucide-react';
+import { MainNavigation } from '@/components/MainNavigation';
+import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Heart, Wallet, Sprout } from 'lucide-react';
 import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
 
 const Index = () => {
@@ -65,32 +66,7 @@ const Index = () => {
       </div>
 
       {/* Header */}
-      <header className="relative z-10 border-b border-border/50 bg-background/50 backdrop-blur-lg">
-        <nav className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <Logo size="sm" />
-          <div className="flex items-center gap-2 sm:gap-3">
-            <Link to="/agent">
-              <Button variant="outline" size="sm">
-                <Briefcase size={16} />
-                <span className="hidden sm:inline">Agent Portal</span>
-                <span className="sm:hidden">Agents</span>
-              </Button>
-            </Link>
-            <Link to="/admin">
-              <Button variant="ghost" size="sm">
-                <ShieldCheck size={16} />
-                Admin
-              </Button>
-            </Link>
-            <Link to="/register">
-              <Button variant="gold" size="sm">
-                <UserPlus size={16} />
-                Register
-              </Button>
-            </Link>
-          </div>
-        </nav>
-      </header>
+      <MainNavigation />
 
       {/* Hero Section */}
       <main className="relative z-10">
