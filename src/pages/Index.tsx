@@ -20,7 +20,7 @@ const Index = () => {
           <ShoppingBasket size={24} className="text-primary mb-1" />
           <h3 className="font-display text-sm font-semibold mb-1">Bulk Groceries</h3>
           <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Pool funds for wholesale grocery purchases at discounted rates.</p>
-          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-20 h-20 object-cover rounded-lg" />
+          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-28 h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -33,7 +33,7 @@ const Index = () => {
           <Heart size={24} className="text-primary mb-1" />
           <h3 className="font-display text-sm font-semibold mb-1">Burial Cover</h3>
           <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Community support during difficult times with burial insurance.</p>
-          <img src={burialSupportImage} alt="Community support during difficult times" className="w-20 h-20 object-cover rounded-lg" />
+          <img src={burialSupportImage} alt="Community support during difficult times" className="w-28 h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -46,7 +46,7 @@ const Index = () => {
           <Wallet size={24} className="text-primary mb-1" />
           <h3 className="font-display text-sm font-semibold mb-1">Group Savings</h3>
           <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Save together and grow your funds with community savings.</p>
-          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-20 h-20 object-cover rounded-lg" />
+          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-28 h-28 object-cover rounded-lg" />
         </div>
       ),
     },
@@ -59,7 +59,7 @@ const Index = () => {
           <Sprout size={24} className="text-primary mb-1" />
           <h3 className="font-display text-sm font-semibold mb-1">Crowd Farming</h3>
           <p className="text-xs text-muted-foreground mb-2 line-clamp-2">Expand your investment to realize higher potential returns.</p>
-          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-20 h-20 object-cover rounded-lg" />
+          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-28 h-28 object-cover rounded-lg" />
         </div>
       ),
     },
