@@ -5,6 +5,7 @@ import { MainNavigation } from '@/components/MainNavigation';
 import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Heart, Wallet, Sprout } from 'lucide-react';
 import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
 import groceriesBagImage from '@/assets/groceries-bag.jpeg';
+import burialSupportImage from '@/assets/burial-support.jpeg';
 
 const Index = () => {
   const serviceTabs: TabItem[] = [
@@ -29,7 +30,8 @@ const Index = () => {
         <div className="p-4 text-center">
           <Heart size={32} className="text-primary mx-auto mb-3" />
           <h3 className="font-display text-lg font-semibold mb-2">Burial Cover</h3>
-          <p className="text-sm text-muted-foreground">Community support during difficult times with burial insurance.</p>
+          <p className="text-sm text-muted-foreground mb-3">Community support during difficult times with burial insurance.</p>
+          <img src={burialSupportImage} alt="Community support during difficult times" className="w-full max-w-xs mx-auto rounded-lg" />
         </div>
       ),
     },
