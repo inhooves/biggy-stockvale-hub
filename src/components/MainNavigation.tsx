@@ -101,6 +101,9 @@ export function MainNavigation() {
             <Button size="sm" asChild>
               <Link to="/admin">Admin</Link>
             </Button>
+            <Button variant="secondary" size="sm" asChild>
+              <Link to="/member/signup">Sign Up</Link>
+            </Button>
             <SettingsDropdown />
           </div>
 
@@ -147,12 +150,17 @@ export function MainNavigation() {
                   </Link>
                 )
               ))}
-              <div className="flex gap-2 mt-4 px-3">
-                <Button variant="outline" size="sm" asChild className="flex-1">
-                  <Link to="/agent">Agent Portal</Link>
-                </Button>
-                <Button size="sm" asChild className="flex-1">
-                  <Link to="/admin">Admin</Link>
+              <div className="flex flex-col gap-2 mt-4 px-3">
+                <div className="flex gap-2">
+                  <Button variant="outline" size="sm" asChild className="flex-1">
+                    <Link to="/agent">Agent Portal</Link>
+                  </Button>
+                  <Button size="sm" asChild className="flex-1">
+                    <Link to="/admin">Admin</Link>
+                  </Button>
+                </div>
+                <Button variant="secondary" size="sm" asChild className="w-full">
+                  <Link to="/member/signup">Member Sign Up</Link>
                 </Button>
               </div>
             </div>
