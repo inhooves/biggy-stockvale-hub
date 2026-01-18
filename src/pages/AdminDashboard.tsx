@@ -21,7 +21,9 @@ import {
   Building2,
   PieChart as PieChartIcon,
   Trophy,
-  BarChart3
+  BarChart3,
+  User,
+  Shield
 } from 'lucide-react';
 import {
   Table,
@@ -83,9 +85,14 @@ interface RegisteredMember {
   surname: string;
   email: string;
   phone: string;
+  id_number: string;
+  date_of_birth: string;
   gender: string;
+  address: string | null;
+  city: string | null;
   referral_source: string;
   created_at: string;
+  updated_at: string;
 }
 
 const REFERRAL_COLORS = [
@@ -126,6 +133,11 @@ const AdminDashboard = () => {
   
   // Self-registered members
   const [registeredMembers, setRegisteredMembers] = useState<RegisteredMember[]>([]);
+  const [memberSearchQuery, setMemberSearchQuery] = useState('');
+  
+  // Member details modal
+  const [selectedMember, setSelectedMember] = useState<RegisteredMember | null>(null);
+  const [memberModalOpen, setMemberModalOpen] = useState(false);
 
   // Check admin role
   useEffect(() => {
@@ -277,6 +289,23 @@ const AdminDashboard = () => {
   const totalAllMembers = useMemo(() => {
     return totalCustomers + registeredMembers.length;
   }, [totalCustomers, registeredMembers.length]);
+
+  // Filter self-registered members
+  const filteredMembers = useMemo(() => {
+    if (!memberSearchQuery) return registeredMembers;
+    const query = memberSearchQuery.toLowerCase();
+    return registeredMembers.filter(m => 
+      m.name.toLowerCase().includes(query) ||
+      m.surname.toLowerCase().includes(query) ||
+      m.email.toLowerCase().includes(query) ||
+      m.phone.includes(query)
+    );
+  }, [registeredMembers, memberSearchQuery]);
+
+  const handleViewMember = (member: RegisteredMember) => {
+    setSelectedMember(member);
+    setMemberModalOpen(true);
+  };
 
   // Compute ranked agents
   const rankedAgents = useMemo((): RankedAgent[] => {
@@ -453,16 +482,20 @@ const AdminDashboard = () => {
           </div>
         )}
 
-        {/* Tabs for Agents and Rankings */}
+        {/* Tabs for Agents, Members, and Rankings */}
         <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
-          <TabsList className="grid w-full max-w-md grid-cols-2">
+          <TabsList className="grid w-full max-w-lg grid-cols-3">
             <TabsTrigger value="agents" className="flex items-center gap-2">
               <Users size={16} />
-              All Agents
+              Agents
+            </TabsTrigger>
+            <TabsTrigger value="members" className="flex items-center gap-2">
+              <UserPlus size={16} />
+              Members
             </TabsTrigger>
             <TabsTrigger value="rankings" className="flex items-center gap-2">
               <Trophy size={16} />
-              Agent Rankings
+              Rankings
             </TabsTrigger>
           </TabsList>
 
@@ -540,6 +573,94 @@ const AdminDashboard = () => {
                             >
                               <Eye size={16} className="text-primary" />
                               View Members
+                            </Button>
+                          </TableCell>
+                        </TableRow>
+                      ))
+                    )}
+                  </TableBody>
+                </Table>
+              </div>
+            </div>
+          </TabsContent>
+
+          {/* Self-Registered Members Tab */}
+          <TabsContent value="members" className="space-y-6">
+            {/* Search Bar */}
+            <div className="flex flex-col sm:flex-row gap-4 animate-slide-up">
+              <div className="relative flex-1">
+                <Search size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
+                <Input
+                  placeholder="Search members by name, email, or phone..."
+                  value={memberSearchQuery}
+                  onChange={e => setMemberSearchQuery(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
+            </div>
+
+            {/* Members Table */}
+            <div className="bg-card rounded-xl border border-border card-elevated overflow-hidden animate-slide-up">
+              <div className="p-4 border-b border-border">
+                <h3 className="font-semibold text-foreground flex items-center gap-2">
+                  <UserPlus size={18} className="text-primary" />
+                  Self-Registered Members
+                </h3>
+                <p className="text-sm text-muted-foreground">Members who registered directly through the website</p>
+              </div>
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow className="hover:bg-transparent border-border">
+                      <TableHead className="text-muted-foreground">Name</TableHead>
+                      <TableHead className="text-muted-foreground">Gender</TableHead>
+                      <TableHead className="text-muted-foreground">Phone</TableHead>
+                      <TableHead className="text-muted-foreground">Email</TableHead>
+                      <TableHead className="text-muted-foreground">Referral Source</TableHead>
+                      <TableHead className="text-muted-foreground">Registered</TableHead>
+                      <TableHead className="text-muted-foreground text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {filteredMembers.length === 0 ? (
+                      <TableRow>
+                        <TableCell colSpan={7} className="text-center py-12 text-muted-foreground">
+                          {memberSearchQuery ? 'No members match your search.' : 'No self-registered members yet.'}
+                        </TableCell>
+                      </TableRow>
+                    ) : (
+                      filteredMembers.map(member => (
+                        <TableRow 
+                          key={member.id} 
+                          className="border-border hover:bg-secondary/50 cursor-pointer"
+                          onClick={() => handleViewMember(member)}
+                        >
+                          <TableCell className="font-medium">
+                            {member.name} {member.surname}
+                          </TableCell>
+                          <TableCell className="text-muted-foreground">{member.gender || '-'}</TableCell>
+                          <TableCell className="text-muted-foreground">{member.phone}</TableCell>
+                          <TableCell className="text-muted-foreground">{member.email || '-'}</TableCell>
+                          <TableCell>
+                            <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent/20 text-accent-foreground">
+                              {member.referral_source}
+                            </span>
+                          </TableCell>
+                          <TableCell className="text-muted-foreground text-sm">
+                            {new Date(member.created_at).toLocaleDateString()}
+                          </TableCell>
+                          <TableCell className="text-right">
+                            <Button 
+                              variant="ghost" 
+                              size="sm"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleViewMember(member);
+                              }}
+                              title="View Details"
+                            >
+                              <Eye size={16} className="text-primary" />
+                              View
                             </Button>
                           </TableCell>
                         </TableRow>
@@ -717,6 +838,107 @@ const AdminDashboard = () => {
               </>
             )}
           </div>
+        </DialogContent>
+      </Dialog>
+
+      {/* Member Details Modal */}
+      <Dialog open={memberModalOpen} onOpenChange={setMemberModalOpen}>
+        <DialogContent className="bg-card border-border max-w-2xl max-h-[85vh] overflow-hidden flex flex-col">
+          <DialogHeader>
+            <DialogTitle className="text-foreground flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-primary/20 flex items-center justify-center">
+                <User size={20} className="text-primary" />
+              </div>
+              <div>
+                <span>{selectedMember?.name} {selectedMember?.surname}</span>
+                <p className="text-sm text-muted-foreground font-normal">Member Details</p>
+              </div>
+            </DialogTitle>
+          </DialogHeader>
+          
+          {selectedMember && (
+            <div className="flex-1 overflow-auto space-y-6 py-4">
+              {/* Personal Information */}
+              <div className="bg-secondary/30 rounded-lg p-4">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <User size={16} className="text-primary" />
+                  Personal Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">First Name</p>
+                    <p className="text-foreground font-medium">{selectedMember.name}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Surname</p>
+                    <p className="text-foreground font-medium">{selectedMember.surname}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">ID Number</p>
+                    <p className="text-foreground font-medium font-mono">{selectedMember.id_number}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Gender</p>
+                    <p className="text-foreground font-medium">{selectedMember.gender}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Date of Birth</p>
+                    <p className="text-foreground font-medium">
+                      {selectedMember.date_of_birth ? new Date(selectedMember.date_of_birth).toLocaleDateString() : '-'}
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Contact Information */}
+              <div className="bg-secondary/30 rounded-lg p-4">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <Shield size={16} className="text-primary" />
+                  Contact Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Phone Number</p>
+                    <p className="text-foreground font-medium">{selectedMember.phone}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Email Address</p>
+                    <p className="text-foreground font-medium">{selectedMember.email}</p>
+                  </div>
+                  <div className="col-span-2">
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Address</p>
+                    <p className="text-foreground font-medium">{selectedMember.address || '-'}</p>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">City</p>
+                    <p className="text-foreground font-medium">{selectedMember.city || '-'}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Registration Information */}
+              <div className="bg-secondary/30 rounded-lg p-4">
+                <h3 className="font-semibold text-foreground mb-4 flex items-center gap-2">
+                  <PieChartIcon size={16} className="text-primary" />
+                  Registration Information
+                </h3>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">How They Heard About Us</p>
+                    <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-primary/10 text-primary mt-1">
+                      {selectedMember.referral_source}
+                    </span>
+                  </div>
+                  <div>
+                    <p className="text-xs text-muted-foreground uppercase tracking-wide">Registration Date</p>
+                    <p className="text-foreground font-medium">
+                      {new Date(selectedMember.created_at).toLocaleDateString()} at {new Date(selectedMember.created_at).toLocaleTimeString()}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
         </DialogContent>
       </Dialog>
     </div>
