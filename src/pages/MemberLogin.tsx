@@ -5,8 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
-import { authenticateMember, getCustomerByEmail } from '@/lib/customerStorage';
-import { setMemberSession } from '@/pages/MemberDashboard';
+import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft, LogIn, User, Lock, Mail, KeyRound } from 'lucide-react';
 
 const loginSchema = z.object({
@@ -43,21 +42,58 @@ const MemberLogin = () => {
     try {
       const validatedData = loginSchema.parse(formData);
       
-      const result = authenticateMember(validatedData.username, validatedData.password);
-      
-      if (result.success && result.customer) {
-        setMemberSession(result.customer.id);
-        toast({
-          title: 'Welcome Back!',
-          description: `Hello ${result.customer.firstName}, you are now logged in.`,
-        });
-        navigate('/member/dashboard');
-      } else {
+      // First, get the email associated with the username from member_profiles
+      const { data: memberProfile, error: profileError } = await supabase
+        .from('member_profiles')
+        .select('user_id, agent_customer_id')
+        .eq('username', validatedData.username.toLowerCase())
+        .maybeSingle();
+
+      if (profileError || !memberProfile) {
         toast({
           title: 'Login Failed',
-          description: result.message,
+          description: 'Invalid username or password.',
           variant: 'destructive',
         });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Get the user's email from agent_customers
+      const { data: agentCustomer } = await supabase
+        .from('agent_customers')
+        .select('email, name')
+        .eq('id', memberProfile.agent_customer_id)
+        .maybeSingle();
+
+      if (!agentCustomer?.email) {
+        toast({
+          title: 'Login Failed',
+          description: 'Could not find account details. Please contact support.',
+          variant: 'destructive',
+        });
+        setIsSubmitting(false);
+        return;
+      }
+
+      // Sign in with Supabase Auth using email and password
+      const { error: authError } = await supabase.auth.signInWithPassword({
+        email: agentCustomer.email,
+        password: validatedData.password,
+      });
+
+      if (authError) {
+        toast({
+          title: 'Login Failed',
+          description: 'Invalid username or password.',
+          variant: 'destructive',
+        });
+      } else {
+        toast({
+          title: 'Welcome Back!',
+          description: `Hello ${agentCustomer.name}, you are now logged in.`,
+        });
+        navigate('/member/dashboard');
       }
     } catch (error) {
       if (error instanceof z.ZodError) {
@@ -68,13 +104,20 @@ const MemberLogin = () => {
           }
         });
         setErrors(fieldErrors);
+      } else {
+        console.error('Login error:', error);
+        toast({
+          title: 'Error',
+          description: 'An unexpected error occurred. Please try again.',
+          variant: 'destructive',
+        });
       }
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  const handleForgotPassword = (e: React.FormEvent) => {
+  const handleForgotPassword = async (e: React.FormEvent) => {
     e.preventDefault();
     
     if (!forgotEmail) {
@@ -86,23 +129,25 @@ const MemberLogin = () => {
       return;
     }
 
-    const customer = getCustomerByEmail(forgotEmail);
-    
-    if (customer) {
+    // Send password reset email via Supabase
+    const { error } = await supabase.auth.resetPasswordForEmail(forgotEmail, {
+      redirectTo: `${window.location.origin}/member/login`,
+    });
+
+    if (error) {
       toast({
-        title: 'Password Recovery',
-        description: `Your username is: ${customer.username}. Please contact support to reset your password.`,
+        title: 'Error',
+        description: 'Failed to send password reset email. Please try again.',
+        variant: 'destructive',
       });
     } else {
       toast({
-        title: 'Email Not Found',
-        description: 'No account found with this email address.',
-        variant: 'destructive',
+        title: 'Password Reset Email Sent',
+        description: 'Check your email for a password reset link.',
       });
+      setShowForgotPassword(false);
+      setForgotEmail('');
     }
-    
-    setShowForgotPassword(false);
-    setForgotEmail('');
   };
 
   if (showForgotPassword) {
@@ -116,7 +161,7 @@ const MemberLogin = () => {
                 Forgot Password
               </h2>
               <p className="text-muted-foreground text-sm">
-                Enter your email to recover your account
+                Enter your email to receive a password reset link
               </p>
             </div>
             
@@ -136,7 +181,7 @@ const MemberLogin = () => {
               
               <Button type="submit" variant="gold" className="w-full">
                 <KeyRound size={18} className="mr-2" />
-                Recover Account
+                Send Reset Link
               </Button>
               
               <Button 
@@ -237,7 +282,7 @@ const MemberLogin = () => {
           <div className="text-center">
             <p className="text-muted-foreground text-sm">
               Don't have an account?{' '}
-              <Link to="/register" className="text-primary hover:underline font-medium">
+              <Link to="/member/signup" className="text-primary hover:underline font-medium">
                 Sign Up
               </Link>
             </p>

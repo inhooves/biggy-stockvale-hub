@@ -239,15 +239,11 @@ const MemberSignUp = () => {
           });
         } else {
           toast({
-            title: 'Account Created!',
-            description: 'Welcome to Biggy Round Stokvel. You can now log in.',
+            title: 'Registration Successful!',
+            description: 'Your account has been created. Please log in to access your dashboard.',
           });
-          setActiveTab('login');
-          loginForm.setValue('username', data.username.toLowerCase());
-          setStep('lookup');
-          setMemberDetails(null);
-          setDetailsVerified(false);
-          setLookupEmail('');
+          // Redirect to login page after successful registration
+          navigate('/member/login');
         }
       }
     } catch (error) {
