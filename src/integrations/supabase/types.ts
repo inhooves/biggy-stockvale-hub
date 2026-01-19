@@ -128,6 +128,41 @@ export type Database = {
         }
         Relationships: []
       }
+      member_profiles: {
+        Row: {
+          agent_customer_id: string | null
+          created_at: string
+          id: string
+          updated_at: string
+          user_id: string
+          username: string
+        }
+        Insert: {
+          agent_customer_id?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id: string
+          username: string
+        }
+        Update: {
+          agent_customer_id?: string | null
+          created_at?: string
+          id?: string
+          updated_at?: string
+          user_id?: string
+          username?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "member_profiles_agent_customer_id_fkey"
+            columns: ["agent_customer_id"]
+            isOneToOne: false
+            referencedRelation: "agent_customers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       registered_members: {
         Row: {
           address: string | null
