@@ -8,7 +8,7 @@ import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import PhotoUpload from '@/components/PhotoUpload';
 import PasswordStrengthIndicator from '@/components/PasswordStrengthIndicator';
-import { addCustomer, isUsernameTaken, getHashedPassword } from '@/lib/customerStorage';
+// Legacy customerStorage removed - now using only Supabase for secure authentication
 import { supabase } from '@/integrations/supabase/client';
 import { ArrowLeft, CheckCircle, Shield, User, MapPin, Users, UserPlus, Lock, KeyRound } from 'lucide-react';
 import { strongPasswordSchema } from '@/lib/passwordValidation';
@@ -128,12 +128,7 @@ const CustomerRegistration = () => {
         return;
       }
 
-      // Check if username is taken
-      if (isUsernameTaken(validatedData.username)) {
-        setErrors({ username: 'Username is already taken. Please choose another.' });
-        setIsSubmitting(false);
-        return;
-      }
+      // Username uniqueness will be checked server-side when creating the member profile
 
       // Save to Supabase registered_members table
       const { error: dbError } = await supabase
@@ -162,44 +157,12 @@ const CustomerRegistration = () => {
         return;
       }
 
-      // Also save to local storage for member login
-      const result = addCustomer({
-        firstName: validatedData.firstName,
-        surname: validatedData.surname,
-        phone: validatedData.phone,
-        idNumber: validatedData.idNumber,
-        idPhoto: validatedData.idPhoto,
-        passportPhoto: validatedData.passportPhoto || '',
-        passportNumber: validatedData.passportNumber || '',
-        email: validatedData.email,
-        gender: validatedData.gender,
-        dateOfBirth: validatedData.dateOfBirth,
-        address: validatedData.address,
-        city: validatedData.city,
-        referralSource: validatedData.referralSource,
-        agentName: validatedData.agentName || '',
-        agentPhone: validatedData.agentPhone || '',
-        beneficiaryName: validatedData.beneficiaryName,
-        beneficiaryIdNumber: validatedData.beneficiaryIdNumber,
-        beneficiaryAddress: validatedData.beneficiaryAddress,
-        beneficiaryPhone: validatedData.beneficiaryPhone,
-        username: validatedData.username,
-        passwordHash: getHashedPassword(validatedData.password),
+      // Registration saved to Supabase successfully
+      toast({
+        title: 'Registration Successful!',
+        description: 'Your information has been submitted. An admin will review your registration.',
       });
-      
-      if (result.success && result.customer) {
-        toast({
-          title: 'Registration Successful!',
-          description: 'Your account has been created. Please login to continue.',
-        });
-        navigate('/member/login');
-      } else {
-        toast({
-          title: 'Registration Failed',
-          description: result.message,
-          variant: 'destructive',
-        });
-      }
+      navigate('/');
     } catch (error) {
       if (error instanceof z.ZodError) {
         const fieldErrors: Record<string, string> = {};

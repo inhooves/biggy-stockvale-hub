@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
-import { getCustomerById, Customer } from '@/lib/customerStorage';
+import { supabase } from '@/integrations/supabase/client';
 import {
   Home,
   Info,
@@ -26,46 +26,67 @@ import {
   Dice5,
 } from 'lucide-react';
 
-const MEMBER_SESSION_KEY = 'biggy_member_session';
-
-export const setMemberSession = (memberId: string) => {
-  localStorage.setItem(MEMBER_SESSION_KEY, memberId);
-};
-
-export const getMemberSession = (): string | null => {
-  return localStorage.getItem(MEMBER_SESSION_KEY);
-};
-
-export const clearMemberSession = () => {
-  localStorage.removeItem(MEMBER_SESSION_KEY);
-};
+// Member data type from Supabase
+interface MemberData {
+  id: string;
+  name: string;
+  surname: string | null;
+  phone: string;
+  email: string | null;
+  id_number: string | null;
+  date_of_birth: string | null;
+  gender: string | null;
+  address: string | null;
+  city: string | null;
+  created_at: string;
+}
 
 const MemberDashboard = () => {
   const navigate = useNavigate();
-  const [member, setMember] = useState<Customer | null>(null);
+  const [member, setMember] = useState<MemberData | null>(null);
   const [activeTab, setActiveTab] = useState('home');
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const memberId = getMemberSession();
-    if (!memberId) {
-      navigate('/member/login');
-      return;
-    }
-    const customerData = getCustomerById(memberId);
-    if (!customerData) {
-      clearMemberSession();
-      navigate('/member/login');
-      return;
-    }
-    setMember(customerData);
+    const checkAuthAndLoadMember = async () => {
+      const { data: { session } } = await supabase.auth.getSession();
+      
+      if (!session) {
+        navigate('/member/login');
+        return;
+      }
+
+      // Try to fetch member profile from agent_customers via member_profiles
+      const { data: memberProfile } = await supabase
+        .from('member_profiles')
+        .select('agent_customer_id')
+        .eq('user_id', session.user.id)
+        .single();
+
+      if (memberProfile?.agent_customer_id) {
+        const { data: customerData } = await supabase
+          .from('agent_customers')
+          .select('*')
+          .eq('id', memberProfile.agent_customer_id)
+          .single();
+
+        if (customerData) {
+          setMember(customerData);
+        }
+      }
+      
+      setLoading(false);
+    };
+
+    checkAuthAndLoadMember();
   }, [navigate]);
 
-  const handleLogout = () => {
-    clearMemberSession();
+  const handleLogout = async () => {
+    await supabase.auth.signOut();
     navigate('/');
   };
 
-  if (!member) {
+  if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-background">
         <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
@@ -73,8 +94,19 @@ const MemberDashboard = () => {
     );
   }
 
+  if (!member) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-background">
+        <div className="text-center">
+          <p className="text-muted-foreground mb-4">No member profile found.</p>
+          <Button onClick={() => navigate('/')}>Go Home</Button>
+        </div>
+      </div>
+    );
+  }
+
   const getInitials = () => {
-    return `${member.firstName?.[0] || ''}${member.surname?.[0] || ''}`.toUpperCase();
+    return `${member.name?.[0] || ''}${member.surname?.[0] || ''}`.toUpperCase();
   };
 
   return (
@@ -86,16 +118,12 @@ const MemberDashboard = () => {
           <div className="flex items-center gap-4">
             <div className="flex items-center gap-2">
               <Avatar className="h-10 w-10 border-2 border-primary">
-                {member.passportPhoto ? (
-                  <AvatarImage src={member.passportPhoto} alt={member.firstName} />
-                ) : (
-                  <AvatarFallback className="bg-primary text-primary-foreground">
-                    {getInitials()}
-                  </AvatarFallback>
-                )}
+                <AvatarFallback className="bg-primary text-primary-foreground">
+                  {getInitials()}
+                </AvatarFallback>
               </Avatar>
               <span className="text-sm font-medium hidden md:block">
-                {member.firstName} {member.surname}
+                {member.name} {member.surname}
               </span>
             </div>
             <Button variant="outline" size="sm" onClick={handleLogout}>
@@ -151,7 +179,7 @@ const MemberDashboard = () => {
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">
                     <User className="h-5 w-5 text-primary" />
-                    Welcome, {member.firstName}!
+                    Welcome, {member.name}!
                   </CardTitle>
                   <CardDescription>Your member dashboard at Biggy Stokvel</CardDescription>
                 </CardHeader>
@@ -159,11 +187,11 @@ const MemberDashboard = () => {
                   <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
                     <div className="bg-muted rounded-lg p-4">
                       <p className="text-sm text-muted-foreground">Member ID</p>
-                      <p className="font-mono font-bold">{member.idNumber}</p>
+                      <p className="font-mono font-bold">{member.id_number || 'N/A'}</p>
                     </div>
                     <div className="bg-muted rounded-lg p-4">
                       <p className="text-sm text-muted-foreground">Member Since</p>
-                      <p className="font-medium">{new Date(member.dateJoined).toLocaleDateString()}</p>
+                      <p className="font-medium">{new Date(member.created_at).toLocaleDateString()}</p>
                     </div>
                     <div className="bg-muted rounded-lg p-4">
                       <p className="text-sm text-muted-foreground">Email</p>
