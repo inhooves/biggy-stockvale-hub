@@ -28,6 +28,7 @@ import TabbedDemo from "./pages/TabbedDemo";
 import MemberDashboard from "./pages/MemberDashboard";
 import MemberLogin from "./pages/MemberLogin";
 import MemberSignUp from "./pages/MemberSignUp";
+import AuthEntryPage from "./pages/AuthEntryPage";
 import { AIChatbot } from "./components/AIChatbot";
 
 const queryClient = new QueryClient();
@@ -42,6 +43,7 @@ const App = () => (
           {/* Main Pages */}
           <Route path="/" element={<Index />} />
           <Route path="/about" element={<AboutPage />} />
+          <Route path="/auth" element={<AuthEntryPage />} />
           <Route path="/register" element={<CustomerRegistration />} />
           
           {/* Stokvel Services */}
