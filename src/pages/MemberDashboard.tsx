@@ -25,6 +25,7 @@ import {
   PartyPopper,
   Dice5,
 } from 'lucide-react';
+import { MemberServicesOverview } from '@/components/MemberServicesOverview';
 
 // Member data type from Supabase
 interface MemberData {
@@ -175,6 +176,12 @@ const MemberDashboard = () => {
           {/* Home Tab */}
           <TabsContent value="home">
             <div className="space-y-6">
+              {/* Services Overview Cards */}
+              <div className="mb-6">
+                <h2 className="font-display text-lg md:text-xl font-semibold mb-4">Your Services</h2>
+                <MemberServicesOverview />
+              </div>
+
               <Card>
                 <CardHeader>
                   <CardTitle className="flex items-center gap-2">

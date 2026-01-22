@@ -2,74 +2,10 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import Logo from '@/components/Logo';
 import { MainNavigation } from '@/components/MainNavigation';
-import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Heart, Wallet, Sprout } from 'lucide-react';
-import { TabbedContainer, TabItem } from '@/components/TabbedContainer';
+import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase } from 'lucide-react';
 import { ServiceImageSlideshow } from '@/components/ServiceImageSlideshow';
-import groceriesBagImage from '@/assets/groceries-bag.jpeg';
-import burialSupportImage from '@/assets/burial-support.jpeg';
-import savingsJarImage from '@/assets/savings-jar.jpeg';
-import investmentGrowthImage from '@/assets/investment-growth.jpeg';
 
 const Index = () => {
-  const serviceTabs: TabItem[] = [
-    {
-      id: 'groceries',
-      title: 'Groceries',
-      closable: false,
-      content: (
-        <div className="p-2 md:p-3 text-center flex flex-col items-center">
-          <ShoppingBasket size={20} className="text-primary mb-1 md:hidden" />
-          <ShoppingBasket size={24} className="text-primary mb-1 hidden md:block" />
-          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Bulk Groceries</h3>
-          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Pool funds for wholesale grocery purchases.</p>
-          <img src={groceriesBagImage} alt="Groceries bag with products" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
-        </div>
-      ),
-    },
-    {
-      id: 'burial',
-      title: 'Burial',
-      closable: false,
-      content: (
-        <div className="p-2 md:p-3 text-center flex flex-col items-center">
-          <Heart size={20} className="text-primary mb-1 md:hidden" />
-          <Heart size={24} className="text-primary mb-1 hidden md:block" />
-          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Burial Cover</h3>
-          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Community support during difficult times.</p>
-          <img src={burialSupportImage} alt="Community support during difficult times" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
-        </div>
-      ),
-    },
-    {
-      id: 'savings',
-      title: 'Savings',
-      closable: false,
-      content: (
-        <div className="p-2 md:p-3 text-center flex flex-col items-center">
-          <Wallet size={20} className="text-primary mb-1 md:hidden" />
-          <Wallet size={24} className="text-primary mb-1 hidden md:block" />
-          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Group Savings</h3>
-          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Save together and grow your funds.</p>
-          <img src={savingsJarImage} alt="Savings jar with coins and money" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
-        </div>
-      ),
-    },
-    {
-      id: 'investments',
-      title: 'Investments',
-      closable: false,
-      content: (
-        <div className="p-2 md:p-3 text-center flex flex-col items-center">
-          <Sprout size={20} className="text-primary mb-1 md:hidden" />
-          <Sprout size={24} className="text-primary mb-1 hidden md:block" />
-          <h3 className="font-display text-xs md:text-sm font-semibold mb-1">Crowd Farming</h3>
-          <p className="text-[10px] md:text-xs text-muted-foreground mb-2 line-clamp-2">Expand your investment potential.</p>
-          <img src={investmentGrowthImage} alt="Investment growth chart" className="w-16 h-16 md:w-28 md:h-28 object-cover rounded-lg" />
-        </div>
-      ),
-    },
-  ];
-
   return (
     <div className="min-h-screen bg-background overflow-hidden">
       {/* Background Effects */}
@@ -83,47 +19,41 @@ const Index = () => {
 
       {/* Hero Section */}
       <main className="relative z-10">
-        <section className="container mx-auto px-3 md:px-4 py-6 md:py-12 text-center">
+        <section className="container mx-auto px-3 md:px-4 py-12 md:py-20 text-center">
           <div className="max-w-4xl mx-auto animate-fade-in">
-            <div className="flex justify-center mb-4 md:mb-6">
+            <div className="flex justify-center mb-6 md:mb-8">
               <div className="scale-75 md:scale-100">
                 <Logo size="lg" />
               </div>
             </div>
             
-            {/* Side-by-Side Tabs */}
-            <div className="h-auto mb-4 md:mb-8 rounded-xl border border-border overflow-visible">
-              <TabbedContainer
-                tabs={serviceTabs}
-                defaultLayoutMode="side-by-side"
-                maxVisiblePanels={4}
-                persistKey="home-services"
-              />
-            </div>
-            
-            <h1 className="font-display text-2xl sm:text-3xl md:text-5xl font-bold mb-3 md:mb-4">
+            <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6">
               <span className="text-foreground">Your Trusted</span>
               <br />
               <span className="gold-text text-3d">Groceries Partner</span>
             </h1>
             
-            <p className="text-sm md:text-base text-muted-foreground mb-6 md:mb-8 max-w-xl mx-auto px-2">
+            <p className="text-base md:text-lg text-muted-foreground mb-8 md:mb-10 max-w-2xl mx-auto px-2">
               Join Biggy Round Groceries Stockvale and experience premium grocery management 
-              with exclusive member benefits.
+              with exclusive member benefits. Together we save, together we grow.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center px-4">
+            <div className="flex flex-col sm:flex-row gap-4 md:gap-6 justify-center px-4">
               <Link to="/register">
-                <Button variant="gold" size="lg" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8">
-                  <UserPlus size={18} className="md:hidden" />
-                  <UserPlus size={20} className="hidden md:block" />
+                <Button variant="gold" size="lg" className="w-full sm:w-auto text-base md:text-lg px-8 md:px-10">
+                  <UserPlus size={20} />
                   Register Now
                 </Button>
               </Link>
+              <Link to="/agent">
+                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base md:text-lg px-8 md:px-10">
+                  <Briefcase size={20} />
+                  Agent Portal
+                </Button>
+              </Link>
               <Link to="/admin">
-                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base md:text-lg px-6 md:px-8">
-                  <ShieldCheck size={18} className="md:hidden" />
-                  <ShieldCheck size={20} className="hidden md:block" />
+                <Button variant="outline" size="lg" className="w-full sm:w-auto text-base md:text-lg px-8 md:px-10">
+                  <ShieldCheck size={20} />
                   Admin Portal
                 </Button>
               </Link>
