@@ -42,14 +42,20 @@ const MemberLogin = () => {
     try {
       const validatedData = loginSchema.parse(formData);
       
-      // First, get the email associated with the username from member_profiles
-      const { data: memberProfile, error: profileError } = await supabase
-        .from('member_profiles')
-        .select('user_id, agent_customer_id')
-        .eq('username', validatedData.username.toLowerCase())
-        .maybeSingle();
+      // Use edge function to securely look up username -> email mapping
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'lookup-username', 
+          username: validatedData.username 
+        }),
+      });
 
-      if (profileError || !memberProfile) {
+      const lookupResult = await response.json();
+
+      if (!response.ok || lookupResult.error) {
         toast({
           title: 'Login Failed',
           description: 'Invalid username or password.',
@@ -59,26 +65,11 @@ const MemberLogin = () => {
         return;
       }
 
-      // Get the user's email from agent_customers
-      const { data: agentCustomer } = await supabase
-        .from('agent_customers')
-        .select('email, name')
-        .eq('id', memberProfile.agent_customer_id)
-        .maybeSingle();
-
-      if (!agentCustomer?.email) {
-        toast({
-          title: 'Login Failed',
-          description: 'Could not find account details. Please contact support.',
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
+      const { email, name } = lookupResult;
 
       // Sign in with Supabase Auth using email and password
       const { error: authError } = await supabase.auth.signInWithPassword({
-        email: agentCustomer.email,
+        email,
         password: validatedData.password,
       });
 
@@ -91,7 +82,7 @@ const MemberLogin = () => {
       } else {
         toast({
           title: 'Welcome Back!',
-          description: `Hello ${agentCustomer.name}, you are now logged in.`,
+          description: `Hello ${name}, you are now logged in.`,
         });
         navigate('/member/dashboard');
       }

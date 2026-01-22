@@ -2,3 +2,6 @@ project_id = "vsrpjsvxmumymlsozzfc"
 
 [functions.chat]
 verify_jwt = false
+
+[functions.member-auth]
+verify_jwt = false

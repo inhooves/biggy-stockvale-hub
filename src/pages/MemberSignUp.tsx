@@ -101,15 +101,21 @@ const MemberSignUp = () => {
 
     setIsLookingUp(true);
     try {
-      // Lookup member by email in agent_customers table
-      const { data: existingMember, error: lookupError } = await supabase
-        .from('agent_customers')
-        .select('id, name, surname, email, phone, id_number, gender, address, city, date_of_birth')
-        .eq('email', lookupEmail.trim().toLowerCase())
-        .maybeSingle();
+      // Use edge function to securely look up member by email
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'lookup-member-by-email', 
+          email: lookupEmail.trim() 
+        }),
+      });
 
-      if (lookupError) {
-        console.error('Error checking member:', lookupError);
+      const result = await response.json();
+
+      if (!response.ok || result.error) {
+        console.error('Lookup error:', result.error);
         toast({
           title: 'Lookup Error',
           description: 'An error occurred while looking up your details. Please try again.',
@@ -118,7 +124,7 @@ const MemberSignUp = () => {
         return;
       }
 
-      if (!existingMember) {
+      if (!result.found) {
         toast({
           title: 'Member Not Found',
           description: 'No registered member found with this email. Please contact your agent or use the exact email provided during registration.',
@@ -127,14 +133,7 @@ const MemberSignUp = () => {
         return;
       }
 
-      // Check if member already has an account
-      const { data: existingProfile } = await supabase
-        .from('member_profiles')
-        .select('id')
-        .eq('agent_customer_id', existingMember.id)
-        .maybeSingle();
-
-      if (existingProfile) {
+      if (result.hasAccount) {
         toast({
           title: 'Account Exists',
           description: 'An account already exists for this member. Please use the Login tab.',
@@ -144,8 +143,8 @@ const MemberSignUp = () => {
         return;
       }
 
-      setMemberDetails(existingMember);
-      signUpForm.setValue('email', existingMember.email || lookupEmail);
+      setMemberDetails(result.member);
+      signUpForm.setValue('email', result.member.email || lookupEmail);
       setStep('verify');
     } catch (error) {
       console.error('Lookup error:', error);
@@ -184,14 +183,20 @@ const MemberSignUp = () => {
 
     setIsSubmitting(true);
     try {
-      // Check if username is already taken
-      const { data: existingUsername } = await supabase
-        .from('member_profiles')
-        .select('id')
-        .eq('username', data.username.toLowerCase())
-        .maybeSingle();
+      // Check if username is already taken using edge function
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const checkResponse = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'check-username-available', 
+          username: data.username 
+        }),
+      });
 
-      if (existingUsername) {
+      const checkResult = await checkResponse.json();
+
+      if (!checkResult.available) {
         toast({
           title: 'Username Taken',
           description: 'This username is already in use. Please choose a different one.',
@@ -261,14 +266,20 @@ const MemberSignUp = () => {
   const onLogin = async (data: LoginFormData) => {
     setIsSubmitting(true);
     try {
-      // First, get the email associated with the username
-      const { data: memberProfile, error: profileError } = await supabase
-        .from('member_profiles')
-        .select('user_id, agent_customer_id')
-        .eq('username', data.username.toLowerCase())
-        .maybeSingle();
+      // Use edge function to securely look up username -> email mapping
+      const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+      const response = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ 
+          action: 'lookup-username', 
+          username: data.username 
+        }),
+      });
 
-      if (profileError || !memberProfile) {
+      const lookupResult = await response.json();
+
+      if (!response.ok || lookupResult.error) {
         toast({
           title: 'Login Failed',
           description: 'Invalid username or password.',
@@ -278,25 +289,8 @@ const MemberSignUp = () => {
         return;
       }
 
-      // Get the user's email from agent_customers
-      const { data: agentCustomer } = await supabase
-        .from('agent_customers')
-        .select('email')
-        .eq('id', memberProfile.agent_customer_id)
-        .maybeSingle();
-
-      if (!agentCustomer?.email) {
-        toast({
-          title: 'Login Failed',
-          description: 'Could not find account details. Please contact support.',
-          variant: 'destructive',
-        });
-        setIsSubmitting(false);
-        return;
-      }
-
       // Sign in with email and password
-      const { error } = await signIn(agentCustomer.email, data.password);
+      const { error } = await signIn(lookupResult.email, data.password);
 
       if (error) {
         toast({
