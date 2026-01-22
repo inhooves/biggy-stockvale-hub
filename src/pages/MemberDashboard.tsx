@@ -8,14 +8,10 @@ import { Avatar, AvatarImage, AvatarFallback } from '@/components/ui/avatar';
 import { supabase } from '@/integrations/supabase/client';
 import {
   Home,
-  Info,
   Wallet,
   Gamepad2,
-  FileText,
   Gift,
-  Phone,
   Store,
-  LogOut,
   User,
   ShoppingBag,
   Flower2,
@@ -26,6 +22,7 @@ import {
   Dice5,
 } from 'lucide-react';
 import { MemberServicesOverview } from '@/components/MemberServicesOverview';
+import { MemberSettingsDropdown } from '@/components/MemberSettingsDropdown';
 
 // Member data type from Supabase
 interface MemberData {
@@ -82,10 +79,6 @@ const MemberDashboard = () => {
     checkAuthAndLoadMember();
   }, [navigate]);
 
-  const handleLogout = async () => {
-    await supabase.auth.signOut();
-    navigate('/');
-  };
 
   if (loading) {
     return (
@@ -127,10 +120,10 @@ const MemberDashboard = () => {
                 {member.name} {member.surname}
               </span>
             </div>
-            <Button variant="outline" size="sm" onClick={handleLogout}>
-              <LogOut className="h-4 w-4 mr-2" />
-              Logout
-            </Button>
+            <MemberSettingsDropdown 
+              onNavigateTab={setActiveTab} 
+              userEmail={member.email || undefined}
+            />
           </div>
         </div>
       </header>
@@ -143,9 +136,9 @@ const MemberDashboard = () => {
               <Home className="h-4 w-4" />
               <span className="hidden sm:inline">Home</span>
             </TabsTrigger>
-            <TabsTrigger value="about" className="flex items-center gap-2">
-              <Info className="h-4 w-4" />
-              <span className="hidden sm:inline">About Us</span>
+            <TabsTrigger value="profile" className="flex items-center gap-2">
+              <User className="h-4 w-4" />
+              <span className="hidden sm:inline">My Profile</span>
             </TabsTrigger>
             <TabsTrigger value="services" className="flex items-center gap-2">
               <Wallet className="h-4 w-4" />
@@ -155,17 +148,9 @@ const MemberDashboard = () => {
               <Gamepad2 className="h-4 w-4" />
               <span className="hidden sm:inline">Fun & Games</span>
             </TabsTrigger>
-            <TabsTrigger value="constitution" className="flex items-center gap-2">
-              <FileText className="h-4 w-4" />
-              <span className="hidden sm:inline">Constitution</span>
-            </TabsTrigger>
             <TabsTrigger value="benefits" className="flex items-center gap-2">
               <Gift className="h-4 w-4" />
               <span className="hidden sm:inline">Benefits</span>
-            </TabsTrigger>
-            <TabsTrigger value="contact" className="flex items-center gap-2">
-              <Phone className="h-4 w-4" />
-              <span className="hidden sm:inline">Contact Us</span>
             </TabsTrigger>
             <TabsTrigger value="marketplace" className="flex items-center gap-2">
               <Store className="h-4 w-4" />
@@ -244,7 +229,72 @@ const MemberDashboard = () => {
             </div>
           </TabsContent>
 
-          {/* About Us Tab */}
+          {/* Profile Tab - Member Details Only */}
+          <TabsContent value="profile">
+            <Card>
+              <CardHeader>
+                <CardTitle className="flex items-center gap-2">
+                  <User className="h-5 w-5 text-primary" />
+                  My Profile
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex flex-col md:flex-row gap-6">
+                  <div className="flex justify-center">
+                    <Avatar className="h-24 w-24 border-4 border-primary">
+                      <AvatarFallback className="bg-primary text-primary-foreground text-2xl">
+                        {getInitials()}
+                      </AvatarFallback>
+                    </Avatar>
+                  </div>
+                  <div className="flex-1 grid gap-4 md:grid-cols-2">
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Full Name</p>
+                      <p className="font-medium">{member.name} {member.surname || ''}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">ID Number</p>
+                      <p className="font-mono font-medium">{member.id_number || 'Not provided'}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Email</p>
+                      <p className="font-medium">{member.email || 'Not provided'}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Phone</p>
+                      <p className="font-medium">{member.phone || 'Not provided'}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Date of Birth</p>
+                      <p className="font-medium">
+                        {member.date_of_birth 
+                          ? new Date(member.date_of_birth).toLocaleDateString() 
+                          : 'Not provided'}
+                      </p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Gender</p>
+                      <p className="font-medium">{member.gender || 'Not provided'}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Address</p>
+                      <p className="font-medium">{member.address || 'Not provided'}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">City</p>
+                      <p className="font-medium">{member.city || 'Not provided'}</p>
+                    </div>
+                    <div className="bg-muted rounded-lg p-4">
+                      <p className="text-sm text-muted-foreground">Member Since</p>
+                      <p className="font-medium">{new Date(member.created_at).toLocaleDateString()}</p>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* About Us Tab (hidden from tabs, accessible via settings) */}
           <TabsContent value="about">
             <Card>
               <CardHeader>
@@ -259,6 +309,21 @@ const MemberDashboard = () => {
                 <p className="text-muted-foreground mt-4">
                   Our vision is to create financial freedom for every member through disciplined 
                   savings, smart investments, and community support systems.
+                </p>
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          {/* Constitution Tab (hidden from tabs, accessible via settings) */}
+          <TabsContent value="constitution">
+            <Card>
+              <CardHeader>
+                <CardTitle>Biggy Stokvel Constitution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground mb-4">
+                  Our constitution outlines the rules, regulations, and guidelines that govern 
+                  our stokvel operations and member conduct.
                 </p>
               </CardContent>
             </Card>
@@ -372,7 +437,7 @@ const MemberDashboard = () => {
             </div>
           </TabsContent>
 
-          {/* Constitution Tab */}
+          {/* Constitution Tab (hidden from tabs, accessible via settings) */}
           <TabsContent value="constitution">
             <Card>
               <CardHeader>
@@ -384,7 +449,6 @@ const MemberDashboard = () => {
                   our stokvel operations and member conduct.
                 </p>
                 <Button variant="outline" onClick={() => navigate('/constitution')}>
-                  <FileText className="h-4 w-4 mr-2" />
                   View Full Constitution
                 </Button>
               </CardContent>
@@ -428,23 +492,6 @@ const MemberDashboard = () => {
             </Card>
           </TabsContent>
 
-          {/* Contact Us Tab */}
-          <TabsContent value="contact">
-            <Card>
-              <CardHeader>
-                <CardTitle>Contact Us</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <p className="text-muted-foreground mb-4">
-                  Have questions or need assistance? Reach out to our team.
-                </p>
-                <Button variant="outline" onClick={() => navigate('/contact')}>
-                  <Phone className="h-4 w-4 mr-2" />
-                  Go to Contact Page
-                </Button>
-              </CardContent>
-            </Card>
-          </TabsContent>
 
           {/* Marketplace Tab */}
           <TabsContent value="marketplace">
