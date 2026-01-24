@@ -38,7 +38,13 @@ export function SettingsDropdown() {
   const { user, isAgent, isAdmin, signOut } = useAuth();
   const { layoutMode, setLayoutMode } = useLayoutPersistence('home-services', 'side-by-side');
   const [notifications, setNotifications] = useState(true);
-  const [darkMode, setDarkMode] = useState(false);
+  const [darkMode, setDarkMode] = useState(() => {
+    // Check if dark mode is already set, default to true
+    if (typeof document !== 'undefined') {
+      return document.documentElement.classList.contains('dark');
+    }
+    return true;
+  });
 
   const handleLogout = async () => {
     const { error } = await signOut();
