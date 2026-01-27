@@ -195,7 +195,7 @@ const CustomerRegistration = () => {
               Welcome to Biggy Round!
             </h2>
             <p className="text-muted-foreground mb-6">
-              Your Groceries Stockvale account has been created successfully. Registration is FREE!
+              Your Groceries Stokvel account has been created successfully. Registration is FREE!
             </p>
             <div className="bg-secondary rounded-lg p-4 mb-4">
               <p className="text-sm text-muted-foreground">Your Account ID</p>
