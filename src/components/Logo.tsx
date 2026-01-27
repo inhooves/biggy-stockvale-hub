@@ -21,7 +21,8 @@ const Logo = ({ size = 'md' }: LogoProps) => {
         style={{
           transform: 'scale(1.4)',
           transformOrigin: 'center center',
-          mixBlendMode: 'screen'
+          mixBlendMode: 'screen',
+          filter: 'drop-shadow(0 0 12px rgba(139, 92, 246, 0.4)) drop-shadow(0 0 24px rgba(139, 92, 246, 0.2))'
         }}
       />
     </div>
