@@ -28,7 +28,7 @@ const Index = () => {
             </h1>
             
             <p className="text-base md:text-lg text-muted-foreground mb-8 md:mb-10 max-w-2xl mx-auto px-2">
-              Join Biggy Round Groceries Stockvale and experience premium grocery management 
+              Join Biggy Round Groceries Stokvel and experience premium grocery management 
               with exclusive member benefits. Together we save, together we grow.
             </p>
 
@@ -72,7 +72,7 @@ const Index = () => {
               {
                 icon: TrendingUp,
                 title: 'Smart Management',
-                description: 'Advanced stockvale tracking and inventory solutions.'
+                description: 'Advanced stokvel tracking and inventory solutions.'
               }
             ].map((feature, index) => (
               <div 
@@ -105,7 +105,7 @@ const Index = () => {
             </h3>
             <p className="text-sm md:text-base text-muted-foreground">
               Join our growing community of satisfied customers who trust Biggy Round 
-              for their grocery stockvale needs.
+              for their grocery stokvel needs.
             </p>
           </div>
         </section>
@@ -117,7 +117,7 @@ const Index = () => {
       {/* Footer */}
       <footer className="relative z-10 border-t border-border/50 py-6 md:py-8">
         <div className="container mx-auto px-3 md:px-4 text-center text-xs md:text-sm text-muted-foreground">
-          <p>© {new Date().getFullYear()} Biggy Round Groceries Stockvale. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Biggy Round Groceries Stokvel. All rights reserved.</p>
         </div>
       </footer>
     </div>
