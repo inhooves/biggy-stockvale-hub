@@ -1,6 +1,5 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import Logo from '@/components/Logo';
 import { MainNavigation } from '@/components/MainNavigation';
 import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase } from 'lucide-react';
 import { ServiceImageSlideshow } from '@/components/ServiceImageSlideshow';
@@ -21,11 +20,6 @@ const Index = () => {
       <main className="relative z-10">
         <section className="container mx-auto px-3 md:px-4 py-12 md:py-20 text-center">
           <div className="max-w-4xl mx-auto animate-fade-in">
-            <div className="flex justify-center mb-6 md:mb-8">
-              <div className="scale-75 md:scale-100">
-                <Logo size="lg" />
-              </div>
-            </div>
             
             <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6">
               <span className="text-foreground">Your Trusted</span>
