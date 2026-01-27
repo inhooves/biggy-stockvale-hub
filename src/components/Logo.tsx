@@ -17,14 +17,26 @@ const Logo = ({ size = 'md' }: LogoProps) => {
       <img 
         src={biggyLogo} 
         alt="Biggy Round Logo" 
-        className={`${sizeClasses[size]} w-auto object-cover`}
+        className={`${sizeClasses[size]} w-auto object-cover animate-logo-glow`}
         style={{
           transform: 'scale(1.4)',
           transformOrigin: 'center center',
           mixBlendMode: 'screen',
-          filter: 'drop-shadow(0 0 12px rgba(139, 92, 246, 0.4)) drop-shadow(0 0 24px rgba(139, 92, 246, 0.2))'
         }}
       />
+      <style>{`
+        @keyframes logo-glow {
+          0%, 100% {
+            filter: drop-shadow(0 0 12px rgba(139, 92, 246, 0.4)) drop-shadow(0 0 24px rgba(139, 92, 246, 0.2));
+          }
+          50% {
+            filter: drop-shadow(0 0 20px rgba(139, 92, 246, 0.6)) drop-shadow(0 0 40px rgba(139, 92, 246, 0.3));
+          }
+        }
+        .animate-logo-glow {
+          animation: logo-glow 3s ease-in-out infinite;
+        }
+      `}</style>
     </div>
   );
 };
