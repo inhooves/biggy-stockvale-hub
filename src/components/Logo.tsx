@@ -13,14 +13,14 @@ const Logo = ({ size = 'md' }: LogoProps) => {
   };
 
   return (
-    <div className="flex items-center justify-start">
+    <div className="flex items-center justify-start overflow-hidden">
       <img 
         src={biggyLogo} 
         alt="Biggy Round Logo" 
-        className={`${sizeClasses[size]} w-auto object-contain rounded-lg`}
+        className={`${sizeClasses[size]} w-auto object-cover`}
         style={{
-          filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.5))',
-          backgroundColor: 'transparent',
+          transform: 'scale(1.4)',
+          transformOrigin: 'center center',
           mixBlendMode: 'screen'
         }}
       />
