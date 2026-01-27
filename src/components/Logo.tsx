@@ -1,4 +1,4 @@
-import biggyLogo from '@/assets/biggy-logo.jpg';
+import biggyLogo from '@/assets/biggy-logo.png';
 
 interface LogoProps {
   size?: 'sm' | 'md' | 'lg';
@@ -17,7 +17,12 @@ const Logo = ({ size = 'md' }: LogoProps) => {
       <img 
         src={biggyLogo} 
         alt="Biggy Round Logo" 
-        className={`${sizeClasses[size]} w-auto object-contain brightness-0 invert dark:brightness-0 dark:invert`}
+        className={`${sizeClasses[size]} w-auto object-contain rounded-lg`}
+        style={{
+          filter: 'drop-shadow(0 0 8px rgba(0, 0, 0, 0.5))',
+          backgroundColor: 'transparent',
+          mixBlendMode: 'screen'
+        }}
       />
     </div>
   );
