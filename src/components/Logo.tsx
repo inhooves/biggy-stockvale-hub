@@ -5,11 +5,11 @@ interface LogoProps {
 }
 
 const Logo = ({ size = 'md' }: LogoProps) => {
-  // Sizes increased by 1.75x: sm: 92*1.75=161, md: 132*1.75=231, lg: 185*1.75=324
+  // Sizes: sm for nav text, md and lg expanded for hero display
   const sizeClasses = {
-    sm: 'h-[161px]',
-    md: 'h-[231px]',
-    lg: 'h-[324px]',
+    sm: 'h-[180px]',
+    md: 'h-[280px]',
+    lg: 'h-[380px]',
   };
 
   return (

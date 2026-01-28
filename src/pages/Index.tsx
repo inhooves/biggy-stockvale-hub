@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { MainNavigation } from '@/components/MainNavigation';
 import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase } from 'lucide-react';
 import { ServiceImageSlideshow } from '@/components/ServiceImageSlideshow';
+import Logo from '@/components/Logo';
 
 const Index = () => {
   return (
@@ -16,9 +17,14 @@ const Index = () => {
       {/* Header */}
       <MainNavigation />
 
+      {/* Logo Section - Below Header */}
+      <div className="relative z-10 flex justify-center py-4 md:py-6">
+        <Logo size="lg" />
+      </div>
+
       {/* Hero Section */}
       <main className="relative z-10">
-        <section className="container mx-auto px-3 md:px-4 py-12 md:py-20 text-center">
+        <section className="container mx-auto px-3 md:px-4 py-8 md:py-12 text-center">
           <div className="max-w-4xl mx-auto animate-fade-in">
             
             <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold mb-4 md:mb-6">
