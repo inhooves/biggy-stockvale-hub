@@ -5,22 +5,20 @@ interface LogoProps {
 }
 
 const Logo = ({ size = 'md' }: LogoProps) => {
-  // Sizes: sm for nav text, md and lg expanded for hero display
+  // Sizes reduced by 50%: sm for nav, md/lg for hero display
   const sizeClasses = {
-    sm: 'h-[180px]',
-    md: 'h-[280px]',
-    lg: 'h-[380px]',
+    sm: 'h-[90px]',
+    md: 'h-[140px]',
+    lg: 'h-[190px]',
   };
 
   return (
-    <div className="flex items-center justify-start overflow-hidden">
+    <div className="flex items-center justify-start">
       <img 
         src={biggyLogo} 
         alt="Biggy Round Logo" 
-        className={`${sizeClasses[size]} w-auto object-cover animate-logo-glow`}
+        className={`${sizeClasses[size]} w-auto object-contain animate-logo-glow`}
         style={{
-          transform: 'scale(1.4)',
-          transformOrigin: 'center center',
           mixBlendMode: 'screen',
         }}
       />

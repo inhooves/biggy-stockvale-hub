@@ -18,7 +18,7 @@ const Index = () => {
       <MainNavigation />
 
       {/* Logo Section - Below Header */}
-      <div className="relative z-10 flex justify-center py-4 md:py-6">
+      <div className="relative z-10 flex justify-start py-4 md:py-6 container mx-auto px-4">
         <Logo size="lg" />
       </div>
 
