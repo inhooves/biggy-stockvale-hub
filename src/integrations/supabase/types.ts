@@ -231,7 +231,24 @@ export type Database = {
       }
     }
     Views: {
-      [_ in never]: never
+      registered_members_summary: {
+        Row: {
+          id: string | null
+          name: string | null
+          surname: string | null
+        }
+        Insert: {
+          id?: string | null
+          name?: string | null
+          surname?: string | null
+        }
+        Update: {
+          id?: string | null
+          name?: string | null
+          surname?: string | null
+        }
+        Relationships: []
+      }
     }
     Functions: {
       get_agent_id: { Args: { _user_id: string }; Returns: string }
