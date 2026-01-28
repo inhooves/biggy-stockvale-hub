@@ -5,9 +5,9 @@ interface LogoProps {
 }
 
 const Logo = ({ size = 'md' }: LogoProps) => {
-  // Sizes reduced by 50%: sm for nav, md/lg for hero display
+  // Sizes: sm for nav header, md/lg for hero display
   const sizeClasses = {
-    sm: 'h-[90px]',
+    sm: 'h-[48px]',
     md: 'h-[140px]',
     lg: 'h-[190px]',
   };
