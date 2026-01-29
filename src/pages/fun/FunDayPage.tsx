@@ -128,8 +128,9 @@ export default function FunDayPage() {
                 <h3 className="font-semibold text-lg mb-2">Entertainment</h3>
                 <ul className="text-muted-foreground space-y-2">
                   <li>• Jumping castle services</li>
-                  <li>• Member product/service booths</li>
-                  <li>• Advertising opportunities</li>
+                  <li>• Members' product/service booths</li>
+                  <li>• Free advertising opportunities for stokvel members and sponsoring organizations</li>
+                  <li>• Advertising items include banners, flyers, brochures, T-shirts, etc.</li>
                 </ul>
               </CardContent>
             </Card>

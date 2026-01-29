@@ -1,75 +1,70 @@
-
-# Add Community Panel to Homepage & Update About Us Page
+# Combined Changes Plan - COMPLETED ✅
 
 ## Overview
-This plan adds an informational panel to the homepage describing Biggy Round's community purpose, and updates the About Us page with the new team description.
+This plan combines all requested changes including homepage panel, About Us team section, registration form updates, and service page improvements.
 
 ---
 
-## Change 1: Add Community Panel to Homepage
+## COMPLETED CHANGES
 
-### Location
-Below the header, positioned to the right side of the page alongside the existing logo section.
+### 1. Homepage - Community Panel ✅
+- Added informational panel next to logo in two-column grid layout
+- Panel contains community purpose text about Biggy Round
 
-### Layout Approach
-- Restructure the area below the header to use a two-column grid layout
-- **Left column**: Existing logo (already left-aligned)
-- **Right column**: New community information panel
+### 2. About Us Page - Team Section ✅
+- Added "Our Team" section after Ubuntu section
+- Describes dedicated professionals passionate about stokvel industry
 
-### Panel Content
-The panel will contain the following text:
-> "Biggy Round is a community of Zimbabweans who come together from all corners of the country to unite as one collective fund for a mutually benefiting cause. This is people coming together and pooling their resources so that they can make it through tough economic times or make their money buy more for the same value. Since ancient times, when a group of people came together with a common purpose, it has largely thrived. Biggy Round was created as a shining example of the positive outcomes resulting from a people coming together with unity of purpose."
+### 3. Registration Form Updates ✅
+- Combined ID number & Passport into single field: "ID Number (Zim Citizens) or Passport (Foreigners)"
+- Replaced Passport Number field with "Contact Number (Calls)" (optional)
+- Made Email address optional
+- Added separate First Name and Surname fields for beneficiary
+- Removed passport-size photo requirement from document uploads
 
-### Styling
-- Uses the existing Card component with subtle background styling
-- Border with primary accent color
-- Responsive: On mobile, the panel will stack below the logo
-- Text will be appropriately sized for readability
+### 4. Grocery Categories ✅
+- Added "Biggy 'Wants' Groceries" - household items not basics (powder milk, tomato sauce, coffee)
+- Added "Biggy Premium Groceries" - high quality, specialty and artisanal products
+- Fixed "tomato sauce" spelling
 
-### Visual Layout (Desktop)
-```text
-+--------------------------------------------------+
-|                  HEADER / NAVIGATION             |
-+--------------------------------------------------+
-|                                                  |
-|  [LOGO]              [COMMUNITY INFO PANEL     ] |
-|  (left)              [ describing Biggy Round  ] |
-|                      [ mission & purpose       ] |
-|                                                  |
-+--------------------------------------------------+
-```
+### 5. Biggy Burial Society Updates ✅
+- Updated description: "Supporting family members of our deceased member..."
+- Changed wording: removed "provided" - now "A service to assist the next of kin..."
+- Changed "contribution" to "fee" in description
+- Updated groceries benefit from 4 months to 3 months
 
----
+### 6. Events Management ✅
+- Updated description for event management specialist
 
-## Change 2: Update About Us Page - Team Section
+### 7. Crowd Funding Page ✅
+- Added "Non-Commercial Crowd Funding" option
+- Updated Crowd Farming to include crop production (potatoes, sweet potato)
+- Updated livestock section header
 
-### New Content
-Add a new "Our Team" section to the About Us page with the following description:
-> "A team of dedicated professionals who are passionate and well researched about the stokvel industry; focused on creating the next big thing for our customers."
+### 8. Stokvel Services Page ✅
+- Added "Biggy Fun & Games" as a service option
 
-### Placement
-- Add as a new section after the "Ubuntu" section and before the "Mission Statement" section
-- Style consistently with other sections on the page
+### 9. Entertainment Section (Fun Day) ✅
+- Changed "Member" to "Members'" 
+- Added free advertising opportunities text
 
----
-
-## Technical Details
-
-### Files to Modify
-
-**1. `src/pages/Index.tsx`**
-- Import the Card component
-- Restructure the logo section (lines 20-23) to be a two-column grid
-- Add the community information panel in the right column
-- Use responsive classes: `grid grid-cols-1 md:grid-cols-2 gap-6`
-
-**2. `src/pages/AboutPage.tsx`**
-- Add a new "Our Team" section between the Ubuntu section and Mission Statement section
-- Use existing Card component styling for consistency
-- Include a Users icon to represent the team
+### 10. Benefits Page Updates ✅
+- Changed "Monthly Prize Draws" to "Quarterly Prize Draws"
+- Updated Small Business Capital: USD $2,000 repayable interest-free in 20 months
+- Updated Burial Society Inclusion: 3 months groceries (not 4)
+- Added "is" to Transparency statement
+- Added "Start Up Funding" benefit
+- Added "Networking Opportunities" benefit
 
 ---
 
-## Responsive Behavior
-- **Desktop**: Logo on left, community panel on right (side by side)
-- **Mobile**: Logo on top, community panel below (stacked vertically)
+## Files Modified
+- src/pages/Index.tsx
+- src/pages/AboutPage.tsx
+- src/pages/CustomerRegistration.tsx
+- src/pages/ServicesPage.tsx
+- src/pages/BenefitsPage.tsx
+- src/pages/services/BurialPage.tsx
+- src/pages/services/GroceriesPage.tsx
+- src/pages/services/CrowdfundingPage.tsx
+- src/pages/fun/FunDayPage.tsx

@@ -147,12 +147,12 @@ export default function GroceriesPage() {
 
       {/* Categories */}
       <section className="py-16 px-4 bg-muted/30">
-        <div className="container mx-auto max-w-4xl">
+        <div className="container mx-auto max-w-5xl">
           <h2 className="text-3xl font-bold text-center mb-8">Grocery Categories</h2>
           <p className="text-center text-muted-foreground mb-8">
-            The Groceries Stokvel is divided into 3 units, each with a different contribution fee:
+            The Groceries Stokvel is divided into 5 categories, each with a different contribution fee:
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <Card className="text-center">
               <CardContent className="p-6">
                 <h3 className="font-semibold text-lg mb-2">Household Basic Groceries</h3>
@@ -169,6 +169,18 @@ export default function GroceriesPage() {
               <CardContent className="p-6">
                 <h3 className="font-semibold text-lg mb-2">Baby Welfare</h3>
                 <p className="text-muted-foreground text-sm">Pampers and milk for young families</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center border-primary/30">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg mb-2 text-primary">Biggy "Wants" Groceries</h3>
+                <p className="text-muted-foreground text-sm">Household items which are not basics. For example: powder milk, tomato sauce, and coffee.</p>
+              </CardContent>
+            </Card>
+            <Card className="text-center border-primary/30">
+              <CardContent className="p-6">
+                <h3 className="font-semibold text-lg mb-2 text-primary">Biggy Premium Groceries</h3>
+                <p className="text-muted-foreground text-sm">High quality, specialty and artisanal products. For example: whole wheat pasta and millet mealie meal.</p>
               </CardContent>
             </Card>
           </div>
