@@ -15,8 +15,8 @@ export default function BurialPage() {
     },
     {
       icon: ShoppingCart,
-      title: "4 Months Groceries",
-      description: "The family will receive standard grocery allotment for 4 months post the death of the member."
+      title: "3 Months Groceries",
+      description: "The family will receive standard grocery allotment for 3 months post the death of the member."
     },
     {
       icon: Users,
@@ -26,7 +26,7 @@ export default function BurialPage() {
     {
       icon: Calendar,
       title: "Events Management",
-      description: "An events management specialist will help with on-ground planning and coordination from news until counselling completion."
+      description: "An event management specialist will help with on-the-ground planning and coordination from the time the news is shared with our Community Manager until completion of the counselling sessions."
     },
   ];
 
@@ -42,7 +42,7 @@ export default function BurialPage() {
               </div>
               <h1 className="text-4xl md:text-5xl font-bold mb-6">Biggy Burial Society</h1>
               <p className="text-xl text-muted-foreground max-w-xl">
-                Supporting families during their most difficult times with financial assistance and emotional care.
+                Supporting family members of our deceased member during their most difficult times with financial assistance and emotional care.
               </p>
             </div>
             <div className="flex-shrink-0">
@@ -60,9 +60,9 @@ export default function BurialPage() {
       <section className="py-16 px-4">
         <div className="container mx-auto max-w-4xl">
           <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            This is a service to assist the provided next of kin with burial-related expenses. The contribution 
-            is automatically covered on the monthly contribution. This benefit is meant to give the family time 
-            to heal, adjust and prepare for the future without their loved one's contribution.
+            A service to assist the next of kin with burial-related expenses. The fee 
+            is automatically covered on the monthly fee. This benefit is meant to give the family time 
+            to heal, adjust and prepare for the future without their loved one.
           </p>
           <p className="text-lg text-muted-foreground leading-relaxed">
             As the Biggy Round community stewards, we believe help comes in many forms apart from financial needs. 

@@ -1,5 +1,6 @@
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
+import { Card, CardContent } from '@/components/ui/card';
 import { MainNavigation } from '@/components/MainNavigation';
 import { UserPlus, ShieldCheck, ShoppingBasket, Users, TrendingUp, Award, Briefcase } from 'lucide-react';
 import { ServiceImageSlideshow } from '@/components/ServiceImageSlideshow';
@@ -17,9 +18,26 @@ const Index = () => {
       {/* Header */}
       <MainNavigation />
 
-      {/* Logo Section - Below Header */}
-      <div className="relative z-10 flex justify-start py-4 md:py-6 container mx-auto px-4">
-        <Logo size="lg" />
+      {/* Logo & Community Panel Section - Below Header */}
+      <div className="relative z-10 container mx-auto px-4 py-4 md:py-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 items-start">
+          <div className="flex justify-start">
+            <Logo size="lg" />
+          </div>
+          <Card className="bg-card/70 backdrop-blur-sm border-primary/30">
+            <CardContent className="p-4 md:p-6">
+              <h3 className="font-display text-sm md:text-base font-semibold gold-text mb-2">Our Community</h3>
+              <p className="text-xs md:text-sm text-muted-foreground leading-relaxed">
+                Biggy Round is a community of Zimbabweans who come together from all corners of the country 
+                to unite as one collective fund for a mutually benefiting cause. This is people coming together 
+                and pooling their resources so that they can make it through tough economic times or make their 
+                money buy more for the same value. Since ancient times, when a group of people came together 
+                with a common purpose, it has largely thrived. Biggy Round was created as a shining example 
+                of the positive outcomes resulting from a people coming together with unity of purpose.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
       </div>
 
       {/* Hero Section */}

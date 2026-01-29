@@ -27,11 +27,10 @@ const registrationSchema = z.object({
   firstName: z.string().min(2, 'First name is required').max(50),
   surname: z.string().min(2, 'Surname is required').max(50),
   phone: z.string().regex(/^[\d\s\-+()]{10,20}$/, 'Invalid phone number'),
-  idNumber: z.string().min(5, 'ID number is required').max(20),
+  phoneCalls: z.string().regex(/^[\d\s\-+()]{10,20}$/, 'Invalid phone number').optional().or(z.literal('')),
+  idOrPassport: z.string().min(5, 'ID number or Passport is required').max(30),
   idPhoto: z.string().min(1, 'ID photo is required'),
-  passportPhoto: z.string().optional(),
-  passportNumber: z.string().optional(),
-  email: z.string().email('Invalid email address'),
+  email: z.string().email('Invalid email address').optional().or(z.literal('')),
   gender: z.string().min(1, 'Gender is required'),
   dateOfBirth: z.string().min(1, 'Date of birth is required'),
   address: z.string().min(5, 'Address is required').max(200),
@@ -39,7 +38,8 @@ const registrationSchema = z.object({
   referralSource: z.string().min(1, 'Please select how you heard about us'),
   agentName: z.string().optional(),
   agentPhone: z.string().optional(),
-  beneficiaryName: z.string().min(2, 'Beneficiary name is required').max(100),
+  beneficiaryFirstName: z.string().min(2, 'Beneficiary first name is required').max(50),
+  beneficiarySurname: z.string().min(2, 'Beneficiary surname is required').max(50),
   beneficiaryIdNumber: z.string().min(5, 'Beneficiary ID number is required').max(20),
   beneficiaryAddress: z.string().min(5, 'Beneficiary address is required').max(200),
   beneficiaryPhone: z.string().regex(/^[\d\s\-+()]{10,20}$/, 'Invalid beneficiary phone number'),
@@ -62,10 +62,9 @@ const CustomerRegistration = () => {
     firstName: '',
     surname: '',
     phone: '',
-    idNumber: '',
+    phoneCalls: '',
+    idOrPassport: '',
     idPhoto: '',
-    passportPhoto: '',
-    passportNumber: '',
     email: '',
     gender: '',
     dateOfBirth: '',
@@ -74,7 +73,8 @@ const CustomerRegistration = () => {
     referralSource: '',
     agentName: '',
     agentPhone: '',
-    beneficiaryName: '',
+    beneficiaryFirstName: '',
+    beneficiarySurname: '',
     beneficiaryIdNumber: '',
     beneficiaryAddress: '',
     beneficiaryPhone: '',
@@ -121,13 +121,6 @@ const CustomerRegistration = () => {
     try {
       const validatedData = registrationSchema.parse(formData);
       
-      // Validate passport number format if provided
-      if (validatedData.passportNumber && validatedData.passportNumber.length > 0 && validatedData.passportNumber.length < 6) {
-        setErrors({ passportNumber: 'Passport number must be at least 6 characters if provided' });
-        setIsSubmitting(false);
-        return;
-      }
-
       // Username uniqueness will be checked server-side when creating the member profile
 
       // Save to Supabase registered_members table
@@ -136,9 +129,9 @@ const CustomerRegistration = () => {
         .insert({
           name: validatedData.firstName,
           surname: validatedData.surname,
-          email: validatedData.email,
+          email: validatedData.email || null,
           phone: validatedData.phone,
-          id_number: validatedData.idNumber,
+          id_number: validatedData.idOrPassport,
           date_of_birth: validatedData.dateOfBirth,
           gender: validatedData.gender,
           address: validatedData.address || null,
@@ -363,32 +356,17 @@ const CustomerRegistration = () => {
               </div>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-5">
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  ID Number <span className="text-destructive">*</span>
-                </label>
-                <Input
-                  value={formData.idNumber}
-                  onChange={e => updateField('idNumber', e.target.value)}
-                  placeholder="Your national ID number"
-                  className={errors.idNumber ? 'border-destructive' : ''}
-                />
-                {errors.idNumber && <p className="text-xs text-destructive">{errors.idNumber}</p>}
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-sm font-medium">
-                  Passport Number <span className="text-muted-foreground text-xs">(Optional)</span>
-                </label>
-                <Input
-                  value={formData.passportNumber}
-                  onChange={e => updateField('passportNumber', e.target.value)}
-                  placeholder="Leave blank if none"
-                  className={errors.passportNumber ? 'border-destructive' : ''}
-                />
-                {errors.passportNumber && <p className="text-xs text-destructive">{errors.passportNumber}</p>}
-              </div>
+            <div className="space-y-2">
+              <label className="text-sm font-medium">
+                ID Number (Zim Citizens) or Passport (Foreigners) <span className="text-destructive">*</span>
+              </label>
+              <Input
+                value={formData.idOrPassport}
+                onChange={e => updateField('idOrPassport', e.target.value)}
+                placeholder="Enter your national ID or passport number"
+                className={errors.idOrPassport ? 'border-destructive' : ''}
+              />
+              {errors.idOrPassport && <p className="text-xs text-destructive">{errors.idOrPassport}</p>}
             </div>
 
             <div className="grid md:grid-cols-2 gap-5">
@@ -407,17 +385,30 @@ const CustomerRegistration = () => {
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  Email Address <span className="text-destructive">*</span>
+                  Contact Number (Calls) <span className="text-muted-foreground text-xs">(Optional)</span>
                 </label>
                 <Input
-                  type="email"
-                  value={formData.email}
-                  onChange={e => updateField('email', e.target.value)}
-                  placeholder="your.email@example.com"
-                  className={errors.email ? 'border-destructive' : ''}
+                  value={formData.phoneCalls}
+                  onChange={e => updateField('phoneCalls', e.target.value)}
+                  placeholder="+263 7XX XXX XXX"
+                  className={errors.phoneCalls ? 'border-destructive' : ''}
                 />
-                {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
+                {errors.phoneCalls && <p className="text-xs text-destructive">{errors.phoneCalls}</p>}
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">
+                Email Address <span className="text-muted-foreground text-xs">(Optional)</span>
+              </label>
+              <Input
+                type="email"
+                value={formData.email}
+                onChange={e => updateField('email', e.target.value)}
+                placeholder="your.email@example.com"
+                className={errors.email ? 'border-destructive' : ''}
+              />
+              {errors.email && <p className="text-xs text-destructive">{errors.email}</p>}
             </div>
 
             <div className="grid md:grid-cols-2 gap-5">
@@ -556,29 +547,42 @@ const CustomerRegistration = () => {
             <div className="grid md:grid-cols-2 gap-5">
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  Full Name <span className="text-destructive">*</span>
+                  First Name <span className="text-destructive">*</span>
                 </label>
                 <Input
-                  value={formData.beneficiaryName}
-                  onChange={e => updateField('beneficiaryName', e.target.value)}
-                  placeholder="Beneficiary's full name"
-                  className={errors.beneficiaryName ? 'border-destructive' : ''}
+                  value={formData.beneficiaryFirstName}
+                  onChange={e => updateField('beneficiaryFirstName', e.target.value)}
+                  placeholder="Beneficiary's first name"
+                  className={errors.beneficiaryFirstName ? 'border-destructive' : ''}
                 />
-                {errors.beneficiaryName && <p className="text-xs text-destructive">{errors.beneficiaryName}</p>}
+                {errors.beneficiaryFirstName && <p className="text-xs text-destructive">{errors.beneficiaryFirstName}</p>}
               </div>
 
               <div className="space-y-2">
                 <label className="text-sm font-medium">
-                  ID Number <span className="text-destructive">*</span>
+                  Surname <span className="text-destructive">*</span>
                 </label>
                 <Input
-                  value={formData.beneficiaryIdNumber}
-                  onChange={e => updateField('beneficiaryIdNumber', e.target.value)}
-                  placeholder="Beneficiary's ID number"
-                  className={errors.beneficiaryIdNumber ? 'border-destructive' : ''}
+                  value={formData.beneficiarySurname}
+                  onChange={e => updateField('beneficiarySurname', e.target.value)}
+                  placeholder="Beneficiary's surname"
+                  className={errors.beneficiarySurname ? 'border-destructive' : ''}
                 />
-                {errors.beneficiaryIdNumber && <p className="text-xs text-destructive">{errors.beneficiaryIdNumber}</p>}
+                {errors.beneficiarySurname && <p className="text-xs text-destructive">{errors.beneficiarySurname}</p>}
               </div>
+            </div>
+
+            <div className="space-y-2">
+              <label className="text-sm font-medium">
+                ID Number <span className="text-destructive">*</span>
+              </label>
+              <Input
+                value={formData.beneficiaryIdNumber}
+                onChange={e => updateField('beneficiaryIdNumber', e.target.value)}
+                placeholder="Beneficiary's ID number"
+                className={errors.beneficiaryIdNumber ? 'border-destructive' : ''}
+              />
+              {errors.beneficiaryIdNumber && <p className="text-xs text-destructive">{errors.beneficiaryIdNumber}</p>}
             </div>
 
             <div className="grid md:grid-cols-2 gap-5">
@@ -613,24 +617,14 @@ const CustomerRegistration = () => {
           {/* Photo Uploads */}
           <div className="bg-card rounded-2xl p-6 card-elevated border border-border space-y-5">
             <h2 className="font-semibold text-lg mb-4">Document Uploads</h2>
-            <div className="grid md:grid-cols-2 gap-5">
-              <PhotoUpload
-                label="ID Photo"
-                value={formData.idPhoto}
-                onChange={value => updateField('idPhoto', value)}
-                maxSizeMB={15}
-                required
-                error={errors.idPhoto}
-              />
-              <PhotoUpload
-                label="Passport Sized Photo"
-                value={formData.passportPhoto}
-                onChange={value => updateField('passportPhoto', value)}
-                maxSizeMB={15}
-                required={false}
-                error={errors.passportPhoto}
-              />
-            </div>
+            <PhotoUpload
+              label="ID / Passport Photo"
+              value={formData.idPhoto}
+              onChange={value => updateField('idPhoto', value)}
+              maxSizeMB={15}
+              required
+              error={errors.idPhoto}
+            />
           </div>
 
           {/* Security Notice */}

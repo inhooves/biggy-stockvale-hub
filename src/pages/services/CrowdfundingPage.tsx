@@ -19,7 +19,12 @@ export default function CrowdfundingPage() {
     {
       icon: Sprout,
       title: "Crowd Farming",
-      description: "Stokvel members pool funds together to fund medium to large scale farming projects or high return projects. This includes cattle, goat farming, or road runner breeding over a designated period (5 years) with each contributor viewed as an investor entitled to equal sharing of growth."
+      description: "Stokvel members pool funds together to fund medium to large scale farming projects or high return projects. This includes cattle, goat farming, road runner breeding OR short to medium term crop production such as potatoes and sweet potato farming over a designated period (5 years) with each contributor viewed as an investor entitled to equal sharing of growth."
+    },
+    {
+      icon: Users,
+      title: "Non-Commercial Crowd Funding",
+      description: "Pooling funds from a group of people to acquire or procure a commonly demanded not-for-profit product."
     },
   ];
 
@@ -67,10 +72,11 @@ export default function CrowdfundingPage() {
         <div className="container mx-auto max-w-4xl">
           <Card className="border-primary/20">
             <CardContent className="p-8">
-              <h2 className="text-2xl font-bold mb-6">Livestock Farming Projects</h2>
+              <h2 className="text-2xl font-bold mb-6">Livestock & Crop Farming Projects</h2>
               <p className="text-muted-foreground leading-relaxed mb-4">
-                Crowd farming projects can take the form of cattle and goat farming or road runner breeding 
-                to grow the numbers over a designated period (5 years) as a unit with many contributors.
+                Crowd farming projects can take the form of cattle and goat farming, road runner breeding, 
+                or short to medium term crop production such as potatoes and sweet potato farming 
+                to grow returns over a designated period (5 years) as a unit with many contributors.
               </p>
               <p className="text-muted-foreground leading-relaxed mb-4">
                 The livestock can be kept at one to ten farms in total with each stokvel member who contributed 

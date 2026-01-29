@@ -2,7 +2,7 @@ import { Link } from "react-router-dom";
 import { PageLayout } from "@/components/PageLayout";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import { ShoppingCart, Heart, Wallet, TrendingUp, Users, ArrowRight } from "lucide-react";
+import { ShoppingCart, Heart, Wallet, TrendingUp, Users, ArrowRight, PartyPopper } from "lucide-react";
 
 export default function ServicesPage() {
   const services = [
@@ -40,6 +40,13 @@ export default function ServicesPage() {
       description: "Pool funds together for new businesses, farming projects, and dynasty funds. Invest as one consolidated investor.",
       link: "/services/crowdfunding",
       features: ["Business funding", "Crowd farming", "Dynasty fund"]
+    },
+    {
+      icon: PartyPopper,
+      title: "Biggy Fun & Games",
+      description: "Monthly community events featuring games, prizes, and networking. Join us every last Sunday of the month for family fun!",
+      link: "/fun/fun-day",
+      features: ["Monthly events", "Prizes", "Networking"]
     },
   ];
 

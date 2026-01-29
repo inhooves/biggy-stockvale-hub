@@ -23,7 +23,7 @@ export default function BenefitsPage() {
     {
       icon: Heart,
       title: "Burial Society Inclusion",
-      description: "Upon death, next of kin receives USD $500 cash aid and the family receives groceries for 4 consecutive months."
+      description: "Upon death, next of kin receives USD $500 cash aid and the family receives groceries for 3 consecutive months."
     },
     {
       icon: Building2,
@@ -32,7 +32,7 @@ export default function BenefitsPage() {
     },
     {
       icon: Trophy,
-      title: "Monthly Prize Draws",
+      title: "Quarterly Prize Draws",
       description: "Win free groceries worth USD $200, phones, laptops, gas stoves, flat screen TVs, and more!"
     },
     {
@@ -72,8 +72,8 @@ export default function BenefitsPage() {
     },
     {
       icon: Wallet,
-      title: "Interest-Free Loans",
-      description: "Access short-term loans of up to USD $100 repayable in 60 days (after 6 months membership)."
+      title: "Small Business Capital",
+      description: "Secure capital worth USD $2,000 equivalence, repayable interest-free in 20 months maximum period so as to create a revolving fund."
     },
     {
       icon: Gift,
@@ -83,12 +83,22 @@ export default function BenefitsPage() {
     {
       icon: Eye,
       title: "Transparency",
-      description: "Operations are transparent with things done according to established policy. Integrity at the heart of our values."
+      description: "Operations are transparent with things done according to established policy. Integrity is at the heart of our values."
     },
     {
       icon: MessageCircle,
       title: "Grievance Resolution",
       description: "Present grievances to the Community Manager via email, WhatsApp, or in-person appointments."
+    },
+    {
+      icon: Lightbulb,
+      title: "Start Up Funding",
+      description: "Potentially raise financing from the crowd funding network. Easily helped to parade your start-up to mobilise funding from interested members."
+    },
+    {
+      icon: Users,
+      title: "Networking Opportunities",
+      description: "Easily link up with people of similar interests (business, social, investments, farming)."
     },
   ];
 

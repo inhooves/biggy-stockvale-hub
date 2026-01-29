@@ -104,6 +104,24 @@ export default function AboutPage() {
         </div>
       </section>
 
+      {/* Our Team Section */}
+      <section className="py-10 md:py-16 px-3 md:px-4 bg-muted/30">
+        <div className="container mx-auto max-w-4xl">
+          <Card className="border-primary/20">
+            <CardContent className="p-6 md:p-8 lg:p-12 text-center">
+              <div className="w-14 h-14 md:w-16 md:h-16 mx-auto mb-4 md:mb-6 rounded-full bg-primary/10 flex items-center justify-center">
+                <Users className="h-7 w-7 md:h-8 md:w-8 text-primary" />
+              </div>
+              <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Our Team</h2>
+              <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
+                A team of dedicated professionals who are passionate and well researched about the stokvel 
+                industry; focused on creating the next big thing for our customers.
+              </p>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
       {/* Mission Statement */}
       <section className="py-10 md:py-16 px-3 md:px-4 bg-primary text-primary-foreground">
         <div className="container mx-auto text-center max-w-4xl">
