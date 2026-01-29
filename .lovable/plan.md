@@ -1,71 +1,75 @@
 
-# Fix Agent Portal Navigation Issue
+# Add Community Panel to Homepage & Update About Us Page
 
-## Problem Summary
-The Agent Portal has a race condition where users are redirected back to the login page after successfully authenticating. This happens because the navigation to the dashboard occurs before the authentication state has propagated through the application.
+## Overview
+This plan adds an informational panel to the homepage describing Biggy Round's community purpose, and updates the About Us page with the new team description.
 
-## Root Cause
-When a user logs in or registers:
-1. The `signIn` or `signUp` function completes successfully
-2. `navigate('/agent/dashboard')` is called immediately
-3. The authentication state (user) hasn't updated yet in the `useAuth` hook
-4. The dashboard sees no authenticated user and redirects back to `/agent`
+---
 
-## Solution
-Remove the manual navigation calls after login/registration and let the existing `useEffect` handle the redirect once the authentication state is properly updated.
+## Change 1: Add Community Panel to Homepage
 
-The `useEffect` at line 68-72 in `AgentRegistration.tsx` already handles this:
-```tsx
-useEffect(() => {
-  if (!authLoading && user) {
-    navigate('/agent/dashboard');
-  }
-}, [user, authLoading, navigate]);
+### Location
+Below the header, positioned to the right side of the page alongside the existing logo section.
+
+### Layout Approach
+- Restructure the area below the header to use a two-column grid layout
+- **Left column**: Existing logo (already left-aligned)
+- **Right column**: New community information panel
+
+### Panel Content
+The panel will contain the following text:
+> "Biggy Round is a community of Zimbabweans who come together from all corners of the country to unite as one collective fund for a mutually benefiting cause. This is people coming together and pooling their resources so that they can make it through tough economic times or make their money buy more for the same value. Since ancient times, when a group of people came together with a common purpose, it has largely thrived. Biggy Round was created as a shining example of the positive outcomes resulting from a people coming together with unity of purpose."
+
+### Styling
+- Uses the existing Card component with subtle background styling
+- Border with primary accent color
+- Responsive: On mobile, the panel will stack below the logo
+- Text will be appropriately sized for readability
+
+### Visual Layout (Desktop)
+```text
++--------------------------------------------------+
+|                  HEADER / NAVIGATION             |
++--------------------------------------------------+
+|                                                  |
+|  [LOGO]              [COMMUNITY INFO PANEL     ] |
+|  (left)              [ describing Biggy Round  ] |
+|                      [ mission & purpose       ] |
+|                                                  |
++--------------------------------------------------+
 ```
 
-## Changes Required
+---
 
-### File: `src/pages/AgentRegistration.tsx`
+## Change 2: Update About Us Page - Team Section
 
-**Change 1: Remove navigation from onLogin (line 162)**
-- Remove: `navigate('/agent/dashboard');`
-- The `useEffect` will handle navigation once `user` state updates
+### New Content
+Add a new "Our Team" section to the About Us page with the following description:
+> "A team of dedicated professionals who are passionate and well researched about the stokvel industry; focused on creating the next big thing for our customers."
 
-**Change 2: Remove navigation from onRegister (line 138)**
-- Remove: `navigate('/agent/dashboard');`
-- The `useEffect` will handle navigation once `user` state updates
+### Placement
+- Add as a new section after the "Ubuntu" section and before the "Mission Statement" section
+- Style consistently with other sections on the page
+
+---
 
 ## Technical Details
 
-### Before (onLogin function)
-```tsx
-const onLogin = async (data: LoginFormData) => {
-  try {
-    const { error } = await signIn(data.email, data.password);
-    if (error) throw error;
-    toast({ ... });
-    navigate('/agent/dashboard'); // PROBLEM: Called before auth state updates
-  } catch ...
-};
-```
+### Files to Modify
 
-### After (onLogin function)
-```tsx
-const onLogin = async (data: LoginFormData) => {
-  try {
-    const { error } = await signIn(data.email, data.password);
-    if (error) throw error;
-    toast({ ... });
-    // Navigation handled by useEffect when user state updates
-  } catch ...
-};
-```
+**1. `src/pages/Index.tsx`**
+- Import the Card component
+- Restructure the logo section (lines 20-23) to be a two-column grid
+- Add the community information panel in the right column
+- Use responsive classes: `grid grid-cols-1 md:grid-cols-2 gap-6`
 
-The same pattern applies to `onRegister`.
+**2. `src/pages/AboutPage.tsx`**
+- Add a new "Our Team" section between the Ubuntu section and Mission Statement section
+- Use existing Card component styling for consistency
+- Include a Users icon to represent the team
 
-## Expected Behavior After Fix
-1. User enters credentials and clicks login/register
-2. Authentication succeeds and toast shows success message
-3. `useAuth` hook updates `user` state via `onAuthStateChange`
-4. `useEffect` detects authenticated user and navigates to `/agent/dashboard`
-5. Dashboard loads with authenticated user context
+---
+
+## Responsive Behavior
+- **Desktop**: Logo on left, community panel on right (side by side)
+- **Mobile**: Logo on top, community panel below (stacked vertically)
