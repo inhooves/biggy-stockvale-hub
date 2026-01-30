@@ -168,7 +168,7 @@ export default function GroceriesPage() {
             <Card className="text-center">
               <CardContent className="p-6">
                 <h3 className="font-semibold text-lg mb-2">Baby Welfare</h3>
-                <p className="text-muted-foreground text-sm">Pampers and milk for young families</p>
+                <p className="text-muted-foreground text-sm">Pampers and milk for young toddlers</p>
               </CardContent>
             </Card>
             <Card className="text-center border-primary/30">

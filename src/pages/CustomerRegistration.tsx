@@ -224,6 +224,11 @@ const CustomerRegistration = () => {
 
       {/* Form */}
       <main className="container mx-auto px-4 py-8 max-w-3xl">
+        {/* Logo Section */}
+        <div className="flex justify-start mb-6">
+          <Logo size="md" />
+        </div>
+
         <div className="text-center mb-8 animate-fade-in">
           <h1 className="font-display text-3xl font-bold gold-text mb-2">
             Member Registration
