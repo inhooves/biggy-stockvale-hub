@@ -24,6 +24,7 @@ const navItems = [
       { name: "Biggy Savings Club", path: "/services/savings" },
       { name: "Biggy Investments Club", path: "/services/investments" },
       { name: "Biggy Crowd Funding", path: "/services/crowdfunding" },
+      { name: "Biggy Fun & Games", path: "/fun/funday" },
     ]
   },
   { 

@@ -38,9 +38,6 @@ export default function AboutPage() {
       <section className="py-10 md:py-16 px-3 md:px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
         <div className="container mx-auto text-center">
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">About Us</h1>
-          <p className="text-base md:text-xl text-muted-foreground max-w-3xl mx-auto">
-            Building the biggest fulfilling stokvel community in Zimbabwe and Africa
-          </p>
         </div>
       </section>
 
@@ -129,7 +126,7 @@ export default function AboutPage() {
           <p className="text-base md:text-lg leading-relaxed opacity-90">
             A project for the people, by the people - start the journey together, grow together, 
             save together, buy together, invest together, farm together and have fun together. 
-            We run with professionalism, sound administration and maximum customer satisfaction.
+            We run our community with professionalism, sound administration and maximum customer satisfaction.
           </p>
           <p className="text-xl md:text-2xl font-bold mt-6 md:mt-8">
             Biggy Round is Bigger, Better and Bolder.
