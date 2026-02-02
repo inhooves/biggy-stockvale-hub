@@ -112,7 +112,7 @@ export default function AboutPage() {
               <h2 className="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Our Team</h2>
               <p className="text-base md:text-lg text-muted-foreground leading-relaxed">
                 A team of dedicated professionals who are passionate and well researched about the stokvel 
-                industry; focused on creating the next big thing for our customers.
+                industry, focused on creating the next big thing for our customers.
               </p>
             </CardContent>
           </Card>
