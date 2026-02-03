@@ -6,7 +6,7 @@ import { Input } from '@/components/ui/input';
 import { useToast } from '@/hooks/use-toast';
 import Logo from '@/components/Logo';
 import { supabase } from '@/integrations/supabase/client';
-import { ArrowLeft, LogIn, User, Lock, Mail, KeyRound } from 'lucide-react';
+import { ArrowLeft, LogIn, User, Lock, Mail, KeyRound, Eye, EyeOff } from 'lucide-react';
 
 const loginSchema = z.object({
   username: z.string().min(3, 'Username is required'),
@@ -19,6 +19,8 @@ const MemberLogin = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [showForgotPassword, setShowForgotPassword] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
+  
+  const [showPassword, setShowPassword] = useState(false);
   
   const [formData, setFormData] = useState({
     username: '',
@@ -240,14 +242,23 @@ const MemberLogin = () => {
                 <Lock size={16} className="text-primary" />
                 Password <span className="text-destructive">*</span>
               </label>
-              <Input
-                type="password"
-                value={formData.password}
-                onChange={e => updateField('password', e.target.value)}
-                placeholder="Enter your password"
-                className={errors.password ? 'border-destructive' : ''}
-                autoComplete="current-password"
-              />
+              <div className="relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  value={formData.password}
+                  onChange={e => updateField('password', e.target.value)}
+                  placeholder="Enter your password"
+                  className={errors.password ? 'border-destructive pr-10' : 'pr-10'}
+                  autoComplete="current-password"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground transition-colors"
+                >
+                  {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                </button>
+              </div>
               {errors.password && <p className="text-xs text-destructive">{errors.password}</p>}
             </div>
 
