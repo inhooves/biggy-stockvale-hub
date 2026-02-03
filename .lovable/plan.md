@@ -1,34 +1,71 @@
 
-# Remove Text Under "About Us" Headline
+# Add Direct Registration Link for Non-Agent Members
 
 ## Overview
-Remove the paragraph that was just added under the "About Us" headline in the hero section.
+Add a helpful link on the Member Access page (`/member/signup`) that redirects unregistered members (those not registered by any agent) directly to the full member registration page (`/register`).
 
 ---
 
-## Current Structure (lines 38-46)
+## Location
+**File:** `src/pages/MemberSignUp.tsx`
+
+The link will be placed in the **Sign Up tab**, specifically in the `step === 'lookup'` section, **above the email address input field** (around line 394).
+
+---
+
+## Current Structure (lines 386-417)
 ```tsx
-<section className="py-10 md:py-16 px-3 md:px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
-  <div className="container mx-auto text-center">
-    <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">About Us</h1>
-    <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-      A team of dedicated professionals who are passionate and well researched about the stokvel 
-      industry, focused on creating the next big thing for our customers.
-    </p>   ← DELETE THIS PARAGRAPH
+{step === 'lookup' && (
+  <div className="space-y-4">
+    <div className="bg-muted/50 rounded-lg p-3 mb-4">
+      <p className="text-sm text-muted-foreground">
+        <strong>Step 1:</strong> Enter the email address your agent used during registration...
+      </p>
+    </div>
+
+    <div className="space-y-2">
+      <label className="flex items-center gap-2 text-sm font-medium">
+        <Mail size={16} className="text-primary" />
+        Email Address <span className="text-destructive">*</span>
+      </label>
+      <Input ... />
+    </div>
+    ...
   </div>
-</section>
+)}
 ```
 
 ---
 
 ## Change Required
-**File:** `src/pages/AboutPage.tsx`
+Insert a new informational block **after** the Step 1 instruction box and **before** the Email Address input field:
 
-Delete lines 41-44 (the `<p>` element containing the team description text).
+```tsx
+<div className="bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
+  <p className="text-sm text-muted-foreground mb-2">
+    Not registered by an agent?
+  </p>
+  <Link 
+    to="/register" 
+    className="text-primary hover:underline font-medium text-sm"
+  >
+    Sign up fully here →
+  </Link>
+</div>
+```
+
+This will also require adding `Link` to the imports from `react-router-dom`.
 
 ---
 
-## Result
-The About Us hero section will display only the "About Us" headline with no text underneath.
+## Visual Result
+The Member Access page (Sign Up tab) will display:
+1. Step 1 instruction box
+2. **New:** "Not registered by an agent? Sign up fully here →" link
+3. Email Address input field
+4. "Find My Details" button
 
-Note: The same team description text still appears in the "Our Team" section further down the page (lines 117-119), so it remains visible there.
+---
+
+## Files Changed
+- `src/pages/MemberSignUp.tsx` - Add import for `Link` and insert the new registration link block
