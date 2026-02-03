@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { z } from 'zod';
 import { useForm } from 'react-hook-form';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -389,6 +389,18 @@ const MemberSignUp = () => {
                     <p className="text-sm text-muted-foreground">
                       <strong>Step 1:</strong> Enter the email address your agent used during registration to find your details.
                     </p>
+                  </div>
+
+                  <div className="bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
+                    <p className="text-sm text-muted-foreground mb-2">
+                      Not registered by an agent?
+                    </p>
+                    <Link 
+                      to="/register" 
+                      className="text-primary hover:underline font-medium text-sm"
+                    >
+                      Sign up fully here →
+                    </Link>
                   </div>
 
                   <div className="space-y-2">
