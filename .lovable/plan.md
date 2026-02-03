@@ -1,17 +1,20 @@
 
-# Add Team Description Under "About Us" Headline
+# Remove Text Under "About Us" Headline
 
 ## Overview
-Add the requested text directly under the "About Us" headline in the hero section at the top of the page.
+Remove the paragraph that was just added under the "About Us" headline in the hero section.
 
 ---
 
-## Current Structure (lines 38-42)
+## Current Structure (lines 38-46)
 ```tsx
 <section className="py-10 md:py-16 px-3 md:px-4 bg-gradient-to-br from-primary/10 to-secondary/10">
   <div className="container mx-auto text-center">
     <h1 className="text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6">About Us</h1>
-    <!-- No text here currently -->
+    <p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
+      A team of dedicated professionals who are passionate and well researched about the stokvel 
+      industry, focused on creating the next big thing for our customers.
+    </p>   ← DELETE THIS PARAGRAPH
   </div>
 </section>
 ```
@@ -21,20 +24,11 @@ Add the requested text directly under the "About Us" headline in the hero sectio
 ## Change Required
 **File:** `src/pages/AboutPage.tsx`
 
-Add a paragraph immediately after the `<h1>About Us</h1>` heading (after line 40):
-
-```tsx
-<p className="text-base md:text-lg text-muted-foreground leading-relaxed max-w-3xl mx-auto">
-  A team of dedicated professionals who are passionate and well researched about the stokvel 
-  industry, focused on creating the next big thing for our customers.
-</p>
-```
+Delete lines 41-44 (the `<p>` element containing the team description text).
 
 ---
 
 ## Result
-The About Us page hero section will display:
-1. **"About Us"** headline
-2. **Team description text** directly underneath
+The About Us hero section will display only the "About Us" headline with no text underneath.
 
-This is a single-line addition to one file.
+Note: The same team description text still appears in the "Our Team" section further down the page (lines 117-119), so it remains visible there.
