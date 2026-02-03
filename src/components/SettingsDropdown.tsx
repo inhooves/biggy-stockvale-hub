@@ -62,18 +62,16 @@ export function SettingsDropdown() {
 
   const handleProfileClick = () => {
     if (!user) {
-      // Not logged in, redirect to login
-      navigate('/agent/login');
+      navigate('/member/login');
       return;
     }
     
     if (isAgent) {
-      navigate('/agent');
+      navigate('/agent/profile');
     } else if (isAdmin) {
-      navigate('/admin');
+      navigate('/admin/profile');
     } else {
-      // Regular user or member - for now redirect to register
-      navigate('/register');
+      navigate('/user/profile');
     }
   };
 
@@ -177,7 +175,7 @@ export function SettingsDropdown() {
           My Profile
         </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => navigate('/agent/register')}>
+        <DropdownMenuItem onClick={() => navigate('/member/login')}>
           <UserPlus className="mr-2 h-4 w-4" />
           Add Account
         </DropdownMenuItem>
