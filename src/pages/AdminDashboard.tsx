@@ -23,8 +23,10 @@ import {
   Trophy,
   BarChart3,
   User,
-  Shield
+   Shield,
+   Settings
 } from 'lucide-react';
+import { SettingsDropdown } from '@/components/SettingsDropdown';
 import {
   Table,
   TableBody,
@@ -403,6 +405,7 @@ const AdminDashboard = () => {
               <LogOut size={16} />
               Logout
             </Button>
+             <SettingsDropdown />
           </div>
         </div>
       </header>

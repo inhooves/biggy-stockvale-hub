@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect } from "react";
 import { MessageCircle, X, Send, User, LogIn } from "lucide-react";
 import { useNavigate } from "react-router-dom";
-import mamaBiggyAvatar from "@/assets/mama-biggy-avatar-new.png";
+ import mamaBiggyAvatar from "@/assets/mama-biggy-profile.png";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { ScrollArea } from "@/components/ui/scroll-area";

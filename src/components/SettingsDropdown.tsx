@@ -180,13 +180,6 @@ export function SettingsDropdown() {
           Add Account
         </DropdownMenuItem>
 
-        <DropdownMenuItem onClick={() => navigate('/admin')}>
-          <Shield className="mr-2 h-4 w-4" />
-          Admin Panel
-        </DropdownMenuItem>
-
-        <DropdownMenuSeparator />
-
         {/* Help & Support */}
         <DropdownMenuItem onClick={() => navigate('/contact')}>
           <HelpCircle className="mr-2 h-4 w-4" />
