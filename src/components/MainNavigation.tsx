@@ -24,11 +24,9 @@ const navItems = [
       { name: "Biggy Savings Club", path: "/services/savings" },
       { name: "Biggy Investments Club", path: "/services/investments" },
       { name: "Biggy Crowd Funding", path: "/services/crowdfunding" },
-      { name: "--- Biggy Fun & Games ---", path: "", isHeader: true },
-      { name: "Biggy Fun Day", path: "/fun/funday" },
-      { name: "Biggy Do or Die", path: "/fun/doordie" },
     ]
   },
+   { name: "Biggy Fun & Games", path: "/fun" },
   { name: "Constitution", path: "/constitution" },
   { name: "Benefits", path: "/benefits" },
   { name: "Contact Us", path: "/contact" },

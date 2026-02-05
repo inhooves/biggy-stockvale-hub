@@ -49,8 +49,10 @@ import {
   BarChart3,
   WifiOff,
   RefreshCw,
-  Cloud
+   Cloud,
+   Settings
 } from 'lucide-react';
+import { SettingsDropdown } from '@/components/SettingsDropdown';
 
 interface Agent {
   id: string;
@@ -434,6 +436,7 @@ const AgentDashboard = () => {
               <LogOut size={16} />
               <span className="hidden sm:inline">Logout</span>
             </Button>
+             <SettingsDropdown />
           </div>
         </div>
       </header>

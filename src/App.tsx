@@ -14,6 +14,7 @@ import InvestmentsPage from "./pages/services/InvestmentsPage";
 import CrowdfundingPage from "./pages/services/CrowdfundingPage";
 import FunDayPage from "./pages/fun/FunDayPage";
 import DoOrDiePage from "./pages/fun/DoOrDiePage";
+import FunGamesPage from "./pages/fun/FunGamesPage";
 import ConstitutionPage from "./pages/ConstitutionPage";
 import BenefitsPage from "./pages/BenefitsPage";
 import ContactPage from "./pages/ContactPage";
@@ -55,6 +56,7 @@ const App = () => (
           <Route path="/services/crowdfunding" element={<CrowdfundingPage />} />
           
           {/* Fun & Games */}
+           <Route path="/fun" element={<FunGamesPage />} />
           <Route path="/fun/funday" element={<FunDayPage />} />
           <Route path="/fun/doordie" element={<DoOrDiePage />} />
           
