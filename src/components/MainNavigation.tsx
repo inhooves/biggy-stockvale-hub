@@ -24,13 +24,7 @@ const navItems = [
       { name: "Biggy Savings Club", path: "/services/savings" },
       { name: "Biggy Investments Club", path: "/services/investments" },
       { name: "Biggy Crowd Funding", path: "/services/crowdfunding" },
-      { name: "Biggy Fun & Games", path: "/fun/funday" },
-    ]
-  },
-  { 
-    name: "Fun & Games", 
-    path: "/fun",
-    subItems: [
+      { name: "--- Biggy Fun & Games ---", path: "", isHeader: true },
       { name: "Biggy Fun Day", path: "/fun/funday" },
       { name: "Biggy Do or Die", path: "/fun/doordie" },
     ]
@@ -74,9 +68,15 @@ export function MainNavigation() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
                     {item.subItems.map((subItem) => (
-                      <DropdownMenuItem key={subItem.path} asChild>
-                        <Link to={subItem.path}>{subItem.name}</Link>
-                      </DropdownMenuItem>
+                      (subItem as any).isHeader ? (
+                        <div key={subItem.name} className="px-2 py-1.5 text-xs font-semibold text-muted-foreground border-t mt-1 pt-2">
+                          {subItem.name.replace(/---/g, '').trim()}
+                        </div>
+                      ) : (
+                        <DropdownMenuItem key={subItem.path} asChild>
+                          <Link to={subItem.path}>{subItem.name}</Link>
+                        </DropdownMenuItem>
+                      )
                     ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
