@@ -1,71 +1,51 @@
 
-# Add Direct Registration Link for Non-Agent Members
+
+# Navigation & Groceries Updates
 
 ## Overview
-Add a helpful link on the Member Access page (`/member/signup`) that redirects unregistered members (those not registered by any agent) directly to the full member registration page (`/register`).
+Two changes:
+1. Update "Stokvel Services" dropdown to include "Biggy Fun & Games" as a parent item with "Biggy Fun Day" and "Biggy Do or Die" as its sub-items, then remove the standalone "Fun & Games" dropdown
+2. Add new grocery items to the Groceries page
 
 ---
 
-## Location
-**File:** `src/pages/MemberSignUp.tsx`
+## Changes
 
-The link will be placed in the **Sign Up tab**, specifically in the `step === 'lookup'` section, **above the email address input field** (around line 394).
+### 1. Navigation (`src/components/MainNavigation.tsx`)
 
----
+**Current structure (lines 14-42):**
+- "Stokvel Services" has "Biggy Fun & Games" as a single link to `/fun/funday`
+- Separate "Fun & Games" dropdown exists between Stokvel Services and Constitution
 
-## Current Structure (lines 386-417)
-```tsx
-{step === 'lookup' && (
-  <div className="space-y-4">
-    <div className="bg-muted/50 rounded-lg p-3 mb-4">
-      <p className="text-sm text-muted-foreground">
-        <strong>Step 1:</strong> Enter the email address your agent used during registration...
-      </p>
-    </div>
-
-    <div className="space-y-2">
-      <label className="flex items-center gap-2 text-sm font-medium">
-        <Mail size={16} className="text-primary" />
-        Email Address <span className="text-destructive">*</span>
-      </label>
-      <Input ... />
-    </div>
-    ...
-  </div>
-)}
+**New structure for Stokvel Services subItems:**
+```text
+Stokvel Services dropdown:
+  - Biggy Groceries → /services/groceries
+  - Biggy Burial Society → /services/burial
+  - Biggy Savings Club → /services/savings
+  - Biggy Investments Club → /services/investments
+  - Biggy Crowd Funding → /services/crowdfunding
+  - Biggy Fun & Games (header/label)
+    - Biggy Fun Day → /fun/funday
+    - Biggy Do or Die → /fun/doordie
 ```
 
----
-
-## Change Required
-Insert a new informational block **after** the Step 1 instruction box and **before** the Email Address input field:
-
-```tsx
-<div className="bg-primary/10 border border-primary/30 rounded-lg p-3 text-center">
-  <p className="text-sm text-muted-foreground mb-2">
-    Not registered by an agent?
-  </p>
-  <Link 
-    to="/register" 
-    className="text-primary hover:underline font-medium text-sm"
-  >
-    Sign up fully here →
-  </Link>
-</div>
-```
-
-This will also require adding `Link` to the imports from `react-router-dom`.
+**Remove:** The standalone "Fun & Games" dropdown (lines 30-37)
 
 ---
 
-## Visual Result
-The Member Access page (Sign Up tab) will display:
-1. Step 1 instruction box
-2. **New:** "Not registered by an agent? Sign up fully here →" link
-3. Email Address input field
-4. "Find My Details" button
+### 2. Groceries Page (`src/pages/services/GroceriesPage.tsx`)
+
+**Add to foodItems array (line 9-11):**
+- "Rooibos Teabags"
+- "Packaged Soups (e.g. Royco)"
+
+**Add to nonFoodItems array (line 14-16):**
+- "Toothpaste"
 
 ---
 
 ## Files Changed
-- `src/pages/MemberSignUp.tsx` - Add import for `Link` and insert the new registration link block
+- `src/components/MainNavigation.tsx` - Update Stokvel Services to include Fun & Games sub-items, remove standalone Fun & Games dropdown
+- `src/pages/services/GroceriesPage.tsx` - Add 3 new grocery items
+
