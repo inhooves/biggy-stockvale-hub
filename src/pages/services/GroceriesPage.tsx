@@ -8,12 +8,13 @@ import groceriesHeroImage from "@/assets/groceries-hero.jpeg";
 export default function GroceriesPage() {
   const foodItems = [
     "Rice", "Spaghetti", "Macaroni", "Corn mealie meal", "Beans", "Flour",
-    "Peanut butter", "Jam", "Cooking Oil", "Sugar", "Salt", "Dilutable Juice"
+    "Peanut butter", "Jam", "Cooking Oil", "Sugar", "Salt", "Dilutable Juice",
+    "Rooibos Teabags", "Packaged Soups (e.g. Royco)"
   ];
 
   const nonFoodItems = [
     "Washing Powder", "Dish washing liquid soap", "Green/Blue Bar soap",
-    "Toilet Cleaner", "Scouring Powder (Vim)", "Sta Soft"
+    "Toilet Cleaner", "Scouring Powder (Vim)", "Sta Soft", "Toothpaste"
   ];
 
   const timeline = [
