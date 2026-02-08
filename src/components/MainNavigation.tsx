@@ -24,9 +24,11 @@ const navItems = [
       { name: "Biggy Savings Club", path: "/services/savings" },
       { name: "Biggy Investments Club", path: "/services/investments" },
       { name: "Biggy Crowd Funding", path: "/services/crowdfunding" },
+      { name: "--- Biggy Fun & Games ---", path: "", isHeader: true },
+      { name: "Biggy Fun Day", path: "/fun/funday" },
+      { name: "Biggy Do or Die", path: "/fun/doordie" },
     ]
   },
-   { name: "Biggy Fun & Games", path: "/fun" },
   { name: "Constitution", path: "/constitution" },
   { name: "Benefits", path: "/benefits" },
   { name: "Contact Us", path: "/contact" },
@@ -128,14 +130,20 @@ export function MainNavigation() {
                   <div key={item.name} className="space-y-1">
                     <span className="px-3 py-2 text-sm font-medium text-muted-foreground">{item.name}</span>
                     {item.subItems.map((subItem) => (
-                      <Link
-                        key={subItem.path}
-                        to={subItem.path}
-                        className="block px-6 py-2 text-sm hover:bg-muted rounded-md"
-                        onClick={() => setMobileMenuOpen(false)}
-                      >
-                        {subItem.name}
-                      </Link>
+                      (subItem as any).isHeader ? (
+                        <div key={subItem.name} className="px-6 py-1.5 text-xs font-semibold text-muted-foreground border-t mt-2 pt-2">
+                          {subItem.name.replace(/---/g, '').trim()}
+                        </div>
+                      ) : (
+                        <Link
+                          key={subItem.path}
+                          to={subItem.path}
+                          className="block px-8 py-2 text-sm hover:bg-muted rounded-md"
+                          onClick={() => setMobileMenuOpen(false)}
+                        >
+                          {subItem.name}
+                        </Link>
+                      )
                     ))}
                   </div>
                 ) : (
