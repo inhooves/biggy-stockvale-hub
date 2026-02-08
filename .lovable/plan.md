@@ -1,67 +1,25 @@
 
-# Update Mama Biggy Profile, Fun & Games Navigation, and Dashboard Settings
+# Move "Biggy Fun & Games" Under "Stokvel Services" as a Nested Submenu
 
 ## Overview
-Three changes are requested:
-1. Replace the existing Mama Biggy avatar with the new uploaded image
-2. Make "Fun & Games" a parent section in the navigation with "Biggy Fun Day" and "Biggy Do or Die" as side panel options (not dropdowns)
-3. Add settings icon to all dashboards (Admin, Agent, Member) and remove "Admin Panel" from the SettingsDropdown
+Move "Biggy Fun & Games" from being a standalone top-level nav item into the "Stokvel Services" dropdown, with "Biggy Fun Day" and "Biggy Do or Die" as its sub-options.
 
----
+## Changes (single file)
 
-## Changes
+### `src/components/MainNavigation.tsx`
 
-### 1. Update Mama Biggy Avatar
-**File:** `src/assets/` - Copy uploaded image as new Mama Biggy profile
+**1. Update the `navItems` array:**
+- Remove the standalone `{ name: "Biggy Fun & Games", path: "/fun" }` entry (line 29)
+- Add a "--- Biggy Fun & Games ---" header entry plus two sub-items to the Stokvel Services `subItems` array:
+  - `{ name: "--- Biggy Fun & Games ---", isHeader: true }` (visual separator/label)
+  - `{ name: "Biggy Fun Day", path: "/fun/funday" }`
+  - `{ name: "Biggy Do or Die", path: "/fun/doordie" }`
 
-The uploaded image (user-uploads://image-3.png) will replace the existing Mama Biggy avatar used in `AIChatbot.tsx`. The image will be copied to `src/assets/mama-biggy-profile.png` and imported in the chatbot component.
+**2. Update mobile navigation rendering:**
+- Add handling for `isHeader` items in the mobile menu so the "Biggy Fun & Games" label appears as a styled sub-header with its two children indented further beneath it
 
-**File:** `src/components/AIChatbot.tsx`
-- Update the import to use the new profile image for Mama Biggy
+**Result on desktop:** The "Stokvel Services" dropdown will show the five existing services, then a separator line with "Biggy Fun & Games" as a category label, followed by "Biggy Fun Day" and "Biggy Do or Die" as clickable links.
 
----
+**Result on mobile:** Same hierarchical structure -- services listed, then "Biggy Fun & Games" as a label with the two options indented below.
 
-### 2. Update Navigation Structure for Fun & Games
-**File:** `src/components/MainNavigation.tsx`
-
-Currently "Biggy Fun & Games" appears as a header with two dropdown items underneath it within the Stokvel Services dropdown.
-
-**New approach:** Create a dedicated "Biggy Fun & Games" navigation item that leads to a page with side panel navigation showing "Biggy Fun Day" and "Biggy Do or Die" options.
-
-Update the navItems array:
-- Remove the "Biggy Fun & Games" header and its sub-items from Stokvel Services
-- Add a new standalone "Biggy Fun & Games" nav item that links to `/fun` which will display a page with side panels
-
-**New File:** `src/pages/fun/FunGamesPage.tsx`
-- Create a new parent page for Fun & Games
-- Include side panel navigation with links to:
-  - Biggy Fun Day (/fun/funday)
-  - Biggy Do or Die (/fun/doordie)
-- Display content based on selected panel
-
-**File:** `src/App.tsx`
-- Add route for `/fun` to FunGamesPage
-
----
-
-### 3. Add Settings Icon to Dashboards & Remove Admin Panel from Settings
-
-**Files to update:**
-- `src/pages/AdminDashboard.tsx` - Add SettingsDropdown in header
-- `src/pages/AgentDashboard.tsx` - Add SettingsDropdown in header
-- `src/pages/MemberDashboard.tsx` - Already has MemberSettingsDropdown
-
-**File:** `src/components/SettingsDropdown.tsx`
-- Remove the "Admin Panel" menu item (lines 183-186)
-
----
-
-## Files Changed
-1. Copy `user-uploads://image-3.png` to `src/assets/mama-biggy-profile.png`
-2. `src/components/AIChatbot.tsx` - Update avatar import
-3. `src/components/MainNavigation.tsx` - Update navItems to add standalone Fun & Games link
-4. `src/pages/fun/FunGamesPage.tsx` - New page with side panel navigation
-5. `src/App.tsx` - Add /fun route
-6. `src/pages/AdminDashboard.tsx` - Add SettingsDropdown
-7. `src/pages/AgentDashboard.tsx` - Add SettingsDropdown
-8. `src/components/SettingsDropdown.tsx` - Remove Admin Panel item
+The existing `isHeader` rendering logic (lines 69-72) already handles header-style items in the desktop dropdown, so only minor additions are needed.
