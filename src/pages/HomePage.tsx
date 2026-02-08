@@ -55,7 +55,7 @@ export default function HomePage() {
           </div>
           <div className="mt-8 flex flex-col sm:flex-row gap-4 justify-center">
             <Button size="sm" variant="ghost" asChild className="text-muted-foreground hover:text-primary">
-              <Link to="/agent/dashboard" className="flex items-center gap-2">
+              <Link to="/agent" className="flex items-center gap-2">
                 <UserCheck className="h-4 w-4" />
                 Agent Portal
               </Link>
