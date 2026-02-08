@@ -8,6 +8,9 @@ import {
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
+  DropdownMenuSub,
+  DropdownMenuSubTrigger,
+  DropdownMenuSubContent,
 } from "@/components/ui/dropdown-menu";
 import Logo from "./Logo";
 
@@ -24,16 +27,45 @@ const navItems = [
       { name: "Biggy Savings Club", path: "/services/savings" },
       { name: "Biggy Investments Club", path: "/services/investments" },
       { name: "Biggy Crowd Funding", path: "/services/crowdfunding" },
-      { name: "--- Biggy Fun & Games ---", path: "", isHeader: true },
-      { name: "Biggy Fun Day", path: "/fun/funday" },
-      { name: "Biggy Do or Die", path: "/fun/doordie" },
-    ]
+    ],
+    subMenu: {
+      name: "Biggy Fun & Games",
+      items: [
+        { name: "Biggy Fun Day", path: "/fun/funday" },
+        { name: "Biggy Do or Die", path: "/fun/doordie" },
+      ]
+    }
   },
   { name: "Constitution", path: "/constitution" },
   { name: "Benefits", path: "/benefits" },
   { name: "Contact Us", path: "/contact" },
   { name: "Biggy Market Place", path: "/marketplace" },
 ];
+
+function MobileSubMenu({ subMenu, onNavigate }: { subMenu: { name: string; items: { name: string; path: string }[] }; onNavigate: () => void }) {
+  const [open, setOpen] = useState(false);
+  return (
+    <div className="border-t border-border mt-1 pt-1">
+      <button
+        onClick={() => setOpen(!open)}
+        className="flex items-center justify-between w-full px-6 py-2 text-sm font-medium text-muted-foreground hover:bg-muted rounded-md"
+      >
+        {subMenu.name}
+        <ChevronDown className={`h-3 w-3 transition-transform ${open ? 'rotate-180' : ''}`} />
+      </button>
+      {open && subMenu.items.map((sub) => (
+        <Link
+          key={sub.path}
+          to={sub.path}
+          className="block px-10 py-2 text-sm hover:bg-muted rounded-md"
+          onClick={onNavigate}
+        >
+          {sub.name}
+        </Link>
+      ))}
+    </div>
+  );
+}
 
 export function MainNavigation() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -68,16 +100,24 @@ export function MainNavigation() {
                   </DropdownMenuTrigger>
                   <DropdownMenuContent align="center">
                     {item.subItems.map((subItem) => (
-                      (subItem as any).isHeader ? (
-                        <div key={subItem.name} className="px-2 py-1.5 text-xs font-semibold text-muted-foreground border-t mt-1 pt-2">
-                          {subItem.name.replace(/---/g, '').trim()}
-                        </div>
-                      ) : (
-                        <DropdownMenuItem key={subItem.path} asChild>
-                          <Link to={subItem.path}>{subItem.name}</Link>
-                        </DropdownMenuItem>
-                      )
+                      <DropdownMenuItem key={subItem.path} asChild>
+                        <Link to={subItem.path}>{subItem.name}</Link>
+                      </DropdownMenuItem>
                     ))}
+                    {(item as any).subMenu && (
+                      <DropdownMenuSub>
+                        <DropdownMenuSubTrigger className="cursor-pointer">
+                          {(item as any).subMenu.name}
+                        </DropdownMenuSubTrigger>
+                        <DropdownMenuSubContent>
+                          {(item as any).subMenu.items.map((sub: { name: string; path: string }) => (
+                            <DropdownMenuItem key={sub.path} asChild>
+                              <Link to={sub.path}>{sub.name}</Link>
+                            </DropdownMenuItem>
+                          ))}
+                        </DropdownMenuSubContent>
+                      </DropdownMenuSub>
+                    )}
                   </DropdownMenuContent>
                 </DropdownMenu>
               ) : (
@@ -130,21 +170,21 @@ export function MainNavigation() {
                   <div key={item.name} className="space-y-1">
                     <span className="px-3 py-2 text-sm font-medium text-muted-foreground">{item.name}</span>
                     {item.subItems.map((subItem) => (
-                      (subItem as any).isHeader ? (
-                        <div key={subItem.name} className="px-6 py-1.5 text-xs font-semibold text-muted-foreground border-t mt-2 pt-2">
-                          {subItem.name.replace(/---/g, '').trim()}
-                        </div>
-                      ) : (
-                        <Link
-                          key={subItem.path}
-                          to={subItem.path}
-                          className="block px-8 py-2 text-sm hover:bg-muted rounded-md"
-                          onClick={() => setMobileMenuOpen(false)}
-                        >
-                          {subItem.name}
-                        </Link>
-                      )
+                      <Link
+                        key={subItem.path}
+                        to={subItem.path}
+                        className="block px-6 py-2 text-sm hover:bg-muted rounded-md"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
+                        {subItem.name}
+                      </Link>
                     ))}
+                    {(item as any).subMenu && (
+                      <MobileSubMenu
+                        subMenu={(item as any).subMenu}
+                        onNavigate={() => setMobileMenuOpen(false)}
+                      />
+                    )}
                   </div>
                 ) : (
                   <Link
