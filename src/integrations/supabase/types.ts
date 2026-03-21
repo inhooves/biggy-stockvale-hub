@@ -231,27 +231,18 @@ export type Database = {
       }
     }
     Views: {
-      registered_members_summary: {
-        Row: {
-          id: string | null
-          name: string | null
-          surname: string | null
-        }
-        Insert: {
-          id?: string | null
-          name?: string | null
-          surname?: string | null
-        }
-        Update: {
-          id?: string | null
-          name?: string | null
-          surname?: string | null
-        }
-        Relationships: []
-      }
+      [_ in never]: never
     }
     Functions: {
       get_agent_id: { Args: { _user_id: string }; Returns: string }
+      get_registered_members_summary: {
+        Args: never
+        Returns: {
+          id: string
+          name: string
+          surname: string
+        }[]
+      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]
