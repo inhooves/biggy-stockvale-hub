@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
+// Import all service images
 import groceriesBag from '@/assets/groceries-bag.jpeg';
 import burialSupport from '@/assets/burial-support.jpeg';
 import savingsJar from '@/assets/savings-jar.jpeg';
@@ -21,12 +22,12 @@ const serviceImages = [
   { src: investmentGrowth, alt: 'Biggy Investments - Financial growth', link: '/services/investments' },
 ];
 
+// Duplicate images for seamless loop
 const duplicatedImages = [...serviceImages, ...serviceImages];
 
 export function ServiceImageSlideshow() {
   return (
-    <section className="py-10 md:py-14 overflow-hidden relative">
-      <div className="absolute inset-0 bg-gradient-to-r from-background via-transparent to-background z-10 pointer-events-none" />
+    <section className="py-8 md:py-12 bg-muted/30 overflow-hidden">
       <div className="relative w-full">
         <div className="flex animate-scroll-slow hover:pause-animation">
           {duplicatedImages.map((image, index) => (
@@ -35,11 +36,11 @@ export function ServiceImageSlideshow() {
               to={image.link}
               className="flex-shrink-0 w-[264px] md:w-[370px] lg:w-[422px] px-3"
             >
-              <div className="aspect-square overflow-hidden rounded-2xl shadow-lg cursor-pointer group">
+              <div className="aspect-square overflow-hidden rounded-lg shadow-md cursor-pointer">
                 <img
                   src={image.src}
                   alt={image.alt}
-                  className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-110"
+                  className="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
                 />
               </div>
             </Link>
