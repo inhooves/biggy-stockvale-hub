@@ -31,6 +31,7 @@ import MemberLogin from "./pages/MemberLogin";
 import MemberSignUp from "./pages/MemberSignUp";
 import AuthEntryPage from "./pages/AuthEntryPage";
 import { AIChatbot } from "./components/AIChatbot";
+import { PageIntro } from "./components/PageIntro";
 
 const queryClient = new QueryClient();
 
@@ -40,6 +41,7 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
+        <PageIntro />
         <Routes>
           {/* Main Pages */}
           <Route path="/" element={<Index />} />
