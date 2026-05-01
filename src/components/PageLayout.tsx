@@ -3,6 +3,7 @@ import { MainNavigation } from "./MainNavigation";
 import { Link } from "react-router-dom";
 import { ServiceImageSlideshow } from "./ServiceImageSlideshow";
 import Logo from "./Logo";
+import { PageIntro } from "./PageIntro";
 
 interface PageLayoutProps {
   children: ReactNode;
@@ -11,6 +12,7 @@ interface PageLayoutProps {
 export function PageLayout({ children }: PageLayoutProps) {
   return (
     <div className="min-h-screen bg-background flex flex-col">
+      <PageIntro />
       <MainNavigation />
       {/* Logo Section - appears on all pages */}
       <div className="container mx-auto px-4 py-4">
