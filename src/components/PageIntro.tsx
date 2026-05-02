@@ -85,27 +85,36 @@ export function PageIntro() {
 
           {/* Bag wrapper — slides smoothly from above the viewport to below */}
           <motion.div
-            initial={{ top: "-30vh", x: "-50%", rotate: -3 }}
+            initial={{ top: "-16vh", x: "-50%", rotate: -4, scale: 1.08, opacity: 1 }}
             animate={{
-              top: ["-30vh", "35vh", "100vh"],
-              rotate: [-3, 3, -1],
-              x: ["-50%", "-48%", "-50%"],
+              top: ["-16vh", "30vh", "92vh"],
+              rotate: [-4, 4, -2],
+              x: ["-50%", "-45%", "-50%"],
+              scale: [1.08, 1.14, 1.02],
             }}
             transition={{
               duration: DURATION,
               ease: EASE,
               times: [0, 0.5, 1],
             }}
-            className="absolute left-1/2 z-10 will-change-transform"
+            className="absolute left-1/2 z-[120] will-change-transform"
             style={{ transformOrigin: "center center" }}
           >
+            <span
+              className="absolute inset-0 -z-10 rounded-full blur-2xl"
+              style={{
+                background:
+                  "radial-gradient(circle, hsl(var(--accent) / 0.55) 0%, hsl(var(--primary) / 0.35) 42%, transparent 72%)",
+                transform: "scale(1.2)",
+              }}
+            />
             <img
               src={groceryBag}
               alt=""
-              className="h-[28vh] max-h-[260px] w-auto object-contain select-none"
+              className="h-[34vh] min-h-[168px] max-h-[300px] w-auto object-contain select-none"
               style={{
                 filter:
-                  "drop-shadow(0 18px 28px hsl(245 70% 6% / 0.65)) drop-shadow(0 0 24px hsl(var(--primary) / 0.7)) drop-shadow(0 0 8px hsl(var(--accent) / 0.4))",
+                  "drop-shadow(0 24px 34px hsl(var(--background) / 0.82)) drop-shadow(0 0 28px hsl(var(--accent) / 0.82)) drop-shadow(0 0 18px hsl(var(--primary-foreground) / 0.55))",
               }}
               draggable={false}
             />
