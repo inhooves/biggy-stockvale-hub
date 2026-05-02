@@ -37,31 +37,35 @@ export function PageIntro() {
           className="fixed inset-0 z-[100] pointer-events-none overflow-hidden"
           aria-hidden="true"
         >
-          {/* LEFT purple panel — zips open by sliding leftward */}
+          {/* LEFT purple panel — zips open with a sculpted zipper edge */}
           <motion.div
-            initial={{ x: 0 }}
-            animate={{ x: "-100%" }}
+            initial={{ x: 0, skewX: -1 }}
+            animate={{ x: "-108%", skewX: -4 }}
             transition={{ duration: DURATION, ease: EASE }}
-            className="absolute inset-y-0 left-0 w-1/2"
+            className="absolute inset-y-0 left-0 w-[56vw]"
             style={{
+              clipPath:
+                "polygon(0 0, 100% 0, 91% 13%, 99% 27%, 88% 44%, 98% 62%, 90% 79%, 100% 100%, 0 100%)",
               background:
-                "linear-gradient(120deg, hsl(245 60% 14%) 0%, hsl(var(--primary) / 0.95) 60%, hsl(245 50% 22%) 100%)",
+                "radial-gradient(circle at 88% 24%, hsl(var(--accent) / 0.28), transparent 24%), linear-gradient(125deg, hsl(var(--background)) 0%, hsl(var(--primary) / 0.96) 58%, hsl(var(--secondary)) 100%)",
               boxShadow:
-                "inset -1px 0 0 hsl(var(--accent) / 0.6), inset -8px 0 24px hsl(var(--primary) / 0.5)",
+                "inset -10px 0 28px hsl(var(--accent) / 0.28), inset -34px 0 70px hsl(var(--primary) / 0.45)",
             }}
           />
 
-          {/* RIGHT purple panel — zips open by sliding rightward */}
+          {/* RIGHT purple panel — zips open with a sculpted zipper edge */}
           <motion.div
-            initial={{ x: 0 }}
-            animate={{ x: "100%" }}
+            initial={{ x: 0, skewX: 1 }}
+            animate={{ x: "108%", skewX: 4 }}
             transition={{ duration: DURATION, ease: EASE }}
-            className="absolute inset-y-0 right-0 w-1/2"
+            className="absolute inset-y-0 right-0 w-[56vw]"
             style={{
+              clipPath:
+                "polygon(0 0, 100% 0, 100% 100%, 0 100%, 10% 79%, 2% 62%, 12% 44%, 1% 27%, 9% 13%)",
               background:
-                "linear-gradient(-120deg, hsl(245 60% 14%) 0%, hsl(var(--primary) / 0.95) 60%, hsl(245 50% 22%) 100%)",
+                "radial-gradient(circle at 12% 72%, hsl(var(--accent) / 0.28), transparent 25%), linear-gradient(-125deg, hsl(var(--background)) 0%, hsl(var(--primary) / 0.96) 58%, hsl(var(--secondary)) 100%)",
               boxShadow:
-                "inset 1px 0 0 hsl(var(--accent) / 0.6), inset 8px 0 24px hsl(var(--primary) / 0.5)",
+                "inset 10px 0 28px hsl(var(--accent) / 0.28), inset 34px 0 70px hsl(var(--primary) / 0.45)",
             }}
           />
 
