@@ -81,10 +81,10 @@ export function PageIntro() {
 
           {/* Bag wrapper — slides smoothly from above the viewport to below */}
           <motion.div
-            initial={{ y: "-25vh", x: "-50%", rotate: -2 }}
+            initial={{ top: "-30vh", x: "-50%", rotate: -3 }}
             animate={{
-              y: ["-25vh", "40vh", "115vh"],
-              rotate: [-2, 2, -1],
+              top: ["-30vh", "35vh", "100vh"],
+              rotate: [-3, 3, -1],
               x: ["-50%", "-48%", "-50%"],
             }}
             transition={{
@@ -92,7 +92,7 @@ export function PageIntro() {
               ease: EASE,
               times: [0, 0.5, 1],
             }}
-            className="absolute left-1/2 top-0 will-change-transform"
+            className="absolute left-1/2 z-10 will-change-transform"
             style={{ transformOrigin: "center center" }}
           >
             <img
