@@ -18,12 +18,12 @@ export function PageIntro() {
   useEffect(() => {
     setKey(pathname);
     setShow(true);
-    const t = setTimeout(() => setShow(false), 1700);
+    const t = setTimeout(() => setShow(false), 2250);
     return () => clearTimeout(t);
   }, [pathname]);
 
   // Shared duration & easing so panels and bag stay perfectly in sync
-  const DURATION = 1.5;
+  const DURATION = 2;
   const EASE = [0.65, 0, 0.35, 1] as const;
 
   return (
@@ -85,9 +85,9 @@ export function PageIntro() {
 
           {/* Bag wrapper — slides smoothly from above the viewport to below */}
           <motion.div
-            initial={{ top: "-16vh", x: "-50%", rotate: -4, scale: 1.08, opacity: 1 }}
+            initial={{ top: "4vh", x: "-50%", rotate: -4, scale: 1.08, opacity: 1 }}
             animate={{
-              top: ["-16vh", "30vh", "92vh"],
+              top: ["4vh", "34vh", "88vh"],
               rotate: [-4, 4, -2],
               x: ["-50%", "-45%", "-50%"],
               scale: [1.08, 1.14, 1.02],
@@ -107,6 +107,10 @@ export function PageIntro() {
                   "radial-gradient(circle, hsl(var(--accent) / 0.55) 0%, hsl(var(--primary) / 0.35) 42%, transparent 72%)",
                 transform: "scale(1.2)",
               }}
+            />
+            <span
+              className="absolute inset-x-4 -top-2 -z-10 h-8 rounded-full blur-md"
+              style={{ background: "hsl(var(--accent) / 0.85)" }}
             />
             <img
               src={groceryBag}
