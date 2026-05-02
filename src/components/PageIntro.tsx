@@ -83,11 +83,11 @@ export function PageIntro() {
             }}
           />
 
-          {/* Bag wrapper — slides smoothly from above the viewport to below */}
+          {/* Bag wrapper — fixed above all panels so the package remains unmistakable */}
           <motion.div
-            initial={{ top: "4vh", x: "-50%", rotate: -4, scale: 1.08, opacity: 1 }}
+            initial={{ y: "-6vh", x: "-50%", rotate: -4, scale: 1.08, opacity: 1 }}
             animate={{
-              top: ["4vh", "34vh", "88vh"],
+              y: ["-6vh", "32vh", "86vh"],
               rotate: [-4, 4, -2],
               x: ["-50%", "-45%", "-50%"],
               scale: [1.08, 1.14, 1.02],
@@ -97,7 +97,7 @@ export function PageIntro() {
               ease: EASE,
               times: [0, 0.5, 1],
             }}
-            className="absolute left-1/2 z-[120] will-change-transform"
+            className="fixed left-1/2 top-0 z-[10000] grid place-items-center will-change-transform"
             style={{ transformOrigin: "center center" }}
           >
             <span
@@ -112,10 +112,19 @@ export function PageIntro() {
               className="absolute inset-x-4 -top-2 -z-10 h-8 rounded-full blur-md"
               style={{ background: "hsl(var(--accent) / 0.85)" }}
             />
+            <span
+              className="absolute top-[12%] h-[68%] w-[58%] rounded-b-[18%] rounded-t-[30%] border-2"
+              style={{
+                background:
+                  "linear-gradient(155deg, hsl(34 73% 64%), hsl(30 61% 39%) 58%, hsl(24 58% 25%))",
+                borderColor: "hsl(var(--accent) / 0.85)",
+                boxShadow: "0 0 24px hsl(var(--accent) / 0.45)",
+              }}
+            />
             <img
               src={groceryBag}
               alt=""
-              className="h-[34vh] min-h-[168px] max-h-[300px] w-auto object-contain select-none"
+              className="relative z-10 h-[38vh] min-h-[210px] max-h-[340px] w-auto object-contain select-none"
               style={{
                 filter:
                   "drop-shadow(0 24px 34px hsl(var(--background) / 0.82)) drop-shadow(0 0 28px hsl(var(--accent) / 0.82)) drop-shadow(0 0 18px hsl(var(--primary-foreground) / 0.55))",
