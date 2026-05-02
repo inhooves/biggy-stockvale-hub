@@ -97,7 +97,7 @@ export function PageIntro() {
               ease: EASE,
               times: [0, 0.5, 1],
             }}
-            className="fixed left-1/2 top-0 z-[10000] grid place-items-center will-change-transform"
+            className="fixed left-1/2 top-0 z-[10000] h-[34vh] min-h-[210px] max-h-[320px] aspect-square will-change-transform"
             style={{ transformOrigin: "center center" }}
           >
             <span
@@ -113,7 +113,7 @@ export function PageIntro() {
               style={{ background: "hsl(var(--accent) / 0.85)" }}
             />
             <span
-              className="absolute top-[12%] h-[68%] w-[58%] rounded-b-[18%] rounded-t-[30%] border-2"
+              className="absolute left-1/2 top-[17%] z-10 h-[68%] w-[58%] -translate-x-1/2 rounded-b-[18%] rounded-t-[30%] border-2"
               style={{
                 background:
                   "linear-gradient(155deg, hsl(34 73% 64%), hsl(30 61% 39%) 58%, hsl(24 58% 25%))",
@@ -121,10 +121,15 @@ export function PageIntro() {
                 boxShadow: "0 0 24px hsl(var(--accent) / 0.45)",
               }}
             />
+            <span className="absolute left-[29%] top-[6%] z-20 h-[28%] w-[14%] rounded-t-full border-[5px] border-b-0 border-[hsl(var(--accent))]" />
+            <span className="absolute right-[29%] top-[6%] z-20 h-[28%] w-[14%] rounded-t-full border-[5px] border-b-0 border-[hsl(var(--accent))]" />
+            <span className="absolute left-[30%] top-[42%] z-20 h-[11%] w-[11%] rounded-full bg-[hsl(var(--accent))] shadow-[0_0_14px_hsl(var(--accent)/0.8)]" />
+            <span className="absolute left-[43%] top-[35%] z-20 h-[13%] w-[13%] rounded-full bg-[hsl(var(--primary-foreground))] shadow-[0_0_14px_hsl(var(--primary-foreground)/0.55)]" />
+            <span className="absolute right-[29%] top-[40%] z-20 h-[12%] w-[12%] rounded-full bg-[hsl(38_95%_65%)] shadow-[0_0_14px_hsl(38_95%_65%/0.7)]" />
             <img
               src={groceryBag}
               alt=""
-              className="relative z-10 h-[38vh] min-h-[210px] max-h-[340px] w-auto object-contain select-none"
+              className="absolute inset-0 z-30 h-full w-full object-contain select-none opacity-95"
               style={{
                 filter:
                   "drop-shadow(0 24px 34px hsl(var(--background) / 0.82)) drop-shadow(0 0 28px hsl(var(--accent) / 0.82)) drop-shadow(0 0 18px hsl(var(--primary-foreground) / 0.55))",
