@@ -262,36 +262,38 @@ const MemberSignUp = () => {
   const onLogin = async (data: LoginFormData) => {
     setIsSubmitting(true);
     try {
-      // Use edge function to securely look up username -> email mapping
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const response = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'lookup-username', 
-          username: data.username 
+        body: JSON.stringify({
+          action: 'login-with-username',
+          username: data.username,
+          password: data.password,
         }),
       });
 
-      const lookupResult = await response.json();
+      const result = await response.json();
 
-      if (!response.ok || lookupResult.error) {
+      if (!response.ok || !result.session) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password.',
+          description: result?.error || 'Invalid username or password.',
           variant: 'destructive',
         });
         setIsSubmitting(false);
         return;
       }
 
-      // Sign in with email and password
-      const { error } = await signIn(lookupResult.email, data.password);
+      const { error: setErr } = await supabase.auth.setSession({
+        access_token: result.session.access_token,
+        refresh_token: result.session.refresh_token,
+      });
 
-      if (error) {
+      if (setErr) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password.',
+          description: 'Could not establish session. Please try again.',
           variant: 'destructive',
         });
       } else {
