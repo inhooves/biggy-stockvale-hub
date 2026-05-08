@@ -235,14 +235,6 @@ export type Database = {
     }
     Functions: {
       get_agent_id: { Args: { _user_id: string }; Returns: string }
-      get_registered_members_summary: {
-        Args: never
-        Returns: {
-          id: string
-          name: string
-          surname: string
-        }[]
-      }
       has_role: {
         Args: {
           _role: Database["public"]["Enums"]["app_role"]

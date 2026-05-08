@@ -28,13 +28,9 @@ interface MemberDetails {
   id: string;
   name: string;
   surname: string | null;
-  email: string | null;
-  phone: string;
-  id_number: string | null;
-  gender: string | null;
-  address: string | null;
-  city: string | null;
-  date_of_birth: string | null;
+  email: string | null; // masked
+  phone: string | null; // masked (last 4)
+  id_number: string | null; // masked (first 2)
 }
 
 const signUpSchema = z.object({
@@ -144,7 +140,7 @@ const MemberSignUp = () => {
       }
 
       setMemberDetails(result.member);
-      signUpForm.setValue('email', result.member.email || lookupEmail);
+      signUpForm.setValue('email', lookupEmail.trim().toLowerCase());
       setStep('verify');
     } catch (error) {
       console.error('Lookup error:', error);
@@ -266,36 +262,38 @@ const MemberSignUp = () => {
   const onLogin = async (data: LoginFormData) => {
     setIsSubmitting(true);
     try {
-      // Use edge function to securely look up username -> email mapping
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const response = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'lookup-username', 
-          username: data.username 
+        body: JSON.stringify({
+          action: 'login-with-username',
+          username: data.username,
+          password: data.password,
         }),
       });
 
-      const lookupResult = await response.json();
+      const result = await response.json();
 
-      if (!response.ok || lookupResult.error) {
+      if (!response.ok || !result.session) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password.',
+          description: result?.error || 'Invalid username or password.',
           variant: 'destructive',
         });
         setIsSubmitting(false);
         return;
       }
 
-      // Sign in with email and password
-      const { error } = await signIn(lookupResult.email, data.password);
+      const { error: setErr } = await supabase.auth.setSession({
+        access_token: result.session.access_token,
+        refresh_token: result.session.refresh_token,
+      });
 
-      if (error) {
+      if (setErr) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password.',
+          description: 'Could not establish session. Please try again.',
           variant: 'destructive',
         });
       } else {
@@ -452,32 +450,21 @@ const MemberSignUp = () => {
                           <p className="font-medium">{memberDetails.name} {memberDetails.surname || ''}</p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Gender:</span>
-                          <p className="font-medium">{memberDetails.gender || 'Not provided'}</p>
-                        </div>
-                        <div>
                           <span className="text-muted-foreground">Email:</span>
                           <p className="font-medium">{memberDetails.email || 'Not provided'}</p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Phone:</span>
-                          <p className="font-medium">{memberDetails.phone}</p>
+                          <p className="font-medium">{memberDetails.phone || 'Not provided'}</p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">ID Number:</span>
                           <p className="font-medium">{memberDetails.id_number || 'Not provided'}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Date of Birth:</span>
-                          <p className="font-medium">{formatDate(memberDetails.date_of_birth)}</p>
-                        </div>
-                        <div className="col-span-2">
-                          <span className="text-muted-foreground">Address:</span>
-                          <p className="font-medium">
-                            {memberDetails.address ? `${memberDetails.address}${memberDetails.city ? `, ${memberDetails.city}` : ''}` : 'Not provided'}
-                          </p>
-                        </div>
                       </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Some details are masked for your privacy. Full details are available after signing in.
+                      </p>
                     </CardContent>
                   </Card>
 
