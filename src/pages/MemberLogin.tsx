@@ -43,48 +43,47 @@ const MemberLogin = () => {
 
     try {
       const validatedData = loginSchema.parse(formData);
-      
-      // Use edge function to securely look up username -> email mapping
+
+      // Server-side authentication: edge function performs sign-in and returns a session.
+      // The member's email is never sent to the client.
       const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
       const response = await fetch(`${supabaseUrl}/functions/v1/member-auth`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ 
-          action: 'lookup-username', 
-          username: validatedData.username 
+        body: JSON.stringify({
+          action: 'login-with-username',
+          username: validatedData.username,
+          password: validatedData.password,
         }),
       });
 
-      const lookupResult = await response.json();
+      const result = await response.json();
 
-      if (!response.ok || lookupResult.error) {
+      if (!response.ok || !result.session) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password.',
+          description: result?.error || 'Invalid username or password.',
           variant: 'destructive',
         });
         setIsSubmitting(false);
         return;
       }
 
-      const { email, name } = lookupResult;
-
-      // Sign in with Supabase Auth using email and password
-      const { error: authError } = await supabase.auth.signInWithPassword({
-        email,
-        password: validatedData.password,
+      const { error: setErr } = await supabase.auth.setSession({
+        access_token: result.session.access_token,
+        refresh_token: result.session.refresh_token,
       });
 
-      if (authError) {
+      if (setErr) {
         toast({
           title: 'Login Failed',
-          description: 'Invalid username or password.',
+          description: 'Could not establish session. Please try again.',
           variant: 'destructive',
         });
       } else {
         toast({
           title: 'Welcome Back!',
-          description: `Hello ${name}, you are now logged in.`,
+          description: `Hello ${result.name || ''}, you are now logged in.`,
         });
         navigate('/member/dashboard');
       }
