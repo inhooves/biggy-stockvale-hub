@@ -140,7 +140,7 @@ const MemberSignUp = () => {
       }
 
       setMemberDetails(result.member);
-      signUpForm.setValue('email', result.member.email || lookupEmail);
+      signUpForm.setValue('email', lookupEmail.trim().toLowerCase());
       setStep('verify');
     } catch (error) {
       console.error('Lookup error:', error);
