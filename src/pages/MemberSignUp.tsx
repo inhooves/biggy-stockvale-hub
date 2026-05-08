@@ -448,32 +448,21 @@ const MemberSignUp = () => {
                           <p className="font-medium">{memberDetails.name} {memberDetails.surname || ''}</p>
                         </div>
                         <div>
-                          <span className="text-muted-foreground">Gender:</span>
-                          <p className="font-medium">{memberDetails.gender || 'Not provided'}</p>
-                        </div>
-                        <div>
                           <span className="text-muted-foreground">Email:</span>
                           <p className="font-medium">{memberDetails.email || 'Not provided'}</p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">Phone:</span>
-                          <p className="font-medium">{memberDetails.phone}</p>
+                          <p className="font-medium">{memberDetails.phone || 'Not provided'}</p>
                         </div>
                         <div>
                           <span className="text-muted-foreground">ID Number:</span>
                           <p className="font-medium">{memberDetails.id_number || 'Not provided'}</p>
                         </div>
-                        <div>
-                          <span className="text-muted-foreground">Date of Birth:</span>
-                          <p className="font-medium">{formatDate(memberDetails.date_of_birth)}</p>
-                        </div>
-                        <div className="col-span-2">
-                          <span className="text-muted-foreground">Address:</span>
-                          <p className="font-medium">
-                            {memberDetails.address ? `${memberDetails.address}${memberDetails.city ? `, ${memberDetails.city}` : ''}` : 'Not provided'}
-                          </p>
-                        </div>
                       </div>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        Some details are masked for your privacy. Full details are available after signing in.
+                      </p>
                     </CardContent>
                   </Card>
 
