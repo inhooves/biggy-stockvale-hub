@@ -28,13 +28,9 @@ interface MemberDetails {
   id: string;
   name: string;
   surname: string | null;
-  email: string | null;
-  phone: string;
-  id_number: string | null;
-  gender: string | null;
-  address: string | null;
-  city: string | null;
-  date_of_birth: string | null;
+  email: string | null; // masked
+  phone: string | null; // masked (last 4)
+  id_number: string | null; // masked (first 2)
 }
 
 const signUpSchema = z.object({
