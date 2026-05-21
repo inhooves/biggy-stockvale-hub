@@ -78,7 +78,13 @@ export default function ContactPage() {
                 <CardContent>
                   <div className="space-y-3 md:space-y-4">
                     {contactNumbers.map((contact) => (
-                      <div key={contact.number} className="flex items-center gap-2 md:gap-3 text-sm md:text-base">
+                      <a
+                        key={contact.number}
+                        href={contact.waLink}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-center gap-2 md:gap-3 text-sm md:text-base hover:text-primary transition-colors"
+                      >
                         <span>{contact.number}</span>
                         {contact.hasWhatsApp && (
                           <div className="flex gap-1.5 md:gap-2">
@@ -86,7 +92,7 @@ export default function ContactPage() {
                             <MessageCircle className="h-3.5 w-3.5 md:h-4 md:w-4 text-green-500" />
                           </div>
                         )}
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </CardContent>
