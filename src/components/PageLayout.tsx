@@ -41,9 +41,9 @@ export function PageLayout({ children }: PageLayoutProps) {
               <h4 className="font-semibold text-sm md:text-base mb-3 md:mb-4">Contact</h4>
               <div className="flex flex-col gap-1.5 md:gap-2 text-xs md:text-sm text-muted-foreground">
                 <a href="mailto:admin@biggyround.co.zw" className="hover:text-primary">admin@biggyround.co.zw</a>
-                <a href="https://web.whatsapp.com/send?phone=263715385960" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+263 715 385 960</a>
-                <a href="https://web.whatsapp.com/send?phone=263713360948" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+263 713 360 948</a>
-                <a href="https://web.whatsapp.com/send?phone=263773226245" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+263 773 226 245</a>
+                <a href="/whatsapp.html?phone=263715385960" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+263 715 385 960</a>
+                <a href="/whatsapp.html?phone=263713360948" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+263 713 360 948</a>
+                <a href="/whatsapp.html?phone=263773226245" target="_blank" rel="noopener noreferrer" className="hover:text-primary">+263 773 226 245</a>
               </div>
             </div>
             <div className="col-span-2 md:col-span-1">
