@@ -19,9 +19,9 @@ export default function ContactPage() {
   });
 
   const contactNumbers = [
-    { number: "+263 715 385 960", waLink: "https://wa.me/263715385960", hasWhatsApp: true },
-    { number: "+263 713 360 948", waLink: "https://wa.me/263713360948", hasWhatsApp: true },
-    { number: "+263 773 226 245", waLink: "https://wa.me/263773226245", hasWhatsApp: true },
+    { number: "+263 715 385 960", waLink: "https://web.whatsapp.com/send?phone=263715385960", hasWhatsApp: true },
+    { number: "+263 713 360 948", waLink: "https://web.whatsapp.com/send?phone=263713360948", hasWhatsApp: true },
+    { number: "+263 773 226 245", waLink: "https://web.whatsapp.com/send?phone=263773226245", hasWhatsApp: true },
   ];
 
   const handleSubmit = (e: React.FormEvent) => {
