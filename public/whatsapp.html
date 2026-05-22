@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>Opening WhatsApp…</title>
+<meta name="robots" content="noindex" />
+<style>
+  :root { color-scheme: dark light; }
+  body { font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    background: #0b0b12; color: #eee; display: grid; place-items: center;
+    min-height: 100vh; margin: 0; text-align: center; padding: 24px; }
+  .card { max-width: 420px; }
+  h1 { font-size: 1.25rem; margin: 0 0 8px; }
+  p { opacity: .8; margin: 4px 0; }
+  a { color: #8b5cf6; }
+  .links { margin-top: 16px; display: flex; flex-direction: column; gap: 8px; }
+  .links a { padding: 10px 14px; background: #1a1a26; border-radius: 8px; text-decoration: none; }
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Opening WhatsApp…</h1>
+    <p id="status">Connecting you to chat.</p>
+    <div class="links" id="manual" hidden>
+      <p>If it doesn't open automatically, tap one:</p>
+      <a id="l1" target="_blank" rel="noopener noreferrer">Open via wa.me</a>
+      <a id="l2" target="_blank" rel="noopener noreferrer">Open via WhatsApp Web</a>
+      <a id="l3" target="_blank" rel="noopener noreferrer">Open via api.whatsapp.com</a>
+      <a id="l4">Open WhatsApp app</a>
+    </div>
+  </div>
+<script>
+(function () {
+  var params = new URLSearchParams(location.search);
+  var phone = (params.get('phone') || '').replace(/[^0-9]/g, '');
+  var text  = params.get('text') || '';
+  var qs = text ? ('?text=' + encodeURIComponent(text)) : '';
+
+  if (!phone) {
+    document.getElementById('status').textContent = 'Missing phone number.';
+    return;
+  }
+
+  var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+
+  // Ordered fallback chain
+  var urls = isMobile
+    ? [
+        'whatsapp://send?phone=' + phone + (text ? '&text=' + encodeURIComponent(text) : ''),
+        'https://wa.me/' + phone + qs,
+        'https://api.whatsapp.com/send?phone=' + phone + (text ? '&text=' + encodeURIComponent(text) : ''),
+        'https://web.whatsapp.com/send?phone=' + phone + (text ? '&text=' + encodeURIComponent(text) : '')
+      ]
+    : [
+        'https://wa.me/' + phone + qs,
+        'https://web.whatsapp.com/send?phone=' + phone + (text ? '&text=' + encodeURIComponent(text) : ''),
+        'https://api.whatsapp.com/send?phone=' + phone + (text ? '&text=' + encodeURIComponent(text) : '')
+      ];
+
+  // Populate manual fallback list
+  document.getElementById('l1').href = 'https://wa.me/' + phone + qs;
+  document.getElementById('l2').href = 'https://web.whatsapp.com/send?phone=' + phone;
+  document.getElementById('l3').href = 'https://api.whatsapp.com/send?phone=' + phone;
+  document.getElementById('l4').href = 'whatsapp://send?phone=' + phone;
+
+  var index = 0;
+  var navigated = false;
+
+  // If the tab becomes hidden, WhatsApp opened successfully — stop trying.
+  document.addEventListener('visibilitychange', function () {
+    if (document.hidden) navigated = true;
+  });
+
+  function tryNext() {
+    if (navigated) return;
+    if (index >= urls.length) {
+      document.getElementById('status').textContent = "Couldn't open WhatsApp automatically.";
+      document.getElementById('manual').hidden = false;
+      return;
+    }
+    var url = urls[index++];
+    try {
+      // Use replace so back button skips the failed attempt
+      window.location.replace(url);
+    } catch (_) {}
+    // If we are still here after a short delay, try the next URL
+    setTimeout(tryNext, 1500);
+  }
+
+  // Show manual options after a few seconds regardless
+  setTimeout(function () {
+    if (!navigated) document.getElementById('manual').hidden = false;
+  }, 4000);
+
+  tryNext();
+})();
+</script>
+</body>
+</html>
